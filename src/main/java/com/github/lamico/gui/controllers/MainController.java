@@ -2,15 +2,28 @@ package com.github.lamico.gui.controllers;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import com.github.lamico.DBConnection;
+import com.github.lamico.entities.Person;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 
-public class MainController {
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+public class MainController implements Initializable {
 
     @FXML
     private ResourceBundle resources;
@@ -37,7 +50,7 @@ public class MainController {
     private TableColumn<?, ?> tvDepartment;
 
     @FXML
-    private TableView<?> tvEmployee;
+    private TableView<Person> tvEmployee;
 
     @FXML
     private TableColumn<?, ?> tvHireDate;
@@ -82,49 +95,93 @@ public class MainController {
     private TextField txtSalary;
 
     @FXML
-    void deleteEmployee(ActionEvent event) {
+    public void deleteEmployee(ActionEvent event) {
 
     }
 
     @FXML
-    void handleRowSelection(MouseEvent event) {
+    public void handleRowSelection(MouseEvent event) {
+        Person person = tvEmployee.getSelectionModel().getSelectedItem();
+        if (person == null)
+            return;
+
+        txtSSN.setText(person.getSsn() + "");
+        txtName.setText(person.getPName());
+        txtAddress.setText(person.getAddress());
+        txtBankName.setText(person.getBankInfo());
+        txtBirthDate.setText(person.getDateOfBirth().toString());
+    }
+
+    @FXML
+    public void insertEmployee(ActionEvent event) {
 
     }
 
     @FXML
-    void insertEmployee(ActionEvent event) {
+    public void updateEmployee(ActionEvent event) {
 
     }
 
-    @FXML
-    void updateEmployee(ActionEvent event) {
-
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        showEmployees();
     }
 
-    @FXML
-    void initialize() {
-        assert btnDelete != null : "fx:id=\"btnDelete\" was not injected: check your FXML file 'root.fxml'.";
-        assert btnInsert != null : "fx:id=\"btnInsert\" was not injected: check your FXML file 'root.fxml'.";
-        assert btnUpdate != null : "fx:id=\"btnUpdate\" was not injected: check your FXML file 'root.fxml'.";
-        assert tvBank != null : "fx:id=\"tvBank\" was not injected: check your FXML file 'root.fxml'.";
-        assert tvBirthDate != null : "fx:id=\"tvBirthDate\" was not injected: check your FXML file 'root.fxml'.";
-        assert tvDepartment != null : "fx:id=\"tvDepartment\" was not injected: check your FXML file 'root.fxml'.";
-        assert tvEmployee != null : "fx:id=\"tvEmployee\" was not injected: check your FXML file 'root.fxml'.";
-        assert tvHireDate != null : "fx:id=\"tvHireDate\" was not injected: check your FXML file 'root.fxml'.";
-        assert tvName != null : "fx:id=\"tvName\" was not injected: check your FXML file 'root.fxml'.";
-        assert tvPosition != null : "fx:id=\"tvPosition\" was not injected: check your FXML file 'root.fxml'.";
-        assert tvSSN != null : "fx:id=\"tvSSN\" was not injected: check your FXML file 'root.fxml'.";
-        assert tvSalary != null : "fx:id=\"tvSalary\" was not injected: check your FXML file 'root.fxml'.";
-        assert txtAddress != null : "fx:id=\"txtAddress\" was not injected: check your FXML file 'root.fxml'.";
-        assert txtBankName != null : "fx:id=\"txtBankName\" was not injected: check your FXML file 'root.fxml'.";
-        assert txtBirthDate != null : "fx:id=\"txtBirthDate\" was not injected: check your FXML file 'root.fxml'.";
-        assert txtDepartment != null : "fx:id=\"txtDepartment\" was not injected: check your FXML file 'root.fxml'.";
-        assert txtHireDate != null : "fx:id=\"txtHireDate\" was not injected: check your FXML file 'root.fxml'.";
-        assert txtName != null : "fx:id=\"txtName\" was not injected: check your FXML file 'root.fxml'.";
-        assert txtPosition != null : "fx:id=\"txtPosition\" was not injected: check your FXML file 'root.fxml'.";
-        assert txtSSN != null : "fx:id=\"txtSSN\" was not injected: check your FXML file 'root.fxml'.";
-        assert txtSalary != null : "fx:id=\"txtSalary\" was not injected: check your FXML file 'root.fxml'.";
+    private void showEmployees() {
+        tvName.setCellValueFactory(new PropertyValueFactory<>("pName"));
+        tvSSN.setCellValueFactory(new PropertyValueFactory<>("ssn"));
+        tvBirthDate.setCellValueFactory(new PropertyValueFactory<>("dateOfBirth"));
+        tvBank.setCellValueFactory(new PropertyValueFactory<>("bankInfo"));
 
+        tvEmployee.setItems(getPersons("SELECT * FROM person"));
     }
 
+    private ObservableList<Person> getPersons(String query) {
+        ObservableList<Person> result = FXCollections.observableArrayList();
+        Connection connection = DBConnection.getConnection();
+
+        Statement statement = null;
+        ResultSet queryResult = null;
+
+        try {
+            statement = connection.createStatement();
+            queryResult = statement.executeQuery(query);
+
+            // Check if no data was retrieved
+            if (!queryResult.isBeforeFirst()) {
+                System.out.println("No employees found.");
+                return null;
+            }
+
+            // Add all elements in the query result to the result list
+            while (queryResult.next())
+                result.add(new Person(queryResult.getInt("ssn"), queryResult.getString("pName"),
+                        queryResult.getString("Address"), queryResult.getDate("dateOfBirth"),
+                        queryResult.getString("bankInfo")));
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        }
+
+        // Close all resources
+        try {
+            statement.close();
+            queryResult.close();
+            connection.close();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        }
+
+        return result;
+    }
+
+    private void executeQuery(String query) {
+        Connection connection = DBConnection.getConnection();
+
+        try {
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(query);
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        }
+    }
 }
