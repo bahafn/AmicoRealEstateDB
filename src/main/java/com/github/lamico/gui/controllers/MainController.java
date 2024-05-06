@@ -3,7 +3,7 @@ package com.github.lamico.gui.controllers;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import com.github.lamico.DBConnection;
+import com.github.lamico.db.DBConnection;
 import com.github.lamico.entities.Person;
 
 import javafx.collections.FXCollections;
