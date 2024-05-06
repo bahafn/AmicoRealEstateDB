@@ -47,25 +47,13 @@ public class MainController implements Initializable {
     private TableColumn<?, ?> tvBirthDate;
 
     @FXML
-    private TableColumn<?, ?> tvDepartment;
-
-    @FXML
     private TableView<Person> tvEmployee;
-
-    @FXML
-    private TableColumn<?, ?> tvHireDate;
 
     @FXML
     private TableColumn<?, ?> tvName;
 
     @FXML
-    private TableColumn<?, ?> tvPosition;
-
-    @FXML
     private TableColumn<?, ?> tvSSN;
-
-    @FXML
-    private TableColumn<?, ?> tvSalary;
 
     @FXML
     private TextField txtAddress;
@@ -77,22 +65,10 @@ public class MainController implements Initializable {
     private TextField txtBirthDate;
 
     @FXML
-    private TextField txtDepartment;
-
-    @FXML
-    private TextField txtHireDate;
-
-    @FXML
     private TextField txtName;
 
     @FXML
-    private TextField txtPosition;
-
-    @FXML
     private TextField txtSSN;
-
-    @FXML
-    private TextField txtSalary;
 
     @FXML
     public void deleteEmployee(ActionEvent event) {
@@ -177,8 +153,7 @@ public class MainController implements Initializable {
     private void executeQuery(String query) {
         Connection connection = DBConnection.getConnection();
 
-        try {
-            Statement statement = connection.createStatement();
+        try (Statement statement = connection.createStatement()){
             statement.executeUpdate(query);
         } catch (SQLException sqle) {
             sqle.printStackTrace();
