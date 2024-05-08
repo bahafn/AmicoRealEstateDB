@@ -52,6 +52,35 @@
 	<Button fx:id="btnInsert" layoutX="24.0" layoutY="426.0" mnemonicParsing="false" onAction="#insertEmployee" prefHeight="26.0" prefWidth="78.0" text="Insert" AnchorPane.bottomAnchor="23.600000000000023" />
 	<Button fx:id="btnUpdate" layoutX="230.0" layoutY="426.0" mnemonicParsing="false" onAction="#updateEmployee" prefHeight="26.0" prefWidth="78.0" text="Update" AnchorPane.bottomAnchor="23.600000000000023" />
 	<Button fx:id="btnDelete" layoutX="129.0" layoutY="426.0" mnemonicParsing="false" onAction="#deleteEmployee" prefHeight="26.0" prefWidth="78.0" text="Delete" AnchorPane.bottomAnchor="23.600000000000023" />
+      <VBox layoutX="328.0" layoutY="39.0" prefHeight="183.0" prefWidth="96.0" style="-fx-spacing: 19;">
+         <children>
+            <Label fx:id="lbSSNError" textFill="RED" VBox.vgrow="ALWAYS">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="lbNameError" textFill="RED" VBox.vgrow="ALWAYS">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="lbAddressError" textFill="RED">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="lbBankError" textFill="RED">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="lbBirthDateError" textFill="RED">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+         </children>
+      </VBox>
 	<TableView fx:id="tvEmployee" layoutX="434.0" layoutY="116.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#handleRowSelection" prefHeight="434.0" prefWidth="480.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="434.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="41.60000000000002">
 		<columns>
 			<TableColumn fx:id="tvSSN" prefWidth="100.0" resizable="false" text="SSN" />
@@ -65,6 +94,21 @@
          </columnResizePolicy>
 	</TableView>
       <Label alignment="CENTER" layoutX="589.0" layoutY="14.0" prefHeight="18.0" prefWidth="155.0" text="Person Table" textAlignment="CENTER" AnchorPane.leftAnchor="589.0" AnchorPane.rightAnchor="169.8" AnchorPane.topAnchor="14.0">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblInsertError" layoutX="24.0" layoutY="464.0" prefHeight="8.0" prefWidth="78.0" textFill="RED">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblDeleteError" layoutX="129.0" layoutY="464.0" prefHeight="8.0" prefWidth="78.0" textFill="RED">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblUpdateError" layoutX="230.0" layoutY="464.0" prefHeight="8.0" prefWidth="78.0" textFill="RED">
          <font>
             <Font size="14.0" />
          </font>

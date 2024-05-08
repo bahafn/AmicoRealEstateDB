@@ -42,7 +42,7 @@
 .button:pressed {
 	-fx-text-fill: black;
 }
-
+/* ComboBox */
 .combo-box{
 	
 	 -fx-focus-traversable:false;
@@ -106,6 +106,7 @@
     -fx-border-color: black;
 }
 
+/* ListView */
 .list-view .list-cell {
     -fx-background-color: white;
     -fx-text-fill: black;
@@ -148,9 +149,18 @@
     -fx-background-color: white; /* Track and track background color */
 }
 
+/* TableView */
+.table-view .filler {
+    -fx-background-color: transparent;
+}
+
 .table-view {
     -fx-background-color: white;
     -fx-border-color: black;
+}
+
+.table-view .corner {
+    -fx-background-color: white;
 }
 
 .table-view .column-header-background {
@@ -168,22 +178,23 @@
 .table-view .table-cell {
     -fx-background-color: white;
     -fx-text-fill: black;
+    -fx-alignment: CENTER;
 }
 
-.table-view .table-cell:selected {
-    -fx-background-color: black;
-    -fx-text-fill: white;
+.table-view .table-cell:odd {
+    -fx-background-color: white;
 }
 
-.table-view:focused .table-cell:focused {
-    -fx-background-color: black;
+.table-view .table-cell:even {
+    -fx-background-color: #F7F7F7;
+}
+
+.table-view .table-row-cell:selected {
+    -fx-background-color: transparent;
     -fx-border-color: black;
-    -fx-border-width: 1.0px;
-    -fx-text-fill: white;
+    -fx-border-width: 1;
 }
 
-.table-view:focused {
-    -fx-border-color: black;
-    -fx-border-width: 1.0px;
+.table-view .table-row-cell:selected .table-cell {
+    -fx-border-width: 0;
 }
-

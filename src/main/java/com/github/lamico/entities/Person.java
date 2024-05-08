@@ -3,13 +3,13 @@ package com.github.lamico.entities;
 import java.util.Date;
 
 public class Person {
-    private int ssn;
+    private String ssn;
     private String pName;
     private String address;
     private Date dateOfBirth;
     private String bankInfo;
     
-    public Person(int ssn, String pName, String address, Date dateOfBirth, String bankInfo) {
+    public Person(String ssn, String pName, String address, Date dateOfBirth, String bankInfo) {
         this.ssn = ssn;
         this.pName = pName;
         this.address = address;
@@ -17,11 +17,11 @@ public class Person {
         this.bankInfo = bankInfo;
     }
 
-    public int getSsn() {
+    public String getSsn() {
         return ssn;
     }
 
-    public void setSsn(int ssn) {
+    public void setSsn(String ssn) {
         this.ssn = ssn;
     }
 

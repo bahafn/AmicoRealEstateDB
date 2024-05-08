@@ -7,9 +7,9 @@ public class Employee {
     private Date hireDate;
     private String ePosition;
     private String department;
-    private int ssn;
+    private String ssn;
     
-    public Employee(int salary, Date hireDate, String ePosition, String department, int ssn) {
+    public Employee(int salary, Date hireDate, String ePosition, String department, String ssn) {
         this.salary = salary;
         this.hireDate = hireDate;
         this.ePosition = ePosition;
@@ -49,11 +49,11 @@ public class Employee {
         this.department = department;
     }
 
-    public int getSsn() {
+    public String getSsn() {
         return ssn;
     }
 
-    public void setSsn(int ssn) {
+    public void setSsn(String ssn) {
         this.ssn = ssn;
     }
 
