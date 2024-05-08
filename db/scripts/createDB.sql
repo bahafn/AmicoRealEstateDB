@@ -43,6 +43,15 @@ CREATE TABLE `apartment` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `apartment`
+--
+
+LOCK TABLES `apartment` WRITE;
+/*!40000 ALTER TABLE `apartment` DISABLE KEYS */;
+/*!40000 ALTER TABLE `apartment` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `broker`
 --
 
@@ -51,11 +60,20 @@ DROP TABLE IF EXISTS `broker`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `broker` (
   `bShare` double NOT NULL,
-  `ssn` int NOT NULL,
+  `ssn` char(9) NOT NULL,
   PRIMARY KEY (`ssn`),
   CONSTRAINT `broker_ibfk_1` FOREIGN KEY (`ssn`) REFERENCES `person` (`ssn`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `broker`
+--
+
+LOCK TABLES `broker` WRITE;
+/*!40000 ALTER TABLE `broker` DISABLE KEYS */;
+/*!40000 ALTER TABLE `broker` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `building`
@@ -78,6 +96,15 @@ CREATE TABLE `building` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `building`
+--
+
+LOCK TABLES `building` WRITE;
+/*!40000 ALTER TABLE `building` DISABLE KEYS */;
+/*!40000 ALTER TABLE `building` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `chequetransaction`
 --
 
@@ -93,6 +120,15 @@ CREATE TABLE `chequetransaction` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `chequetransaction`
+--
+
+LOCK TABLES `chequetransaction` WRITE;
+/*!40000 ALTER TABLE `chequetransaction` DISABLE KEYS */;
+/*!40000 ALTER TABLE `chequetransaction` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `clienttbl`
 --
 
@@ -103,28 +139,20 @@ CREATE TABLE `clienttbl` (
   `sponsor` varchar(32) NOT NULL,
   `incomeLevel` int DEFAULT NULL,
   `employeementInfo` varchar(32) DEFAULT NULL,
-  `ssn` int NOT NULL,
+  `ssn` char(9) NOT NULL,
   PRIMARY KEY (`ssn`),
   CONSTRAINT `clienttbl_ibfk_1` FOREIGN KEY (`ssn`) REFERENCES `person` (`ssn`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `companybroker`
+-- Dumping data for table `clienttbl`
 --
 
-DROP TABLE IF EXISTS `companybroker`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `companybroker` (
-  `ssn` int NOT NULL,
-  `employeeSSN` int NOT NULL,
-  PRIMARY KEY (`ssn`),
-  KEY `employeeSSN` (`employeeSSN`),
-  CONSTRAINT `companybroker_ibfk_1` FOREIGN KEY (`ssn`) REFERENCES `broker` (`ssn`) ON DELETE CASCADE,
-  CONSTRAINT `companybroker_ibfk_2` FOREIGN KEY (`employeeSSN`) REFERENCES `employee` (`ssn`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+LOCK TABLES `clienttbl` WRITE;
+/*!40000 ALTER TABLE `clienttbl` DISABLE KEYS */;
+/*!40000 ALTER TABLE `clienttbl` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `contract`
@@ -139,8 +167,8 @@ CREATE TABLE `contract` (
   `Cstatus` varchar(32) DEFAULT NULL,
   `ArrangmentType` varchar(32) DEFAULT NULL,
   `price` varchar(32) DEFAULT NULL,
-  `brokerSSN` int DEFAULT NULL,
-  `clientSSN` int DEFAULT NULL,
+  `brokerSSN` char(9) DEFAULT NULL,
+  `clientSSN` char(9) DEFAULT NULL,
   `prNum` int DEFAULT NULL,
   PRIMARY KEY (`contractNo`),
   KEY `prNum` (`prNum`),
@@ -153,6 +181,15 @@ CREATE TABLE `contract` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `contract`
+--
+
+LOCK TABLES `contract` WRITE;
+/*!40000 ALTER TABLE `contract` DISABLE KEYS */;
+/*!40000 ALTER TABLE `contract` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `email`
 --
 
@@ -161,11 +198,20 @@ DROP TABLE IF EXISTS `email`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `email` (
   `address` varchar(64) NOT NULL,
-  `ssn` int NOT NULL,
+  `ssn` char(9) NOT NULL,
   PRIMARY KEY (`ssn`,`address`),
   CONSTRAINT `email_ibfk_1` FOREIGN KEY (`ssn`) REFERENCES `person` (`ssn`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `email`
+--
+
+LOCK TABLES `email` WRITE;
+/*!40000 ALTER TABLE `email` DISABLE KEYS */;
+/*!40000 ALTER TABLE `email` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `employee`
@@ -179,11 +225,20 @@ CREATE TABLE `employee` (
   `hireDate` date DEFAULT NULL,
   `ePosition` varchar(16) NOT NULL,
   `department` varchar(16) NOT NULL,
-  `ssn` int NOT NULL,
+  `ssn` char(9) NOT NULL,
   PRIMARY KEY (`ssn`),
   CONSTRAINT `employee_ibfk_1` FOREIGN KEY (`ssn`) REFERENCES `person` (`ssn`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `employee`
+--
+
+LOCK TABLES `employee` WRITE;
+/*!40000 ALTER TABLE `employee` DISABLE KEYS */;
+/*!40000 ALTER TABLE `employee` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `independentbroker`
@@ -194,11 +249,20 @@ DROP TABLE IF EXISTS `independentbroker`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `independentbroker` (
   `commission` int NOT NULL,
-  `ssn` int NOT NULL,
+  `ssn` char(9) NOT NULL,
   PRIMARY KEY (`ssn`),
   CONSTRAINT `independentbroker_ibfk_1` FOREIGN KEY (`ssn`) REFERENCES `broker` (`ssn`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `independentbroker`
+--
+
+LOCK TABLES `independentbroker` WRITE;
+/*!40000 ALTER TABLE `independentbroker` DISABLE KEYS */;
+/*!40000 ALTER TABLE `independentbroker` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `land`
@@ -217,6 +281,15 @@ CREATE TABLE `land` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `land`
+--
+
+LOCK TABLES `land` WRITE;
+/*!40000 ALTER TABLE `land` DISABLE KEYS */;
+/*!40000 ALTER TABLE `land` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `person`
 --
 
@@ -224,7 +297,7 @@ DROP TABLE IF EXISTS `person`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `person` (
-  `ssn` int NOT NULL,
+  `ssn` char(9) NOT NULL,
   `pName` varchar(32) DEFAULT NULL,
   `address` varchar(32) DEFAULT NULL,
   `dateOfBirth` date DEFAULT NULL,
@@ -232,6 +305,16 @@ CREATE TABLE `person` (
   PRIMARY KEY (`ssn`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `person`
+--
+
+LOCK TABLES `person` WRITE;
+/*!40000 ALTER TABLE `person` DISABLE KEYS */;
+INSERT INTO `person` VALUES ('000000001','Jihad Awad','Ramallah','1000-01-11','Arab Bank'),('010123456','Khalil Al-Natsheh','Al-Walaja St, Bethlehem','1988-04-12','Bank of Palestine'),('011234567','Sami Al-Hajj','Al-Quds St, Jerusalem','1972-06-20','Palestine Islamic Bank'),('012345678','Nadia Al-Khaldi','Al-Manara St, Ramallah','1990-08-22','Arab Bank'),('013456789','Mohammed Al-Najjar','Al-Bireh St, Ramallah','1985-03-15','Bank of Palestine'),('014567890','Rania Al-Araj','Al-Quds St, Jerusalem','1978-11-18','Palestine Islamic Bank'),('015678901','Omar Al-Hajj','Al-Walaja St, Bethlehem','1992-01-15','Arab Bank'),('016789012','Amina Al-Masri','Al-Khansa St, Hebron','1980-05-25','Bank of Palestine'),('017890123','Ali Al-Qasem','Al-Quds St, Jerusalem','1975-02-12','Bank of Palestine'),('018901234','Jihad Al-Hourani','Al-Manara St, Ramallah','1982-09-25','Bank of Palestine'),('019012345','Rasha Al-Khalil','Al-Bireh St, Ramallah','1995-01-01','Arab Bank'),('020123456','Khalil Al-Natsheh','Al-Walaja St, Bethlehem','1988-04-10','Bank of Palestine'),('021234567','Sami Al-Hajj','Al-Quds St, Jerusalem','1972-09-25','Palestine Islamic Bank'),('022345678','Nadia Al-Khaldi','Al-Manara St, Ramallah','1990-06-25','Palestine Islamic Bank'),('023456789','Mohammed Al-Najjar','Al-Bireh St, Ramallah','1985-03-01','Arab Bank'),('024567890','Rania Al-Araj','Al-Quds St, Jerusalem','1978-11-12','Bank of Palestine'),('025678901','Omar Al-Hajj','Al-Walaja St, Bethlehem','1992-01-15','Arab Bank'),('026789012','Amina Al-Masri','Al-Khansa St, Hebron','1980-05-20','Bank of Palestine'),('027890123','Ali Al-Qasem','Al-Quds St, Jerusalem','1975-02-15','Bank of Palestine'),('028901234','Jihad Al-Hourani','Al-Manara St, Ramallah','1982-09-25','Bank of Palestine'),('029012345','Rasha Al-Khalil','Al-Bireh St, Ramallah','1995-01-01','Arab Bank'),('111234567','Sami Al-Hajj','Al-Quds St, Jerusalem','1972-09-28','Bank of Palestine'),('123456789','Ahmed Al-Khateeb','Al-Masayef St, Ramallah','1990-01-01','Arab Bank'),('219853985','Omar Al-Hajj','Al-Walaja St, Bethlehem','1992-01-15','Arab Bank'),('222345678','Nadia Al-Khaldi','Al-Manara St, Ramallah','1990-06-25','Palestine Islamic Bank'),('234567890','Fatima Al-Araj','Al-Bireh St, Ramallah','1985-06-15','Bank of Palestine'),('333456789','Mohammed Al-Najjar','Al-Bireh St, Ramallah','1985-03-01','Arab Bank'),('345678901','Mohammed Al-Najjar','Al-Manara St, Ramallah','1970-03-20','Palestine Islamic Bank'),('426985632','Rania Al-Araj','Al-Quds St, Jerusalem','1978-11-12','Bank of Palestine'),('444567890','Rania Al-Araj','Al-Quds St, Jerusalem','1978-11-12','Bank of Palestine'),('456789012','Rania Al-Khaldi','Al-Quds St, Jerusalem','1995-09-12','Arab Bank'),('555678901','Omar Al-Hajj','Al-Walaja St, Bethlehem','1992-01-15','Arab Bank'),('567890123','Omar Al-Hajj','Al-Walaja St, Bethlehem','1980-11-25','Bank of Palestine'),('654321985','Nadia Al-Khaldi','Al-Manara St, Ramallah','1990-06-25','Palestine Islamic Bank'),('654398753','Ali Al-Qasem','Al-Quds St, Jerusalem','1975-02-15','Bank of Palestine'),('666789012','Amina Al-Masri','Al-Khansa St, Hebron','1980-05-20','Bank of Palestine'),('678901234','Amina Al-Masri','Al-Khansa St, Hebron','1992-05-18','Palestine Islamic Bank'),('753192654','Mohammed Al-Najjar','Al-Bireh St, Ramallah','1985-03-01','Arab Bank'),('753984210','Khalil Al-Natsheh','Al-Walaja St, Bethlehem','1988-04-10','Bank of Palestine'),('777890123','Ali Al-Qasem','Al-Quds St, Jerusalem','1975-02-15','Bank of Palestine'),('789012345','Ali Al-Qasem','Al-Quds St, Jerusalem','1975-02-08','Arab Bank'),('888901234','Jihad Al-Hourani','Al-Manara St, Ramallah','1982-09-25','Bank of Palestine'),('890123456','Jihad Al-Hourani','Al-Manara St, Ramallah','1982-08-22','Bank of Palestine'),('901234567','Rasha Al-Khalil','Al-Bireh St, Ramallah','1997-01-15','Palestine Islamic Bank'),('912345678','Khalil Al-Natsheh','Al-Walaja St, Bethlehem','1988-04-10','Arab Bank'),('982135479','Sami Al-Hajj','Al-Quds St, Jerusalem','1972-09-25','Palestine Islamic Bank'),('985632159','Amina Al-Masri','Al-Khansa St, Hebron','1980-05-20','Bank of Palestine'),('999012345','Rasha Al-Khalil','Al-Bireh St, Ramallah','1995-01-01','Arab Bank');
+/*!40000 ALTER TABLE `person` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `phone`
@@ -242,11 +325,20 @@ DROP TABLE IF EXISTS `phone`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `phone` (
   `phoneNumber` char(10) NOT NULL,
-  `ssn` int NOT NULL,
+  `ssn` char(9) NOT NULL,
   PRIMARY KEY (`ssn`,`phoneNumber`),
   CONSTRAINT `phone_ibfk_1` FOREIGN KEY (`ssn`) REFERENCES `person` (`ssn`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `phone`
+--
+
+LOCK TABLES `phone` WRITE;
+/*!40000 ALTER TABLE `phone` DISABLE KEYS */;
+/*!40000 ALTER TABLE `phone` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `realestate`
@@ -263,12 +355,21 @@ CREATE TABLE `realestate` (
   `valuation` decimal(12,2) NOT NULL,
   `areaDescription` varchar(255) DEFAULT NULL,
   `area` decimal(12,2) NOT NULL,
-  `ownerSSN` int NOT NULL,
+  `ownerSSN` char(9) NOT NULL,
   PRIMARY KEY (`prNum`),
   KEY `ownerSSN` (`ownerSSN`),
   CONSTRAINT `realestate_ibfk_1` FOREIGN KEY (`ownerSSN`) REFERENCES `person` (`ssn`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `realestate`
+--
+
+LOCK TABLES `realestate` WRITE;
+/*!40000 ALTER TABLE `realestate` DISABLE KEYS */;
+/*!40000 ALTER TABLE `realestate` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `rentalapartment`
@@ -286,6 +387,15 @@ CREATE TABLE `rentalapartment` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `rentalapartment`
+--
+
+LOCK TABLES `rentalapartment` WRITE;
+/*!40000 ALTER TABLE `rentalapartment` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rentalapartment` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `saleapartment`
 --
 
@@ -299,6 +409,15 @@ CREATE TABLE `saleapartment` (
   CONSTRAINT `saleapartment_ibfk_1` FOREIGN KEY (`prNum`) REFERENCES `apartment` (`prNum`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `saleapartment`
+--
+
+LOCK TABLES `saleapartment` WRITE;
+/*!40000 ALTER TABLE `saleapartment` DISABLE KEYS */;
+/*!40000 ALTER TABLE `saleapartment` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `transaction`
@@ -319,6 +438,15 @@ CREATE TABLE `transaction` (
   CONSTRAINT `transaction_ibfk_1` FOREIGN KEY (`contractNo`) REFERENCES `contract` (`contractNo`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `transaction`
+--
+
+LOCK TABLES `transaction` WRITE;
+/*!40000 ALTER TABLE `transaction` DISABLE KEYS */;
+/*!40000 ALTER TABLE `transaction` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -329,4 +457,4 @@ CREATE TABLE `transaction` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-06 11:23:32
+-- Dump completed on 2024-05-08  8:33:13
