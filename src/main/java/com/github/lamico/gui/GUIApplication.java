@@ -1,5 +1,7 @@
 package com.github.lamico.gui;
 
+import com.github.lamico.managers.ResourceManager;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,19 +17,20 @@ public class GUIApplication extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("/fxml/demo.fxml"));
+		FXMLLoader mainLoader = ResourceManager.getFXMLLoader("demo");
 		Parent mainRoot = mainLoader.load();
 		// MainController mainController = mainLoader.getController();
 		
 
 		Scene scene = new Scene(mainRoot);
 		
-		scene.getStylesheets().add(getClass().getResource("/css/root.css").toExternalForm());
+		scene.getStylesheets().add(ResourceManager.getStylesheetURL("root"));
 		
 		primaryStage.setScene(scene);
 		primaryStage.setMinHeight(563);
 		primaryStage.setMinWidth(934);
 		primaryStage.setTitle("Lamico Demo");
+		primaryStage.getIcons().add(ResourceManager.getImage("lamico_icon.png"));
 
 		primaryStage.show();
 	}
