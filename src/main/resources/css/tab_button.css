@@ -1,0 +1,15 @@
+/* Default style */
+.button {
+    -fx-text-fill: white;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-border-radius: 0 0 0 0;
+    -fx-font-size: 13;
+    -fx-font-weight: 700;
+}
+
+/* On mouse enter */
+.button:hover {
+    -fx-text-fill: #dcdcdc;
+}
+

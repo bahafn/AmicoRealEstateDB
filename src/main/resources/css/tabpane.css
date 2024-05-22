@@ -1,0 +1,36 @@
+.tab-pane {
+    -fx-tab-max-height: 20px;
+    -fx-border-color: transparent;
+    -fx-border-width: 0 0 0 0;
+    -fx-padding: 0;
+}
+
+.tab-pane .tab-content-area {
+    -fx-background-color: white; /* Set the background colour of the tab content area */
+    -fx-padding: 0 0 0 0;
+}
+
+.tab-pane .tab-header-area {
+    -fx-background-color: white; /* Set the background colour of the tab header area */
+}
+
+.tab-header-background {
+    -fx-background-color: black;
+}
+
+.tab {
+  -fx-background-color: white; 
+  -fx-font-size: 14px;
+  -fx-text-base-color:white;
+  -fx-border-radius: 0;  /* Make tab borders square */
+  -fx-background-radius: 0;  /* Make tab background square */
+}
+
+.tab-pane .tab-label {
+    -fx-alignment: center;
+}
+.tab:selected {
+    -fx-border-style: solid;
+    -fx-border-color: black black white black;
+    -fx-border-width: 3px;
+}

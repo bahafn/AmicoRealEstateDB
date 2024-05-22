@@ -17,7 +17,7 @@ public class GUIApplication extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		FXMLLoader mainLoader = ResourceManager.getFXMLLoader("demo");
+		FXMLLoader mainLoader = ResourceManager.getFXMLLoader("main");
 		Parent mainRoot = mainLoader.load();
 		// MainController mainController = mainLoader.getController();
 		
@@ -29,7 +29,7 @@ public class GUIApplication extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.setMinHeight(563);
 		primaryStage.setMinWidth(934);
-		primaryStage.setTitle("Lamico Demo");
+		primaryStage.setTitle("Lamico Real Estate");
 		primaryStage.getIcons().add(ResourceManager.getImage("lamico_icon.png"));
 
 		primaryStage.show();
