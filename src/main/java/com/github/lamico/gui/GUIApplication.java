@@ -5,7 +5,7 @@ import com.github.lamico.managers.ResourceManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;	
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class GUIApplication extends Application {
@@ -19,16 +19,14 @@ public class GUIApplication extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		FXMLLoader mainLoader = ResourceManager.getFXMLLoader("main");
 		Parent mainRoot = mainLoader.load();
-		// MainController mainController = mainLoader.getController();
-		
 
 		Scene scene = new Scene(mainRoot);
-		
+
 		scene.getStylesheets().add(ResourceManager.getStylesheetURL("root"));
-		
+
 		primaryStage.setScene(scene);
 		primaryStage.setMinHeight(563);
-		primaryStage.setMinWidth(934);
+		primaryStage.setMinWidth(1034);
 		primaryStage.setTitle("Lamico Real Estate");
 		primaryStage.getIcons().add(ResourceManager.getImage("lamico_icon.png"));
 

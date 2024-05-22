@@ -1,14 +1,28 @@
 package com.github.lamico.gui.controllers;
 
-import com.github.lamico.gui.toolbars.StatusToolbarConfigurer;
-import com.github.lamico.gui.toolbars.TabToolbarConfigurer;
+import java.io.IOException;
+
+import com.github.lamico.gui.configurers.BottomBoxConfigurer;
+import com.github.lamico.gui.configurers.StatusToolbarConfigurer;
+import com.github.lamico.gui.configurers.TabToolbarConfigurer;
+import com.github.lamico.gui.utils.Clock;
+import com.github.lamico.managers.ResourceManager;
+import com.github.lamico.managers.TabManager;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ToolBar;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 
 public class MainController {
+	private TabManager tabManager;
+
+	@FXML
+	private BorderPane bpRoot;
 
 	@FXML
 	private Button btApartments;
@@ -38,63 +52,100 @@ public class MainController {
 	private Button btTransactions;
 
 	@FXML
-	private StackPane spMainScreen;
-
-	@FXML
 	private ToolBar statusToolbar;
 
 	@FXML
 	private ToolBar tabToolbar;
 
 	@FXML
-	void switchToApartments(ActionEvent event) {
+	private HBox hbStatus;
 
+	@FXML
+	private Label lbTime;
+
+	@FXML
+	private Label lbUser;
+
+	@FXML
+	void switchToApartments(ActionEvent event) {
+		selectStyle((Button) event.getSource());
+		tabManager.switchTo(TabManager.APARTMENTS);
 	}
 
 	@FXML
 	void switchToBrokers(ActionEvent event) {
-
+		selectStyle((Button) event.getSource());
+		tabManager.switchTo(TabManager.BROKERS);
 	}
 
 	@FXML
 	void switchToBuildings(ActionEvent event) {
-
+		selectStyle((Button) event.getSource());
+		tabManager.switchTo(TabManager.BUILDINGS);
 	}
 
 	@FXML
 	void switchToClients(ActionEvent event) {
-
+		selectStyle((Button) event.getSource());
+		tabManager.switchTo(TabManager.CLIENTS);
 	}
 
 	@FXML
 	void switchToContracts(ActionEvent event) {
-
+		selectStyle((Button) event.getSource());
+		tabManager.switchTo(TabManager.CONTRACTS);
 	}
 
 	@FXML
 	void switchToDashboard(ActionEvent event) {
-
+		selectStyle((Button) event.getSource());
+		tabManager.switchTo(TabManager.DASHBOARD);
 	}
 
 	@FXML
 	void switchToEmployees(ActionEvent event) {
-
+		selectStyle((Button) event.getSource());
+		tabManager.switchTo(TabManager.EMPLOYEES);
 	}
 
 	@FXML
 	void switchToLand(ActionEvent event) {
-
+		selectStyle((Button) event.getSource());
+		tabManager.switchTo(TabManager.LAND);
 	}
 
 	@FXML
 	void switchToTransactions(ActionEvent event) {
-
+		selectStyle((Button) event.getSource());
+		tabManager.switchTo(TabManager.TRANSACTIONS);
 	}
 
 	@FXML
-	void initialize() {
+	void initialize() throws IOException {
 		TabToolbarConfigurer.applyStyles(tabToolbar);
 		StatusToolbarConfigurer.applyStyles(statusToolbar);
+		BottomBoxConfigurer.applyStyles(hbStatus);
+
+		Clock.makeClock(lbTime);
+		lbTime.setStyle("-fx-text-fill: white;");
+
+		tabManager = new TabManager(bpRoot);
+		btDashboard.fire();
+	}
+
+	private static void updateTabStyles(Button selectedButton, Button otherButton) {
+		otherButton.getStylesheets().clear();
+		if (otherButton == selectedButton) {
+			otherButton.getStylesheets().add(ResourceManager.getStylesheetURL("tab_button_selected"));
+		}
+	}
+
+	private void selectStyle(Button selectedButton) {
+		for (Node otherNode : tabToolbar.getItems()) {
+			if (otherNode instanceof Button otherButton) {
+				updateTabStyles(selectedButton, otherButton);
+			}
+		}
 	}
 
 }
