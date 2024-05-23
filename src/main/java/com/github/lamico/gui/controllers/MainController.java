@@ -19,6 +19,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 
 public class MainController {
+	// Go to this class to set up your tab
 	private TabManager tabManager;
 
 	@FXML
@@ -47,6 +48,9 @@ public class MainController {
 
 	@FXML
 	private Button btLand;
+	
+	@FXML
+    private Button btOwners;
 
 	@FXML
 	private Button btTransactions;
@@ -66,6 +70,12 @@ public class MainController {
 	@FXML
 	private Label lbUser;
 
+    @FXML
+    void switchToOwners(ActionEvent event) {
+    	selectStyle((Button) event.getSource());
+    	tabManager.switchTo(TabManager.OWNERS);
+    }
+    
 	@FXML
 	void switchToApartments(ActionEvent event) {
 		selectStyle((Button) event.getSource());
