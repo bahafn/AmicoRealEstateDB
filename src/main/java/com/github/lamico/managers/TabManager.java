@@ -21,7 +21,7 @@ public class TabManager {
 	public static final String CONTRACTS = "contracts";
 	public static final String LAND = "land";
 	public static final String APARTMENTS = "apartments";
-	public static final String OWNERS = "owners";
+	public static final String OWNERS = "owner";
 	public static final String BROKERS = "brokers";
 	public static final String CLIENTS = "clients";
 	public static final String EMPLOYEES = "employees";
@@ -52,6 +52,7 @@ public class TabManager {
 		nodeMap.put(APARTMENTS, ResourceManager.getFXMLLoader(APARTMENTS).load());
 		nodeMap.put(LAND, ResourceManager.getFXMLLoader(LAND).load());
 		nodeMap.put(DASHBOARD, ResourceManager.getFXMLLoader(DASHBOARD).load());
+		nodeMap.put(OWNERS, ResourceManager.getFXMLLoader(OWNERS).load());
 	}
 
 	/**
