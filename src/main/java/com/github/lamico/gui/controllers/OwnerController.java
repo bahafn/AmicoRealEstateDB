@@ -6,103 +6,47 @@ import java.util.ResourceBundle;
 import com.github.lamico.db.DBConnection;
 import com.github.lamico.entities.Person;
 import com.github.lamico.gui.utils.TextFormatterTypes;
-import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
 
-import javafx.animation.PauseTransition;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import javafx.util.Duration;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
+import java.time.Instant;
+import java.time.ZoneId;
 
 public class OwnerController implements Initializable {
-
     @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
-
-    @FXML
-    private Button btnDelete;
-
-    @FXML
-    private Button btnInsert;
-
-    @FXML
-    private Button btnUpdate;
-
-    @FXML
-    private TableColumn<?, ?> tcBank;
-
-    @FXML
-    private TableColumn<?, ?> tcDate;
+    private Button btnDelete, btnInsert, btnUpdate;
 
     @FXML
     private TableView<Person> tvOwner;
 
     @FXML
-    private TableColumn<?, ?> tcName;
+    private TableColumn<?, ?> tcBank, tcDate, tcName, tcSSN, tcAddress;
 
     @FXML
-    private TableColumn<?, ?> tcSSN;
+    private TextField txtAddress, txtBank, txtName, txtSSN, txtPhone, txtEmail;
 
     @FXML
-    private TableColumn<?, ?> tcAddress;
+    private DatePicker txtDate;
 
     @FXML
-    private TextField txtAddress;
-
-    @FXML
-    private TextField txtBank;
-
-    @FXML
-    private TextField txtDate;
-
-    @FXML
-    private TextField txtName;
-
-    @FXML
-    private TextField txtSSN;
-
-    @FXML
-    private Label lbAddressError;
-
-    @FXML
-    private Label lbBankError;
-
-    @FXML
-    private Label lbBirthDateError;
-
-    @FXML
-    private Label lbNameError;
-
-    @FXML
-    private Label lbSSNError;
-
-    @FXML
-    private Label lblDeleteError;
-
-    @FXML
-    private Label lblInsertError;
-
-    @FXML
-    private Label lblUpdateError;
+    private Label lbAddressError, lbBankError, lbDateError, lbNameError, lbSSNError, lbGeneralError;
 
     @FXML
     public void handleRowSelection(MouseEvent event) {
@@ -114,17 +58,19 @@ public class OwnerController implements Initializable {
         txtName.setText(owner.getPName());
         txtAddress.setText(owner.getAddress());
         txtBank.setText(owner.getBankInfo());
-        txtDate.setText(owner.getDateOfBirth().toString());
+        txtDate.setValue(
+                Instant.ofEpochMilli(owner.getDateOfBirth().getTime()).atZone(ZoneId.systemDefault()).toLocalDate());
     }
 
     @FXML
     public void deleteOwner(ActionEvent event) {
         String ssn = txtSSN.getText().trim();
         if (ssn.length() < 9) {
-            displayErrorMessage(lblDeleteError, "SSN Invalid", 2);
+            showError(lbSSNError, "SSN Invalid");
             return;
         }
-        String query = "DELETE FROM person WHERE ssn = '" + ssn + "'";
+
+        String query = String.format("DELETE FROM person WHERE ssn = '%s'", ssn);
         executeQuery(query);
         showOwners();
     }
@@ -134,20 +80,20 @@ public class OwnerController implements Initializable {
         String ssn = txtSSN.getText().strip();
         String name = txtName.getText().strip();
         String address = txtAddress.getText().strip();
-        String birthDate = txtDate.getText().strip();
+        String birthDate = txtDate.getValue() == null ? null : txtDate.getValue().toString();
         String bankName = txtBank.getText().strip();
 
         if (ssn.length() < 9) {
-            displayErrorMessage(lblInsertError, "SSN Invalid", 2);
+            showError(lbSSNError, "SSN Invalid");
             return;
         }
-        if (name.isEmpty() || address.isEmpty() || birthDate.isEmpty() || bankName.isEmpty()) {
-            displayErrorMessage(lblInsertError, "Empty Fields", 2);
+        if (name.isEmpty() || address.isEmpty() || birthDate == null || bankName.isEmpty()) {
+            showError(lbGeneralError, "Empty Fields");
             return;
         }
 
-        String query = "INSERT INTO person (ssn, pName, Address, dateOfBirth, bankInfo) VALUES ('" + ssn + "', '" + name
-                + "', '" + address + "', '" + birthDate + "', '" + bankName + "')";
+        String query = String.format("INSERT INTO person VALUES('%s', '%s', '%s', '%s', '%s')", ssn, name, address,
+                birthDate, bankName);
         executeQuery(query);
 
         showOwners();
@@ -155,23 +101,24 @@ public class OwnerController implements Initializable {
 
     @FXML
     public void updateOwner(ActionEvent event) {
-        String ssn = txtSSN.getText().trim();
-        String name = txtName.getText();
-        String address = txtAddress.getText();
-        String birthDate = txtDate.getText();
-        String bankName = txtBank.getText();
+        String ssn = txtSSN.getText().strip();
+        String name = txtName.getText().strip();
+        String address = txtAddress.getText().strip();
+        String birthDate = txtDate.getValue().toString().strip();
+        String bankName = txtBank.getText().strip();
 
         if (ssn.length() < 9) {
-            displayErrorMessage(lblUpdateError, "SSN Invalid", 2);
+            showError(lbSSNError, "SSN Invalid");
             return;
         }
         if (name.isEmpty() || address.isEmpty() || birthDate.isEmpty() || bankName.isEmpty()) {
-            displayErrorMessage(lblUpdateError, "Empty Fields", 2);
+            showError(lbGeneralError, "Empty Fields");
             return;
         }
 
-        String query = "UPDATE person SET pName = '" + name + "', Address = '" + address + "', dateOfBirth = '"
-                + birthDate + "', bankInfo = '" + bankName + "' WHERE ssn = '" + ssn + "'";
+        String query = String.format(
+                "UPDATE person SET pName = '%s', Address = '%s', dateOfBirth = '%s', bankInfo = '%s' WHERE ssn = '%s'",
+                name, address, birthDate, bankName, ssn);
         executeQuery(query);
         showOwners();
     }
@@ -183,37 +130,34 @@ public class OwnerController implements Initializable {
             statement.executeUpdate(query);
         } catch (SQLIntegrityConstraintViolationException e) {
             // Duplicate primary key
-            displayErrorMessage(lbSSNError, "Duplicate!", 2);
-        } catch (MysqlDataTruncation e) {
-            // Incorrect data format
-            String errorMessage = e.getMessage();
-
-            if (errorMessage.contains("Incorrect date value")) {
-                displayErrorMessage(lbBirthDateError, "Wrong Format!", 2);
-            }
-        } catch (SQLException sqle) {
-            sqle.printStackTrace();
+            showError(lbSSNError, "Duplicate!");
+        } catch (SQLException ignored) {
         }
     }
 
-    private PauseTransition pauseTransition;
+    public void showError(Label label, String errorMessage) {
+        label.setText(errorMessage);
+        label.setVisible(true);
+    }
 
-    public void displayErrorMessage(Label label, String errorMessage, int durationInSeconds) {
-        // Platform.runLater(() -> {
-        //     if (pauseTransition != null) {
-        //         pauseTransition.getOnFinished().handle(null);
-        //         pauseTransition.stop();
-        //     }
-        //     label.setText(errorMessage);
-        //     pauseTransition = new PauseTransition(Duration.seconds(durationInSeconds));
-        //     pauseTransition.setOnFinished(event -> label.setText(""));
-        //     pauseTransition.play();
-        // });
-        System.out.println(errorMessage);
+    public void hideAllErrors() {
+        lbAddressError.setVisible(false);
+        lbBankError.setVisible(false);
+        lbDateError.setVisible(false);
+        lbNameError.setVisible(false);
+        lbSSNError.setVisible(false);
+        lbGeneralError.setVisible(false);
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // Set up cell factories
+        tcName.setCellValueFactory(new PropertyValueFactory<>("pName"));
+        tcSSN.setCellValueFactory(new PropertyValueFactory<>("ssn"));
+        tcDate.setCellValueFactory(new PropertyValueFactory<>("dateOfBirth"));
+        tcBank.setCellValueFactory(new PropertyValueFactory<>("bankInfo"));
+        tcAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
+
         showOwners();
         restrictTextFields();
     }
@@ -223,17 +167,10 @@ public class OwnerController implements Initializable {
         txtBank.setTextFormatter(TextFormatterTypes.getAlphaWordCharsFormatter(0));
         txtName.setTextFormatter(TextFormatterTypes.getAlphaWordCharsFormatter(0));
         txtSSN.setTextFormatter(TextFormatterTypes.getIntFormatter(9));
-        txtDate.setTextFormatter(TextFormatterTypes.getSQLDateFormatter());
     }
 
     private void showOwners() {
         tvOwner.setItems(getOwners("SELECT * FROM person"));
-        // Set up cell factories
-        tcName.setCellValueFactory(new PropertyValueFactory<>("pName"));
-        tcSSN.setCellValueFactory(new PropertyValueFactory<>("ssn"));
-        tcDate.setCellValueFactory(new PropertyValueFactory<>("dateOfBirth"));
-        tcBank.setCellValueFactory(new PropertyValueFactory<>("bankInfo"));
-        tcAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
     }
 
     private ObservableList<Person> getOwners(String query) {
@@ -248,11 +185,10 @@ public class OwnerController implements Initializable {
                         queryResult.getString("Address"), queryResult.getDate("dateOfBirth"),
                         queryResult.getString("bankInfo")));
             }
-        } catch (SQLException sqle) {
-            sqle.printStackTrace();
+        } catch (SQLException sql_e) {
+            sql_e.printStackTrace();
         }
-        
+
         return result;
     }
-
 }
