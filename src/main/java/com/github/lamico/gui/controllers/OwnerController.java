@@ -37,7 +37,7 @@ public class OwnerController implements Initializable {
     private TableView<Person> tvOwner;
 
     @FXML
-    private TableColumn<?, ?> tcBank, tcDate, tcName, tcSSN, tcAddress;
+    private TableColumn<?, ?> tcBank, tcDate, tcName, tcSSN, tcAddress, tcPhone, tcEmail;
 
     @FXML
     private TextField txtAddress, txtBank, txtName, txtSSN, txtPhone, txtEmail;
@@ -50,7 +50,7 @@ public class OwnerController implements Initializable {
 
     @FXML
     public void handleRowSelection(MouseEvent event) {
-        Person owner = tvOwner.getSelectionModel().getSelectedItem();
+        Person owner = (Person) tvOwner.getSelectionModel().getSelectedItem();
         if (owner == null)
             return;
 
@@ -64,7 +64,9 @@ public class OwnerController implements Initializable {
 
     @FXML
     public void deleteOwner(ActionEvent event) {
-        String ssn = txtSSN.getText().trim();
+        hideAllErrors();
+
+        String ssn = tvOwner.getSelectionModel().getSelectedItem().getSsn();
         if (ssn.length() < 9) {
             showError(lbSSNError, "SSN Invalid");
             return;
@@ -72,11 +74,14 @@ public class OwnerController implements Initializable {
 
         String query = String.format("DELETE FROM person WHERE ssn = '%s'", ssn);
         executeQuery(query);
+
         showOwners();
     }
 
     @FXML
     public void insertOwner(ActionEvent event) {
+        hideAllErrors();
+
         String ssn = txtSSN.getText().strip();
         String name = txtName.getText().strip();
         String address = txtAddress.getText().strip();
@@ -101,10 +106,12 @@ public class OwnerController implements Initializable {
 
     @FXML
     public void updateOwner(ActionEvent event) {
-        String ssn = txtSSN.getText().strip();
+        hideAllErrors();
+
+        String ssn = tvOwner.getSelectionModel().getSelectedItem().getSsn();
         String name = txtName.getText().strip();
         String address = txtAddress.getText().strip();
-        String birthDate = txtDate.getValue().toString().strip();
+        String birthDate = txtDate.getValue() == null ? null : txtDate.getValue().toString();
         String bankName = txtBank.getText().strip();
 
         if (ssn.length() < 9) {
@@ -120,6 +127,7 @@ public class OwnerController implements Initializable {
                 "UPDATE person SET pName = '%s', Address = '%s', dateOfBirth = '%s', bankInfo = '%s' WHERE ssn = '%s'",
                 name, address, birthDate, bankName, ssn);
         executeQuery(query);
+
         showOwners();
     }
 
@@ -157,6 +165,8 @@ public class OwnerController implements Initializable {
         tcDate.setCellValueFactory(new PropertyValueFactory<>("dateOfBirth"));
         tcBank.setCellValueFactory(new PropertyValueFactory<>("bankInfo"));
         tcAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
+        tcPhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        tcEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
 
         showOwners();
         restrictTextFields();
@@ -170,12 +180,24 @@ public class OwnerController implements Initializable {
     }
 
     private void showOwners() {
-        tvOwner.setItems(getOwners("SELECT * FROM person"));
+        tvOwner.setItems(getOwners());
     }
 
-    private ObservableList<Person> getOwners(String query) {
+    /**
+     * Gets all information of all Owners.
+     * 
+     * @return An ObservableList of all owners.
+     */
+    private ObservableList<Person> getOwners() {
         ObservableList<Person> result = FXCollections.observableArrayList();
 
+        String query = "SELECT p.*, " +
+                "GROUP_CONCAT(DISTINCT ph.phoneNumber SEPARATOR '\n') AS phones, " +
+                "GROUP_CONCAT(DISTINCT e.address SEPARATOR '\n') AS emails " +
+                "FROM person p " +
+                "LEFT JOIN phone ph ON p.ssn = ph.ssn " +
+                "LEFT JOIN email e ON p.ssn = e.ssn " +
+                "GROUP BY p.ssn, p.pName";
         try (Connection connection = DBConnection.getConnection();
                 Statement statement = connection.createStatement();
                 ResultSet queryResult = statement.executeQuery(query)) {
@@ -183,7 +205,8 @@ public class OwnerController implements Initializable {
             while (queryResult.next()) {
                 result.add(new Person(queryResult.getString("ssn"), queryResult.getString("pName"),
                         queryResult.getString("Address"), queryResult.getDate("dateOfBirth"),
-                        queryResult.getString("bankInfo")));
+                        queryResult.getString("bankInfo"), queryResult.getString("phones"),
+                        queryResult.getString("emails")));
             }
         } catch (SQLException sql_e) {
             sql_e.printStackTrace();

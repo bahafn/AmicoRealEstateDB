@@ -244,7 +244,8 @@ public class DemoController implements Initializable {
 			while (queryResult.next()) {
 				result.add(new Person(queryResult.getString("ssn"), queryResult.getString("pName"),
 						queryResult.getString("Address"), queryResult.getDate("dateOfBirth"),
-						queryResult.getString("bankInfo")));
+						queryResult.getString("bankInfo"), queryResult.getString("phones"),
+						queryResult.getString("emails")));
 			}
 		} catch (SQLException sqle) {
 			sqle.printStackTrace();

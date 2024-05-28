@@ -8,13 +8,18 @@ public class Person {
     private String address;
     private Date dateOfBirth;
     private String bankInfo;
-    
-    public Person(String ssn, String pName, String address, Date dateOfBirth, String bankInfo) {
+
+    private String phone;
+    private String email;
+
+    public Person(String ssn, String pName, String address, Date dateOfBirth, String bankInfo, String phone, String email) {
         this.ssn = ssn;
         this.pName = pName;
         this.address = address;
         this.dateOfBirth = dateOfBirth;
         this.bankInfo = bankInfo;
+        this.phone = phone;
+        this.email = email;
     }
 
     public String getSsn() {
@@ -55,6 +60,22 @@ public class Person {
 
     public void setBankInfo(String bankInfo) {
         this.bankInfo = bankInfo;
+    }
+
+    public String getPhone() {
+        return this.phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getEmail() {
+        return this.email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @Override
