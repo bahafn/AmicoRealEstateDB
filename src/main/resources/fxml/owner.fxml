@@ -6,6 +6,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -13,7 +14,6 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-
 
 <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="470.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.lamico.gui.controllers.OwnerController">
    <center>
@@ -46,10 +46,22 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button mnemonicParsing="false" onAction="#insertOwner" prefHeight="26.0" prefWidth="98.0" stylesheets="@../css/demo.css" text="Insert" translateX="5.0" />
-                  <Button mnemonicParsing="false" onAction="#updateOwner" prefHeight="26.0" prefWidth="98.0" stylesheets="@../css/demo.css" text="Update" translateX="5.0" GridPane.columnIndex="1" />
-                  <Button mnemonicParsing="false" onAction="#deleteOwner" prefHeight="26.0" prefWidth="98.0" stylesheets="@../css/demo.css" text="Delete" translateX="5.0" GridPane.rowIndex="1" />
-                  <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="98.0" stylesheets="@../css/demo.css" text="Reports" translateX="5.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Button mnemonicParsing="false" onAction="#insertOwner" prefHeight="26.0" prefWidth="98.0" stylesheets="@../css/demo.css" text="Insert" translateX="5.0">
+                     <tooltip>
+                        <Tooltip text="Adds a new owner with the data above." />
+                     </tooltip></Button>
+                  <Button mnemonicParsing="false" onAction="#updateOwner" prefHeight="26.0" prefWidth="98.0" stylesheets="@../css/demo.css" text="Update" translateX="5.0" GridPane.columnIndex="1">
+                     <tooltip>
+                        <Tooltip text="Updates selected owner with the data above." />
+                     </tooltip></Button>
+                  <Button mnemonicParsing="false" onAction="#deleteOwner" prefHeight="26.0" prefWidth="98.0" stylesheets="@../css/demo.css" text="Delete" translateX="5.0" GridPane.rowIndex="1">
+                     <tooltip>
+                        <Tooltip text="Deletes selected owner." />
+                     </tooltip></Button>
+                  <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="98.0" stylesheets="@../css/demo.css" text="Reports" translateX="5.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <tooltip>
+                        <Tooltip text="Show reports." />
+                     </tooltip></Button>
                </children>
             </GridPane>
          </bottom>
@@ -59,7 +71,10 @@
                   <Pane prefHeight="200.0" prefWidth="210.0">
                      <children>
                         <Label layoutX="14.0" text="SSN:" />
-                        <TextField fx:id="txtSSN" layoutX="89.0" layoutY="-5.0" onKeyTyped="#hideAllErrors" prefHeight="25.0" prefWidth="122.0" />
+                        <TextField fx:id="txtSSN" layoutX="89.0" layoutY="-5.0" onKeyTyped="#hideAllErrors" prefHeight="25.0" prefWidth="122.0">
+                           <tooltip>
+                              <Tooltip text="Enter 9 digit SSN." />
+                           </tooltip></TextField>
                         <Label fx:id="lbSSNError" layoutX="89.0" layoutY="19.0" textFill="RED">
                            <font>
                               <Font size="18.0" />
@@ -70,7 +85,10 @@
                   <Pane prefHeight="200.0" prefWidth="200.0">
                      <children>
                         <Label layoutX="14.0" text="Name:" />
-                        <TextField fx:id="txtName" layoutX="89.0" layoutY="-5.0" onKeyTyped="#hideAllErrors" prefHeight="25.0" prefWidth="122.0" />
+                        <TextField fx:id="txtName" layoutX="89.0" layoutY="-5.0" onKeyTyped="#hideAllErrors" prefHeight="25.0" prefWidth="122.0">
+                           <tooltip>
+                              <Tooltip text="Name can only have letters." />
+                           </tooltip></TextField>
                         <Label fx:id="lbNameError" layoutX="89.0" layoutY="20.0" textFill="RED">
                            <font>
                               <Font size="18.0" />
@@ -81,7 +99,10 @@
                   <Pane prefHeight="200.0" prefWidth="200.0">
                      <children>
                         <Label layoutX="14.0" text="Bank Name:" />
-                        <TextField fx:id="txtBank" layoutX="89.0" layoutY="-5.0" onKeyTyped="#hideAllErrors" prefHeight="25.0" prefWidth="122.0" />
+                        <TextField fx:id="txtBank" layoutX="89.0" layoutY="-5.0" onKeyTyped="#hideAllErrors" prefHeight="25.0" prefWidth="122.0">
+                           <tooltip>
+                              <Tooltip text="Bank name can only have letters." />
+                           </tooltip></TextField>
                         <Label fx:id="lbBankError" layoutX="89.0" layoutY="20.0" textFill="RED">
                            <font>
                               <Font size="18.0" />
@@ -92,7 +113,10 @@
                   <Pane prefHeight="200.0" prefWidth="200.0">
                      <children>
                         <Label layoutX="14.0" text="Address:" />
-                        <TextField fx:id="txtAddress" layoutX="89.0" layoutY="-5.0" onKeyTyped="#hideAllErrors" prefHeight="25.0" prefWidth="122.0" />
+                        <TextField fx:id="txtAddress" layoutX="89.0" layoutY="-5.0" onKeyTyped="#hideAllErrors" prefHeight="25.0" prefWidth="122.0">
+                           <tooltip>
+                              <Tooltip text="Address can only have letters and commas" />
+                           </tooltip></TextField>
                         <Label fx:id="lbAddressError" layoutX="89.0" layoutY="20.0" textFill="RED">
                            <font>
                               <Font size="18.0" />
@@ -103,7 +127,10 @@
                   <Pane prefHeight="200.0" prefWidth="230.0">
                      <children>
                         <Label layoutX="14.0" text="Phone:" />
-                        <TextField fx:id="txtPhone" layoutX="89.0" layoutY="-5.0" onKeyTyped="#hideAllErrors" prefHeight="25.0" prefWidth="122.0" />
+                        <TextField fx:id="txtPhone" layoutX="89.0" layoutY="-5.0" onKeyTyped="#hideAllErrors" prefHeight="25.0" prefWidth="122.0">
+                           <tooltip>
+                              <Tooltip text="10 digit number." />
+                           </tooltip></TextField>
                         <Label fx:id="lbPhoneError" layoutX="89.0" layoutY="20.0" textFill="RED">
                            <font>
                               <Font size="18.0" />
@@ -114,7 +141,10 @@
                   <Pane prefHeight="200.0" prefWidth="200.0">
                      <children>
                         <Label layoutX="14.0" text="Email:" />
-                        <TextField fx:id="txtEmail" layoutX="89.0" layoutY="-5.0" onKeyTyped="#hideAllErrors" prefHeight="25.0" prefWidth="122.0" />
+                        <TextField fx:id="txtEmail" layoutX="89.0" layoutY="-5.0" onKeyTyped="#hideAllErrors" prefHeight="25.0" prefWidth="122.0">
+                           <tooltip>
+                              <Tooltip text="Empty Tooltip" />
+                           </tooltip></TextField>
                         <Label fx:id="lbEmailError" layoutX="89.0" layoutY="20.0" textFill="RED">
                            <font>
                               <Font size="18.0" />
