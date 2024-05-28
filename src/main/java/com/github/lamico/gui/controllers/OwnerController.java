@@ -9,10 +9,9 @@ import com.github.lamico.gui.utils.TextFormatterTypes;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -31,9 +30,6 @@ import java.time.ZoneId;
 
 public class OwnerController implements Initializable {
     @FXML
-    private Button btnDelete, btnInsert, btnUpdate;
-
-    @FXML
     private TableView<Person> tvOwner;
 
     @FXML
@@ -46,9 +42,11 @@ public class OwnerController implements Initializable {
     private DatePicker txtDate;
 
     @FXML
-    private Label lbAddressError, lbBankError, lbDateError, lbNameError, lbSSNError, lbGeneralError;
+    private ComboBox<String> cbPhone, cbEmail;
 
     @FXML
+    private Label lbAddressError, lbBankError, lbDateError, lbNameError, lbSSNError, lbGeneralError;
+
     public void handleRowSelection(MouseEvent event) {
         Person owner = (Person) tvOwner.getSelectionModel().getSelectedItem();
         if (owner == null)
@@ -60,13 +58,19 @@ public class OwnerController implements Initializable {
         txtBank.setText(owner.getBankInfo());
         txtDate.setValue(
                 Instant.ofEpochMilli(owner.getDateOfBirth().getTime()).atZone(ZoneId.systemDefault()).toLocalDate());
+
+        // Remove all items from phone and email ComboBoxes
+        cbPhone.getItems().clear();
+        cbEmail.getItems().clear();
+        // Add selected phones and emails to ComboBoxes
+        cbPhone.getItems().addAll(owner.getPhone().split("\n"));
+        cbEmail.getItems().addAll(owner.getEmail().split("\n"));
     }
 
-    @FXML
-    public void deleteOwner(ActionEvent event) {
+    public void deleteOwner() {
         hideAllErrors();
 
-        String ssn = tvOwner.getSelectionModel().getSelectedItem().getSsn();
+        String ssn = txtSSN.getText().strip();
         if (ssn.length() < 9) {
             showError(lbSSNError, "SSN Invalid");
             return;
@@ -78,8 +82,7 @@ public class OwnerController implements Initializable {
         showOwners();
     }
 
-    @FXML
-    public void insertOwner(ActionEvent event) {
+    public void insertOwner() {
         hideAllErrors();
 
         String ssn = txtSSN.getText().strip();
@@ -104,11 +107,10 @@ public class OwnerController implements Initializable {
         showOwners();
     }
 
-    @FXML
-    public void updateOwner(ActionEvent event) {
+    public void updateOwner() {
         hideAllErrors();
 
-        String ssn = tvOwner.getSelectionModel().getSelectedItem().getSsn();
+        String ssn = txtSSN.getText().strip();
         String name = txtName.getText().strip();
         String address = txtAddress.getText().strip();
         String birthDate = txtDate.getValue() == null ? null : txtDate.getValue().toString();
@@ -131,6 +133,68 @@ public class OwnerController implements Initializable {
         showOwners();
     }
 
+    public void addPhone() {
+        hideAllErrors();
+
+        String ssn = txtSSN.getText().strip();
+        if (ssn.length() < 9) {
+            showError(lbSSNError, "SSN Invalid");
+            return;
+        }
+
+        String query = String.format("INSERT INTO phone VALUES ('%s', '%s')", cbPhone.getEditor().getText(), ssn);
+        executeQuery(query);
+
+        showOwners();
+    }
+
+    public void removePhone() {
+        hideAllErrors();
+
+        String ssn = txtSSN.getText().strip();
+        if (ssn.length() < 9) {
+            showError(lbSSNError, "SSN Invalid");
+            return;
+        }
+
+        String query = String.format("DELETE FROM phone WHERE ssn = '%s' and phoneNumber = '%s'", ssn,
+                cbPhone.getEditor().getText());
+        executeQuery(query);
+
+        showOwners();
+    }
+
+    public void addEmail() {
+        hideAllErrors();
+
+        String ssn = txtSSN.getText().strip();
+        if (ssn.length() < 9) {
+            showError(lbSSNError, "SSN Invalid");
+            return;
+        }
+
+        String query = String.format("INSERT INTO email VALUES ('%s', '%s')", cbEmail.getEditor().getText(), ssn);
+        executeQuery(query);
+
+        showOwners();
+    }
+
+    public void removeEmail() {
+        hideAllErrors();
+
+        String ssn = txtSSN.getText().strip();
+        if (ssn.length() < 9) {
+            showError(lbSSNError, "SSN Invalid");
+            return;
+        }
+
+        String query = String.format("DELETE FROM email WHERE ssn = '%s' and address = '%s'", ssn,
+                cbEmail.getEditor().getText());
+        executeQuery(query);
+
+        showOwners();
+    }
+
     private void executeQuery(String query) {
         Connection connection = DBConnection.getConnection();
 
@@ -140,6 +204,7 @@ public class OwnerController implements Initializable {
             // Duplicate primary key
             showError(lbSSNError, "Duplicate!");
         } catch (SQLException ignored) {
+            // TODO: error message if we can't access database
         }
     }
 
@@ -148,6 +213,7 @@ public class OwnerController implements Initializable {
         label.setVisible(true);
     }
 
+    /** Sets the visibility of all error labels to false. */
     public void hideAllErrors() {
         lbAddressError.setVisible(false);
         lbBankError.setVisible(false);
@@ -209,6 +275,7 @@ public class OwnerController implements Initializable {
                         queryResult.getString("emails")));
             }
         } catch (SQLException sql_e) {
+            // TODO: error message if we couldn't read from database
             sql_e.printStackTrace();
         }
 
