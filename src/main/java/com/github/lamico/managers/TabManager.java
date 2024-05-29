@@ -11,8 +11,6 @@ import javafx.scene.layout.BorderPane;
  * The TabManager class is responsible for managing the tabs in the application.
  * It loads the FXML files for each tab and maps them to a string.
  * The switchTo method is used to switch between the tabs.
- *
- * @author Your Name
  */
 public class TabManager {
 	// Set the value to the fxml name for ease
@@ -63,6 +61,33 @@ public class TabManager {
 	public void switchTo(String tab) {
 		Node node = nodeMap.get(tab);
 		root.setCenter(node);
+	}
+
+	/**
+	 * Gets the given tab.
+	 *
+	 * @param tab the name of the tab to get
+	 */
+	public Node getTab(String tab) {
+		return nodeMap.get(tab);
+	}
+
+	/**
+	 * Gets the root BorderPane.
+	 *
+	 * @return the root BorderPane
+	 */
+	public BorderPane getRoot() {
+		return root;
+	}
+
+	/**
+	 * Sets the root BorderPane.
+	 *
+	 * @param root the new root BorderPane
+	 */
+	public void setRoot(BorderPane root) {
+		this.root = root;
 	}
 
 }
