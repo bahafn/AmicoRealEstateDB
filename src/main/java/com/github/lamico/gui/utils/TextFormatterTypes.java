@@ -8,7 +8,8 @@ import javafx.scene.control.TextFormatter.Change;
 
 public class TextFormatterTypes {
     // Private constructor to prevent instantiation
-    private TextFormatterTypes() {}
+    private TextFormatterTypes() {
+    }
 
     // Regular expression patterns for different types of input
     private static final Pattern INTEGER_PATTERN = Pattern.compile("\\d*");
@@ -16,9 +17,12 @@ public class TextFormatterTypes {
     private static final Pattern ALPHANUMERIC_WORD_CHARS_PATTERN = Pattern.compile("\\w -*");
     private static final Pattern ALPHANUMERIC_WORD_CHARS_AND_COMMAS_PATTERN = Pattern.compile("[\\w, -]*");
     private static final Pattern SQL_DATE_PATTERN = Pattern.compile("\\d{0,4}(-\\d{0,2}){0,2}");
+    public static final Pattern EMAIL_PATTERN = Pattern
+            .compile("[a-zA-Z0-9_-]+(?:@[a-zA-Z.]*)?");
 
     /**
-     * Returns a TextFormatter that restricts input to integers with a maximum length of maxLength.
+     * Returns a TextFormatter that restricts input to integers with a maximum
+     * length of maxLength.
      * If maxLength is 0, there is no length restriction.
      * 
      * @param maxLength the maximum length of the input
@@ -30,11 +34,13 @@ public class TextFormatterTypes {
     }
 
     /**
-     * Returns a TextFormatter that restricts input to alphanumeric characters, spaces, and hyphens with a maximum length of maxLength.
+     * Returns a TextFormatter that restricts input to alphanumeric characters,
+     * spaces, and hyphens with a maximum length of maxLength.
      * If maxLength is 0, there is no length restriction.
      * 
      * @param maxLength the maximum length of the input
-     * @return a TextFormatter that restricts input to alphanumeric characters, spaces, and hyphens
+     * @return a TextFormatter that restricts input to alphanumeric characters,
+     *         spaces, and hyphens
      */
     public static TextFormatter<Integer> getAlphaWordCharsFormatter(int maxLength) {
         return new TextFormatter<>(c -> ALPHA_WORD_CHARS_PATTERN.matcher(c.getControlNewText()).matches()
@@ -42,11 +48,13 @@ public class TextFormatterTypes {
     }
 
     /**
-     * Returns a TextFormatter that restricts input to alphanumeric characters and hyphens with a maximum length of maxLength.
+     * Returns a TextFormatter that restricts input to alphanumeric characters and
+     * hyphens with a maximum length of maxLength.
      * If maxLength is 0, there is no length restriction.
      * 
      * @param maxLength the maximum length of the input
-     * @return a TextFormatter that restricts input to alphanumeric characters and hyphens
+     * @return a TextFormatter that restricts input to alphanumeric characters and
+     *         hyphens
      */
     public static TextFormatter<Integer> getAlphanumericWordCharsFormatter(int maxLength) {
         return new TextFormatter<>(c -> ALPHANUMERIC_WORD_CHARS_PATTERN.matcher(c.getControlNewText()).matches()
@@ -54,11 +62,13 @@ public class TextFormatterTypes {
     }
 
     /**
-     * Returns a TextFormatter that restricts input to alphanumeric characters, hyphens, and commas with a maximum length of maxLength.
+     * Returns a TextFormatter that restricts input to alphanumeric characters,
+     * hyphens, and commas with a maximum length of maxLength.
      * If maxLength is 0, there is no length restriction.
      * 
      * @param maxLength the maximum length of the input
-     * @return a TextFormatter that restricts input to alphanumeric characters, hyphens, and commas
+     * @return a TextFormatter that restricts input to alphanumeric characters,
+     *         hyphens, and commas
      */
     public static TextFormatter<Integer> getAlphanumericWordCharsAndCommasFormatter(int maxLength) {
         return new TextFormatter<>(
@@ -67,7 +77,8 @@ public class TextFormatterTypes {
     }
 
     /**
-     * Returns a TextFormatter that restricts input to a SQL date format (YYYY-MM-DD).
+     * Returns a TextFormatter that restricts input to a SQL date format
+     * (YYYY-MM-DD).
      * The formatter also automatically inserts dashes at the correct positions.
      * 
      * @return a TextFormatter that restricts input to a SQL date format
@@ -99,7 +110,8 @@ public class TextFormatterTypes {
     }
 
     /**
-     * Returns a TextFormatter that restricts input to a maximum length of maxLength.
+     * Returns a TextFormatter that restricts input to a maximum length of
+     * maxLength.
      * If maxLength is 0, there is no length restriction.
      * 
      * @param maxLength the maximum length of the input
@@ -111,5 +123,23 @@ public class TextFormatterTypes {
         } else {
             return new TextFormatter<>(c -> c.getControlNewText().length() <= maxLength ? c : null);
         }
+    }
+
+    /**
+     * Creates a TextFormatter that restricts input to a valid email address.
+     * 
+     * @return Created TextFormatter Object.
+     */
+    public static TextFormatter<String> getEmailTextFormatter(int maxLength) {
+        UnaryOperator<Change> filter = c -> {
+            String newText = c.getControlNewText(); // Get control text
+
+            if ((newText.isEmpty() || EMAIL_PATTERN.matcher(newText).matches()))
+                return c;
+
+            return null;
+        };
+
+        return new TextFormatter<>(filter);
     }
 }

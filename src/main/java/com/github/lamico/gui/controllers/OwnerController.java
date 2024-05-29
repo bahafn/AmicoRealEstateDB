@@ -11,12 +11,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 
@@ -45,7 +47,9 @@ public class OwnerController implements Initializable {
     private ComboBox<String> cbPhone, cbEmail;
 
     @FXML
-    private Label lbAddressError, lbBankError, lbDateError, lbNameError, lbSSNError, lbGeneralError;
+    private Label lbGeneralError;
+
+    private Alert alert = new Alert(AlertType.ERROR);
 
     public void handleRowSelection(MouseEvent event) {
         Person owner = (Person) tvOwner.getSelectionModel().getSelectedItem();
@@ -72,7 +76,7 @@ public class OwnerController implements Initializable {
 
         String ssn = txtSSN.getText().strip();
         if (ssn.length() < 9) {
-            showError(lbSSNError, "SSN Invalid");
+            showError("SSN Invalid");
             return;
         }
 
@@ -92,11 +96,11 @@ public class OwnerController implements Initializable {
         String bankName = txtBank.getText().strip();
 
         if (ssn.length() < 9) {
-            showError(lbSSNError, "SSN Invalid");
+            showError("SSN Invalid");
             return;
         }
         if (name.isEmpty() || address.isEmpty() || birthDate == null || bankName.isEmpty()) {
-            showError(lbGeneralError, "Empty Fields");
+            showError("Empty Fields");
             return;
         }
 
@@ -117,11 +121,11 @@ public class OwnerController implements Initializable {
         String bankName = txtBank.getText().strip();
 
         if (ssn.length() < 9) {
-            showError(lbSSNError, "SSN Invalid");
+            showError("SSN Invalid");
             return;
         }
         if (name.isEmpty() || address.isEmpty() || birthDate.isEmpty() || bankName.isEmpty()) {
-            showError(lbGeneralError, "Empty Fields");
+            showError("Empty Fields");
             return;
         }
 
@@ -138,11 +142,17 @@ public class OwnerController implements Initializable {
 
         String ssn = txtSSN.getText().strip();
         if (ssn.length() < 9) {
-            showError(lbSSNError, "SSN Invalid");
+            showError("SSN Invalid");
+            return;
+        }
+        // Check if phone is empty
+        String phone = cbPhone.getEditor().getText();
+        if (phone.equals("")) {
+            showError("Invalid phone number");
             return;
         }
 
-        String query = String.format("INSERT INTO phone VALUES ('%s', '%s')", cbPhone.getEditor().getText(), ssn);
+        String query = String.format("INSERT INTO phone VALUES ('%s', '%s')", phone, ssn);
         executeQuery(query);
 
         showOwners();
@@ -153,7 +163,7 @@ public class OwnerController implements Initializable {
 
         String ssn = txtSSN.getText().strip();
         if (ssn.length() < 9) {
-            showError(lbSSNError, "SSN Invalid");
+            showError("SSN Invalid");
             return;
         }
 
@@ -169,11 +179,17 @@ public class OwnerController implements Initializable {
 
         String ssn = txtSSN.getText().strip();
         if (ssn.length() < 9) {
-            showError(lbSSNError, "SSN Invalid");
+            showError("SSN Invalid");
+            return;
+        }
+        // Check if email is empty or invalid
+        String email = cbEmail.getEditor().getText();
+        if (email.equals("")) {
+            showError("Invalid email.");
             return;
         }
 
-        String query = String.format("INSERT INTO email VALUES ('%s', '%s')", cbEmail.getEditor().getText(), ssn);
+        String query = String.format("INSERT INTO email VALUES ('%s', '%s')", email, ssn);
         executeQuery(query);
 
         showOwners();
@@ -184,7 +200,7 @@ public class OwnerController implements Initializable {
 
         String ssn = txtSSN.getText().strip();
         if (ssn.length() < 9) {
-            showError(lbSSNError, "SSN Invalid");
+            showError("SSN Invalid");
             return;
         }
 
@@ -201,25 +217,27 @@ public class OwnerController implements Initializable {
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(query);
         } catch (SQLIntegrityConstraintViolationException e) {
-            // Duplicate primary key
-            showError(lbSSNError, "Duplicate!");
-        } catch (SQLException ignored) {
-            // TODO: error message if we can't access database
+            // This means we have a duplicate primary key
+            // duplicate primary key can mean a duplicate SSN, the owner already has this email or phone.
+            if (query.contains("email"))
+                showError("Email already added.");
+            else if (query.contains("phone"))
+                showError("Phone number already added.");
+            else
+                showError("Duplicate SSN");
+        } catch (SQLException sql_e) {
+            alert.setHeaderText("Error reading database");
+            alert.setContentText(sql_e.getMessage());
         }
     }
 
-    public void showError(Label label, String errorMessage) {
-        label.setText(errorMessage);
-        label.setVisible(true);
+    public void showError(String errorMessage) {
+        lbGeneralError.setText(errorMessage);
+        lbGeneralError.setVisible(true);
     }
 
     /** Sets the visibility of all error labels to false. */
     public void hideAllErrors() {
-        lbAddressError.setVisible(false);
-        lbBankError.setVisible(false);
-        lbDateError.setVisible(false);
-        lbNameError.setVisible(false);
-        lbSSNError.setVisible(false);
         lbGeneralError.setVisible(false);
     }
 
@@ -243,6 +261,8 @@ public class OwnerController implements Initializable {
         txtBank.setTextFormatter(TextFormatterTypes.getAlphaWordCharsFormatter(0));
         txtName.setTextFormatter(TextFormatterTypes.getAlphaWordCharsFormatter(0));
         txtSSN.setTextFormatter(TextFormatterTypes.getIntFormatter(9));
+        cbPhone.getEditor().setTextFormatter(TextFormatterTypes.getIntFormatter(15));
+        cbEmail.getEditor().setTextFormatter(TextFormatterTypes.getEmailTextFormatter(64));
     }
 
     private void showOwners() {
@@ -275,8 +295,8 @@ public class OwnerController implements Initializable {
                         queryResult.getString("emails")));
             }
         } catch (SQLException sql_e) {
-            // TODO: error message if we couldn't read from database
-            sql_e.printStackTrace();
+            alert.setHeaderText("Error reading database");
+            alert.setContentText(sql_e.getMessage());
         }
 
         return result;

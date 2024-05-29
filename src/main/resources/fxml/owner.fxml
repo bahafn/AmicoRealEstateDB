@@ -69,87 +69,62 @@
          <top>
             <VBox prefHeight="285.0" prefWidth="210.0" translateY="40.0" BorderPane.alignment="CENTER">
                <children>
-                  <Pane prefHeight="200.0" prefWidth="210.0">
+                  <Label fx:id="lbGeneralError" alignment="CENTER" prefWidth="200.0" textAlignment="CENTER" textFill="RED" translateX="10.0" translateY="-30.0">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Pane prefHeight="200.0" prefWidth="210.0" translateY="-10.0">
                      <children>
                         <Label layoutX="14.0" text="SSN:" />
                         <TextField fx:id="txtSSN" layoutX="89.0" layoutY="-5.0" onKeyTyped="#hideAllErrors" prefHeight="25.0" prefWidth="122.0">
                            <tooltip>
                               <Tooltip text="Enter 9 digit SSN." />
                            </tooltip></TextField>
-                        <Label fx:id="lbSSNError" layoutX="89.0" layoutY="19.0" textFill="RED">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Label>
                      </children>
                   </Pane>
-                  <Pane prefHeight="200.0" prefWidth="200.0">
+                  <Pane prefHeight="200.0" prefWidth="200.0" translateY="-10.0">
                      <children>
                         <Label layoutX="14.0" text="Name:" />
                         <TextField fx:id="txtName" layoutX="89.0" layoutY="-5.0" onKeyTyped="#hideAllErrors" prefHeight="25.0" prefWidth="122.0">
                            <tooltip>
                               <Tooltip text="Name can only have letters." />
                            </tooltip></TextField>
-                        <Label fx:id="lbNameError" layoutX="89.0" layoutY="20.0" textFill="RED">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Label>
                      </children>
                   </Pane>
-                  <Pane prefHeight="200.0" prefWidth="200.0">
+                  <Pane prefHeight="200.0" prefWidth="200.0" translateY="-10.0">
                      <children>
                         <Label layoutX="14.0" text="Bank Name:" />
                         <TextField fx:id="txtBank" layoutX="89.0" layoutY="-5.0" onKeyTyped="#hideAllErrors" prefHeight="25.0" prefWidth="122.0">
                            <tooltip>
                               <Tooltip text="Bank name can only have letters." />
                            </tooltip></TextField>
-                        <Label fx:id="lbBankError" layoutX="89.0" layoutY="20.0" textFill="RED">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Label>
                      </children>
                   </Pane>
-                  <Pane prefHeight="200.0" prefWidth="200.0">
+                  <Pane prefHeight="200.0" prefWidth="200.0" translateY="-10.0">
                      <children>
                         <Label layoutX="14.0" text="Address:" />
                         <TextField fx:id="txtAddress" layoutX="89.0" layoutY="-5.0" onKeyTyped="#hideAllErrors" prefHeight="25.0" prefWidth="122.0">
                            <tooltip>
                               <Tooltip text="Address can only have letters and commas" />
                            </tooltip></TextField>
-                        <Label fx:id="lbAddressError" layoutX="89.0" layoutY="20.0" textFill="RED">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Label>
                      </children>
                   </Pane>
-                  <Pane prefHeight="200.0" prefWidth="200.0">
+                  <Pane prefHeight="200.0" prefWidth="200.0" translateY="-10.0">
                      <children>
                         <Label layoutX="14.0" text="Birth Date:" />
                         <DatePicker fx:id="txtDate" editable="false" layoutX="89.0" layoutY="-5.0" onKeyTyped="#hideAllErrors" prefHeight="25.0" prefWidth="122.0" />
-                        <Label fx:id="lbDateError" layoutX="89.0" layoutY="20.0" textFill="RED">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Label>
                      </children>
                   </Pane>
-                  <Pane prefHeight="200.0" prefWidth="230.0">
+                  <Pane prefHeight="200.0" prefWidth="230.0" translateY="-10.0">
                      <children>
                         <Label layoutX="14.0" text="Phone:" />
-                        <Label fx:id="lbPhoneError" layoutX="89.0" layoutY="20.0" textFill="RED">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Label>
-                        <Button layoutX="6.0" layoutY="25.0" mnemonicParsing="false" onAction="#addPhone" prefHeight="25.0" prefWidth="97.0" stylesheets="@../css/demo.css" text="Add">
+                        <Button layoutX="6.0" layoutY="25.0" mnemonicParsing="false" onAction="#addPhone" prefHeight="26.0" prefWidth="98.0" stylesheets="@../css/demo.css" text="Add">
                            <tooltip>
                               <Tooltip text="Adds a phone number to selected owner." />
                            </tooltip>
                         </Button>
-                        <Button layoutX="112.0" layoutY="25.0" mnemonicParsing="false" onAction="#removePhone" prefHeight="25.0" prefWidth="97.0" stylesheets="@../css/demo.css" text="Remove">
+                        <Button layoutX="112.0" layoutY="25.0" mnemonicParsing="false" onAction="#removePhone" prefHeight="26.0" prefWidth="98.0" stylesheets="@../css/demo.css" text="Remove">
                            <tooltip>
                               <Tooltip text="Removes selected phone number from selected user." />
                            </tooltip>
@@ -157,20 +132,15 @@
                         <ComboBox fx:id="cbPhone" editable="true" layoutX="89.0" layoutY="-4.0" prefWidth="122.0" />
                      </children>
                   </Pane>
-                  <Pane prefHeight="200.0" prefWidth="200.0" translateY="25.0">
+                  <Pane prefHeight="200.0" prefWidth="200.0" translateY="15.0">
                      <children>
                         <Label layoutX="14.0" text="Email:" />
-                        <Label fx:id="lbEmailError" layoutX="89.0" layoutY="20.0" textFill="RED">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Label>
-                        <Button layoutX="6.0" layoutY="25.0" mnemonicParsing="false" onAction="#addEmail" prefHeight="25.0" prefWidth="97.0" stylesheets="@../css/demo.css" text="Add">
+                        <Button layoutX="6.0" layoutY="25.0" mnemonicParsing="false" onAction="#addEmail" prefHeight="26.0" prefWidth="98.0" stylesheets="@../css/demo.css" text="Add">
                            <tooltip>
                               <Tooltip text="Adds an email to selected owner." />
                            </tooltip>
                         </Button>
-                        <Button layoutX="112.0" layoutY="25.0" mnemonicParsing="false" onAction="#removeEmail" prefHeight="25.0" prefWidth="97.0" stylesheets="@../css/demo.css" text="Remove">
+                        <Button layoutX="112.0" layoutY="25.0" mnemonicParsing="false" onAction="#removeEmail" prefHeight="26.0" prefWidth="98.0" stylesheets="@../css/demo.css" text="Remove">
                            <tooltip>
                               <Tooltip text="Removes an email from selected owner." />
                            </tooltip>
@@ -178,11 +148,6 @@
                         <ComboBox fx:id="cbEmail" editable="true" layoutX="89.0" layoutY="-4.0" prefWidth="122.0" />
                      </children>
                   </Pane>
-                  <Label fx:id="lbGeneralError" textFill="RED" translateX="90.0" translateY="45.0">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
                </children>
             </VBox>
          </top>
