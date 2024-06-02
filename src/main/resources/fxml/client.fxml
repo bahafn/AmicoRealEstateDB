@@ -15,7 +15,6 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
 <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="470.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.lamico.gui.controllers.ClientController">
    <center>
@@ -67,22 +66,18 @@
                      <tooltip>
                         <Tooltip text="Show reports." />
                      </tooltip></Button>
+                  <Label fx:id="lbGeneralError" alignment="CENTER" prefHeight="30.0" prefWidth="158.0" textFill="RED" translateX="33.0" GridPane.columnSpan="2" GridPane.rowIndex="2" />
                </children>
             </GridPane>
          </bottom>
          <right>
-            <ScrollPane hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" prefHeight="374.0" prefWidth="224.0" BorderPane.alignment="CENTER">
+            <ScrollPane hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" prefHeight="374.0" prefWidth="224.0" vvalue="1.0" BorderPane.alignment="CENTER">
                <content>
-                  <VBox prefHeight="285.0" prefWidth="210.0" spacing="10.0" translateX="-5.0">
+                  <VBox layoutY="50.0" prefHeight="285.0" prefWidth="210.0" spacing="10.0" translateX="-5.0" translateY="25.0">
                      <children>
-                        <Label fx:id="lbGeneralError" alignment="CENTER" prefWidth="200.0" textAlignment="CENTER" textFill="RED" translateX="10.0" translateY="-5.0">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Label>
                         <Pane minHeight="30.0" prefHeight="30.0" prefWidth="210.0" translateY="-10.0">
                            <children>
-                              <Label layoutX="14.0" text="SSN:" />
+                              <Label layoutX="9.0" text="SSN:" />
                               <TextField fx:id="txtSSN" layoutX="89.0" layoutY="-5.0" onKeyTyped="#hideAllErrors" prefHeight="25.0" prefWidth="122.0">
                                  <tooltip>
                                     <Tooltip text="Enter 9 digit SSN." />
@@ -92,7 +87,7 @@
                         </Pane>
                         <Pane minHeight="30.0" prefHeight="200.0" prefWidth="200.0" translateY="-10.0">
                            <children>
-                              <Label layoutX="14.0" text="Name:" />
+                              <Label layoutX="9.0" text="Name:" />
                               <TextField fx:id="txtName" layoutX="89.0" layoutY="-5.0" onKeyTyped="#hideAllErrors" prefHeight="25.0" prefWidth="122.0">
                                  <tooltip>
                                     <Tooltip text="Name can only have letters." />
@@ -102,7 +97,7 @@
                         </Pane>
                         <Pane minHeight="30.0" prefHeight="200.0" prefWidth="200.0" translateY="-10.0">
                            <children>
-                              <Label layoutX="14.0" text="Bank Name:" />
+                              <Label layoutX="9.0" text="Bank Name:" />
                               <TextField fx:id="txtBank" layoutX="89.0" layoutY="-5.0" onKeyTyped="#hideAllErrors" prefHeight="25.0" prefWidth="122.0">
                                  <tooltip>
                                     <Tooltip text="Bank name can only have letters." />
@@ -112,7 +107,7 @@
                         </Pane>
                         <Pane minHeight="30.0" prefHeight="200.0" prefWidth="200.0" translateY="-10.0">
                            <children>
-                              <Label layoutX="14.0" text="Address:" />
+                              <Label layoutX="9.0" text="Address:" />
                               <TextField fx:id="txtAddress" layoutX="89.0" layoutY="-5.0" onKeyTyped="#hideAllErrors" prefHeight="25.0" prefWidth="122.0">
                                  <tooltip>
                                     <Tooltip text="Address can only have letters and commas" />
@@ -122,13 +117,13 @@
                         </Pane>
                         <Pane minHeight="30.0" prefHeight="200.0" prefWidth="200.0" translateY="-10.0">
                            <children>
-                              <Label layoutX="14.0" text="Birth Date:" />
+                              <Label layoutX="9.0" text="Birth Date:" />
                               <DatePicker fx:id="txtDate" editable="false" layoutX="89.0" layoutY="-5.0" onKeyTyped="#hideAllErrors" prefHeight="25.0" prefWidth="122.0" />
                            </children>
                         </Pane>
                         <Pane minHeight="30.0" prefHeight="0.0" prefWidth="210.0" translateY="-10.0">
                            <children>
-                              <Label layoutX="14.0" text="Sponsor:" />
+                              <Label layoutX="9.0" text="Sponsor:" />
                               <TextField fx:id="txtSponsor" layoutX="89.0" layoutY="-5.0" onKeyTyped="#hideAllErrors" prefHeight="25.0" prefWidth="122.0">
                                  <tooltip>
                                     <Tooltip text="Enter 9 digit SSN." />
@@ -138,7 +133,7 @@
                         </Pane>
                         <Pane minHeight="30.0" prefHeight="0.0" prefWidth="210.0" translateY="-10.0">
                            <children>
-                              <Label layoutX="14.0" text="Income level:" />
+                              <Label layoutX="9.0" text="Income level:" />
                               <TextField fx:id="txtIncomeLevel" layoutX="89.0" layoutY="-5.0" onKeyTyped="#hideAllErrors" prefHeight="25.0" prefWidth="122.0">
                                  <tooltip>
                                     <Tooltip text="Enter 9 digit SSN." />
@@ -148,7 +143,7 @@
                         </Pane>
                         <Pane minHeight="30.0" prefHeight="0.0" prefWidth="210.0" translateY="-10.0">
                            <children>
-                              <Label layoutX="14.0" text="Employer:" />
+                              <Label layoutX="9.0" text="Employer:" />
                               <TextField fx:id="txtEmployer" layoutX="89.0" layoutY="-5.0" onKeyTyped="#hideAllErrors" prefHeight="25.0" prefWidth="122.0">
                                  <tooltip>
                                     <Tooltip text="Enter 9 digit SSN." />
@@ -158,7 +153,7 @@
                         </Pane>
                         <Pane minHeight="60.0" prefHeight="200.0" prefWidth="230.0" translateY="-10.0">
                            <children>
-                              <Label layoutX="14.0" text="Phone:" />
+                              <Label layoutX="9.0" text="Phone:" />
                               <Button layoutX="6.0" layoutY="25.0" mnemonicParsing="false" onAction="#addPhone" prefHeight="26.0" prefWidth="98.0" stylesheets="@../css/demo.css" text="Add">
                                  <tooltip>
                                     <Tooltip text="Adds a phone number to selected owner." />
@@ -174,7 +169,7 @@
                         </Pane>
                         <Pane minHeight="60.0" prefHeight="200.0" prefWidth="200.0" translateY="-10.0">
                            <children>
-                              <Label layoutX="14.0" text="Email:" />
+                              <Label layoutX="9.0" text="Email:" />
                               <Button layoutX="6.0" layoutY="25.0" mnemonicParsing="false" onAction="#addEmail" prefHeight="26.0" prefWidth="98.0" stylesheets="@../css/demo.css" text="Add">
                                  <tooltip>
                                     <Tooltip text="Adds an email to selected owner." />
@@ -188,6 +183,7 @@
                               <ComboBox fx:id="cbEmail" editable="true" layoutX="89.0" layoutY="-4.0" prefWidth="122.0" stylesheets="@../css/demo.css" />
                            </children>
                         </Pane>
+                        <Label />
                      </children>
                   </VBox>
                </content>
