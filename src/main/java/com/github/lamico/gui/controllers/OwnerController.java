@@ -5,13 +5,13 @@ import java.util.ResourceBundle;
 
 import com.github.lamico.db.DBConnection;
 import com.github.lamico.entities.Person;
+import com.github.lamico.gui.utils.AlertUtil;
 import com.github.lamico.gui.utils.TextFormatterTypes;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -49,14 +49,12 @@ public class OwnerController implements Initializable {
     @FXML
     private Label lbGeneralError;
 
-    private Alert alert = new Alert(AlertType.ERROR);
-
     public void handleRowSelection(MouseEvent event) {
         Person owner = (Person) tvOwner.getSelectionModel().getSelectedItem();
         if (owner == null)
             return;
 
-        txtSSN.setText(owner.getSsn() + "");
+        txtSSN.setText(owner.getSsn());
         txtName.setText(owner.getPName());
         txtAddress.setText(owner.getAddress());
         txtBank.setText(owner.getBankInfo());
@@ -74,7 +72,14 @@ public class OwnerController implements Initializable {
     public void deleteOwner() {
         hideAllErrors();
 
-        String ssn = tvOwner.getSelectionModel().getSelectedItem().getSsn();
+        // Get selected Owner from TableView
+        Person owner = tvOwner.getSelectionModel().getSelectedItem();
+        if (owner == null) {
+            showError("Select an owner.");
+            return;
+        }
+
+        String ssn = owner.getSsn();
         if (ssn.length() < 9) {
             showError("SSN Invalid");
             return;
@@ -114,7 +119,14 @@ public class OwnerController implements Initializable {
     public void updateOwner() {
         hideAllErrors();
 
-        String ssn = tvOwner.getSelectionModel().getSelectedItem().getSsn();
+        // Get selected Owner from TableView
+        Person owner = tvOwner.getSelectionModel().getSelectedItem();
+        if (owner == null) {
+            showError("Select an owner.");
+            return;
+        }
+
+        String ssn = owner.getSsn();
         String name = txtName.getText().strip();
         String address = txtAddress.getText().strip();
         String birthDate = txtDate.getValue() == null ? null : txtDate.getValue().toString();
@@ -226,9 +238,7 @@ public class OwnerController implements Initializable {
             else
                 showError("Duplicate SSN");
         } catch (SQLException sql_e) {
-            alert.setHeaderText("Error reading database");
-            alert.setContentText(sql_e.getMessage());
-            alert.show();
+            AlertUtil.showAlert(AlertType.ERROR, "Error reading database", sql_e.getMessage());
         }
     }
 
@@ -262,7 +272,8 @@ public class OwnerController implements Initializable {
         txtBank.setTextFormatter(TextFormatterTypes.getAlphaWordCharsFormatter(0));
         txtName.setTextFormatter(TextFormatterTypes.getAlphaWordCharsFormatter(0));
         txtSSN.setTextFormatter(TextFormatterTypes.getIntFormatter(9));
-        cbPhone.getEditor().setTextFormatter(TextFormatterTypes.getIntFormatter(15));
+        
+        cbPhone.getEditor().setTextFormatter(TextFormatterTypes.getIntFormatter(10));
         cbEmail.getEditor().setTextFormatter(TextFormatterTypes.getEmailTextFormatter(64));
     }
 
@@ -299,9 +310,7 @@ public class OwnerController implements Initializable {
                         queryResult.getString("emails")));
             }
         } catch (SQLException sql_e) {
-            alert.setHeaderText("Error reading database");
-            alert.setContentText(sql_e.getMessage());
-            alert.show();
+            AlertUtil.showAlert(AlertType.ERROR, "Error reading database", sql_e.getMessage());
         }
 
         return result;

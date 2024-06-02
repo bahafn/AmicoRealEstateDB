@@ -4,7 +4,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import com.github.lamico.db.DBConnection;
-import com.github.lamico.entities.Employee;
+import com.github.lamico.entities.Client;
 import com.github.lamico.gui.utils.AlertUtil;
 import com.github.lamico.gui.utils.TextFormatterTypes;
 
@@ -30,19 +30,19 @@ import java.sql.Statement;
 import java.time.Instant;
 import java.time.ZoneId;
 
-public class EmployeeController implements Initializable {
+public class ClientController implements Initializable {
     @FXML
-    private TableView<Employee> tvEmployee;
+    private TableView<Client> tvClient;
 
     @FXML
-    private TableColumn<?, ?> tcBank, tcDate, tcName, tcSSN, tcAddress, tcPhone, tcEmail, tcSalary, tcHireDate,
-            tcDepartment, tcPosition;
+    private TableColumn<?, ?> tcBank, tcDate, tcName, tcSSN, tcAddress, tcPhone, tcEmail, tcSponsor, tcIncome,
+            tcEmployer;
 
     @FXML
-    private TextField txtAddress, txtBank, txtName, txtSSN, txtPhone, txtEmail, txtSalary, txtPosition, txtDepartment;
+    private TextField txtAddress, txtBank, txtName, txtSSN, txtPhone, txtEmail, txtSponsor, txtIncomeLevel, txtEmployer;
 
     @FXML
-    private DatePicker txtDate, txtHireDate;
+    private DatePicker txtDate;
 
     @FXML
     private ComboBox<String> cbPhone, cbEmail;
@@ -51,41 +51,39 @@ public class EmployeeController implements Initializable {
     private Label lbGeneralError;
 
     public void handleRowSelection(MouseEvent event) {
-        Employee employee = (Employee) tvEmployee.getSelectionModel().getSelectedItem();
-        if (employee == null)
+        Client client = (Client) tvClient.getSelectionModel().getSelectedItem();
+        if (client == null)
             return;
 
-        txtSSN.setText(employee.getSsn());
-        txtName.setText(employee.getPName());
-        txtAddress.setText(employee.getAddress());
-        txtBank.setText(employee.getBankInfo());
-        txtSalary.setText(employee.getSalary() + "");
-        txtDepartment.setText(employee.getDepartment());
-        txtPosition.setText(employee.getEPosition());
+        txtSSN.setText(client.getSsn());
+        txtName.setText(client.getPName());
+        txtAddress.setText(client.getAddress());
+        txtBank.setText(client.getBankInfo());
+        txtSponsor.setText(client.getSponsor());
+        txtIncomeLevel.setText(client.getIncomeLevel() + "");
+        txtEmployer.setText(client.getEmployer());
         txtDate.setValue(
-                Instant.ofEpochMilli(employee.getDateOfBirth().getTime()).atZone(ZoneId.systemDefault()).toLocalDate());
-        txtHireDate.setValue(
-                Instant.ofEpochMilli(employee.getHireDate().getTime()).atZone(ZoneId.systemDefault()).toLocalDate());
+                Instant.ofEpochMilli(client.getDateOfBirth().getTime()).atZone(ZoneId.systemDefault()).toLocalDate());
 
         // Remove all items from phone and email ComboBoxes
         cbPhone.getItems().clear();
         cbEmail.getItems().clear();
         // Add selected phones and emails to ComboBoxes
-        cbPhone.getItems().addAll(employee.getPhone().split("\n"));
-        cbEmail.getItems().addAll(employee.getEmail().split("\n"));
+        cbPhone.getItems().addAll(client.getPhone().split("\n"));
+        cbEmail.getItems().addAll(client.getEmail().split("\n"));
     }
 
-    public void deleteEmployee() {
+    public void deleteClient() {
         hideAllErrors();
 
         // Get selected Owner from TableView
-        Employee employee = tvEmployee.getSelectionModel().getSelectedItem();
-        if (employee == null) {
+        Client client = tvClient.getSelectionModel().getSelectedItem();
+        if (client == null) {
             showError("Select an owner.");
             return;
         }
 
-        String ssn = employee.getSsn();
+        String ssn = client.getSsn();
         if (ssn.length() < 9) {
             showError("SSN Invalid");
             return;
@@ -94,10 +92,10 @@ public class EmployeeController implements Initializable {
         String query = String.format("DELETE FROM person WHERE ssn = '%s'", ssn);
         executeQuery(query);
 
-        showEmployees();
+        showClients();
     }
 
-    public void insertEmployee() {
+    public void insertClient() {
         hideAllErrors();
 
         String ssn = txtSSN.getText().strip();
@@ -105,10 +103,9 @@ public class EmployeeController implements Initializable {
         String address = txtAddress.getText().strip();
         String birthDate = txtDate.getValue() == null ? null : txtDate.getValue().toString();
         String bankName = txtBank.getText().strip();
-        String department = txtDepartment.getText().strip();
-        String position = txtPosition.getText().strip();
-        String hireDate = txtDate.getValue() == null ? null : txtHireDate.getValue().toString();
-        String salary = txtSalary.getText();
+        String sponsor = txtSponsor.getText().strip();
+        String incomeLevel = txtIncomeLevel.getText().strip();
+        String employer = txtEmployer.getText().strip();
 
         if (ssn.length() < 9) {
             showError("SSN Invalid");
@@ -125,37 +122,34 @@ public class EmployeeController implements Initializable {
             return;
         }
 
-        // Add person to person table
-        String addPersonQuery = String.format("INSERT INTO person VALUES('%s', '%s', '%s', '%s', '%s')", ssn, name,
+        String insertPersonQuery = String.format("INSERT INTO person VALUES('%s', '%s', '%s', '%s', '%s')", ssn, name,
                 address, birthDate, bankName);
-        executeQuery(addPersonQuery);
-        // Add employee to employee table
-        String addEmployeeQuery = String.format("INSERT INTO employee VALUES(%s, '%s', '%s', '%s', '%s')", salary,
-                hireDate, position, department, ssn);
-        executeQuery(addEmployeeQuery);
+        executeQuery(insertPersonQuery);
+        String insertClientQuery = String.format("INSERT INTO clientTbl VALUES('%s', %s, '%s', '%s')", sponsor,
+                incomeLevel, employer, ssn);
+        executeQuery(insertClientQuery);
 
-        showEmployees();
+        showClients();
     }
 
-    public void updateEmployee() {
+    public void updateClient() {
         hideAllErrors();
-        
+
         // Get selected Owner from TableView
-        Employee employee = tvEmployee.getSelectionModel().getSelectedItem();
-        if (employee == null) {
+        Client client = tvClient.getSelectionModel().getSelectedItem();
+        if (client == null) {
             showError("Select an owner.");
             return;
         }
 
-        String ssn = employee.getSsn();
+        String ssn = client.getSsn();
         String name = txtName.getText().strip();
         String address = txtAddress.getText().strip();
         String birthDate = txtDate.getValue() == null ? null : txtDate.getValue().toString();
         String bankName = txtBank.getText().strip();
-        String department = txtDepartment.getText().strip();
-        String position = txtPosition.getText().strip();
-        String hireDate = txtDate.getValue() == null ? null : txtHireDate.getValue().toString();
-        String salary = txtSalary.getText();
+        String sponsor = txtSponsor.getText().strip();
+        String incomeLevel = txtIncomeLevel.getText().strip();
+        String employer = txtEmployer.getText().strip();
 
         if (ssn.length() < 9) {
             showError("SSN Invalid");
@@ -170,18 +164,18 @@ public class EmployeeController implements Initializable {
                 "UPDATE person SET pName = '%s', Address = '%s', dateOfBirth = '%s', bankInfo = '%s' WHERE ssn = '%s'",
                 name, address, birthDate, bankName, ssn);
         executeQuery(updatePersonQuery);
-        String updateEmployeeQuery = String.format(
-                "UPDATE employee SET salary = %s, department = '%s', ePosition = '%s', hireDate = '%s' WHERE snn = '%s'",
-                salary, department, position, hireDate, ssn);
-        executeQuery(updateEmployeeQuery);
+        String updateClientQuery = String.format(
+                "UPDATE clientTbl SET sponsor = '%s', incomeLevel = %s, employeementInfo = '%s' WHERE ssn = '%s'",
+                sponsor, incomeLevel, employer, ssn);
+        executeQuery(updateClientQuery);
 
-        showEmployees();
+        showClients();
     }
 
     public void addPhone() {
         hideAllErrors();
 
-        String ssn = txtSSN.getText().strip();
+        String ssn = tvClient.getSelectionModel().getSelectedItem().getSsn();
         if (ssn.length() < 9) {
             showError("SSN Invalid");
             return;
@@ -196,7 +190,7 @@ public class EmployeeController implements Initializable {
         String query = String.format("INSERT INTO phone VALUES ('%s', '%s')", phone, ssn);
         executeQuery(query);
 
-        showEmployees();
+        showClients();
     }
 
     public void removePhone() {
@@ -212,7 +206,7 @@ public class EmployeeController implements Initializable {
                 cbPhone.getEditor().getText());
         executeQuery(query);
 
-        showEmployees();
+        showClients();
     }
 
     public void addEmail() {
@@ -233,7 +227,7 @@ public class EmployeeController implements Initializable {
         String query = String.format("INSERT INTO email VALUES ('%s', '%s')", email, ssn);
         executeQuery(query);
 
-        showEmployees();
+        showClients();
     }
 
     public void removeEmail() {
@@ -249,7 +243,7 @@ public class EmployeeController implements Initializable {
                 cbEmail.getEditor().getText());
         executeQuery(query);
 
-        showEmployees();
+        showClients();
     }
 
     private void executeQuery(String query) {
@@ -259,14 +253,14 @@ public class EmployeeController implements Initializable {
             statement.executeUpdate(query);
         } catch (SQLIntegrityConstraintViolationException e) {
             // This means we have a duplicate primary key
-            // Duplicate primary key can mean a duplicate SSN or the employee already has
-            // this email or phone.
+            // duplicate primary key can mean a duplicate SSN, the owner already has this
+            // email or phone.
             if (query.contains("email"))
                 showError("Email already added.");
             else if (query.contains("phone"))
                 showError("Phone number already added.");
             else
-                showError("Duplicate SSN.");
+                showError("Duplicate SSN");
         } catch (SQLException sql_e) {
             AlertUtil.showAlert(AlertType.ERROR, "Error reading database", sql_e.getMessage());
         }
@@ -292,12 +286,11 @@ public class EmployeeController implements Initializable {
         tcAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
         tcPhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
         tcEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
-        tcPosition.setCellValueFactory(new PropertyValueFactory<>("ePosition"));
-        tcHireDate.setCellValueFactory(new PropertyValueFactory<>("hireDate"));
-        tcSalary.setCellValueFactory(new PropertyValueFactory<>("salary"));
-        tcDepartment.setCellValueFactory(new PropertyValueFactory<>("department"));
+        tcSponsor.setCellValueFactory(new PropertyValueFactory<>("sponsor"));
+        tcEmployer.setCellValueFactory(new PropertyValueFactory<>("employer"));
+        tcIncome.setCellValueFactory(new PropertyValueFactory<>("incomeLevel"));
 
-        showEmployees();
+        showClients();
         restrictTextFields();
     }
 
@@ -306,16 +299,16 @@ public class EmployeeController implements Initializable {
         txtBank.setTextFormatter(TextFormatterTypes.getAlphaWordCharsFormatter(0));
         txtName.setTextFormatter(TextFormatterTypes.getAlphaWordCharsFormatter(0));
         txtSSN.setTextFormatter(TextFormatterTypes.getIntFormatter(9));
-        txtSalary.setTextFormatter(TextFormatterTypes.getIntFormatter(10));
-        txtDepartment.setTextFormatter(TextFormatterTypes.getAlphanumericWordCharsAndCommasFormatter(16));
-        txtPosition.setTextFormatter(TextFormatterTypes.getMaxLengthFormatter(16));
+        txtSponsor.setTextFormatter(TextFormatterTypes.getAlphaWordCharsFormatter(32));
+        txtEmployer.setTextFormatter(TextFormatterTypes.getMaxLengthFormatter(32));
+        txtIncomeLevel.setTextFormatter(TextFormatterTypes.getIntFormatter(10));
 
         cbPhone.getEditor().setTextFormatter(TextFormatterTypes.getIntFormatter(10));
         cbEmail.getEditor().setTextFormatter(TextFormatterTypes.getEmailTextFormatter(64));
     }
 
-    private void showEmployees() {
-        tvEmployee.setItems(getEmployees());
+    private void showClients() {
+        tvClient.setItems(getClients());
     }
 
     /** @return Whether an Owner has this ssn. */
@@ -332,32 +325,31 @@ public class EmployeeController implements Initializable {
     }
 
     /**
-     * Gets all information of all Employees.
+     * Gets all information of all Clients.
      * 
-     * @return An ObservableList of all employees.
+     * @return An ObservableList of all clients.
      */
-    private ObservableList<Employee> getEmployees() {
-        ObservableList<Employee> result = FXCollections.observableArrayList();
+    private ObservableList<Client> getClients() {
+        ObservableList<Client> result = FXCollections.observableArrayList();
 
-        String query = "SELECT e.*, p.ssn, p.pName, p.dateOfBirth, p.address, p.bankInfo, "
-                + "GROUP_CONCAT(DISTINCT ph.phoneNumber ORDER BY ph.phoneNumber SEPARATOR '\n') AS phones, "
-                + "GROUP_CONCAT(DISTINCT em.address ORDER BY em.address SEPARATOR '\n') AS emails "
-                + "FROM employee e "
-                + "JOIN person p ON e.ssn = p.ssn "
-                + "LEFT JOIN phone ph ON p.ssn = ph.ssn "
-                + "LEFT JOIN email em ON p.ssn = em.ssn "
-                + "GROUP BY e.ssn, p.ssn, p.pName, p.dateOfBirth, p.address, p.bankInfo";
+        String query = "SELECT c.*, p.ssn, p.pName, p.dateOfBirth, p.address, p.bankInfo, " +
+                "GROUP_CONCAT(DISTINCT ph.phoneNumber SEPARATOR '\n') AS phones, " +
+                "GROUP_CONCAT(DISTINCT e.address SEPARATOR '\n') AS emails " +
+                "FROM clientTbl c " +
+                "JOIN person p ON c.ssn = p.ssn " +
+                "LEFT JOIN phone ph ON p.ssn = ph.ssn " +
+                "LEFT JOIN email e ON p.ssn = e.ssn " +
+                "GROUP BY c.ssn, p.ssn, p.pName, p.dateOfBirth, p.address, p.bankInfo";
         try (Connection connection = DBConnection.getConnection();
                 Statement statement = connection.createStatement();
                 ResultSet queryResult = statement.executeQuery(query)) {
 
             while (queryResult.next()) {
-                result.add(new Employee(queryResult.getString("ssn"), queryResult.getString("pName"),
+                result.add(new Client(queryResult.getString("ssn"), queryResult.getString("pName"),
                         queryResult.getString("Address"), queryResult.getDate("dateOfBirth"),
                         queryResult.getString("bankInfo"), queryResult.getString("phones"),
-                        queryResult.getString("emails"), queryResult.getString("ePosition"),
-                        queryResult.getString("department"), queryResult.getInt("salary"),
-                        queryResult.getDate("hireDate")));
+                        queryResult.getString("emails"), queryResult.getString("sponsor"),
+                        queryResult.getInt("incomeLevel"), queryResult.getString("employeementInfo")));
             }
         } catch (SQLException sql_e) {
             AlertUtil.showAlert(AlertType.ERROR, "Error reading database", sql_e.getMessage());
