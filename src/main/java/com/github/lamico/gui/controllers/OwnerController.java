@@ -74,7 +74,7 @@ public class OwnerController implements Initializable {
     public void deleteOwner() {
         hideAllErrors();
 
-        String ssn = txtSSN.getText().strip();
+        String ssn = tvOwner.getSelectionModel().getSelectedItem().getSsn();
         if (ssn.length() < 9) {
             showError("SSN Invalid");
             return;
@@ -114,7 +114,7 @@ public class OwnerController implements Initializable {
     public void updateOwner() {
         hideAllErrors();
 
-        String ssn = txtSSN.getText().strip();
+        String ssn = tvOwner.getSelectionModel().getSelectedItem().getSsn();
         String name = txtName.getText().strip();
         String address = txtAddress.getText().strip();
         String birthDate = txtDate.getValue() == null ? null : txtDate.getValue().toString();
