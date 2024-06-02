@@ -25,6 +25,7 @@ public class GUIApplication extends Application {
 		scene.getStylesheets().add(ResourceManager.getStylesheetURL("root"));
 
 		primaryStage.setScene(scene);
+		primaryStage.setMaximized(true);
 		primaryStage.setMinHeight(563);
 		primaryStage.setMinWidth(1034);
 		primaryStage.setTitle("Lamico Real Estate");

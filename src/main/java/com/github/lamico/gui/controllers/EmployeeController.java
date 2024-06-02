@@ -5,13 +5,13 @@ import java.util.ResourceBundle;
 
 import com.github.lamico.db.DBConnection;
 import com.github.lamico.entities.Employee;
+import com.github.lamico.gui.utils.AlertUtil;
 import com.github.lamico.gui.utils.TextFormatterTypes;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -49,8 +49,6 @@ public class EmployeeController implements Initializable {
 
     @FXML
     private Label lbGeneralError;
-
-    private Alert alert = new Alert(AlertType.ERROR);
 
     public void handleRowSelection(MouseEvent event) {
         Employee employee = (Employee) tvEmployee.getSelectionModel().getSelectedItem();
@@ -92,7 +90,6 @@ public class EmployeeController implements Initializable {
         showEmployees();
     }
 
-    // TODO: Fix problem with inserting an ssn that exists as a client or owner
     public void insertEmployee() {
         hideAllErrors();
 
@@ -112,6 +109,12 @@ public class EmployeeController implements Initializable {
         }
         if (name.isEmpty() || address.isEmpty() || birthDate == null || bankName.isEmpty()) {
             showError("Empty Fields");
+            return;
+        }
+
+        // Check if ssn is already belongs to an owner
+        if (searchOwner(ssn)) {
+            AlertUtil.showAlert(AlertType.INFORMATION, "Couldn't add Employee", "SSN already used by an owner.");
             return;
         }
 
@@ -251,9 +254,7 @@ public class EmployeeController implements Initializable {
             else
                 showError("Duplicate SSN.");
         } catch (SQLException sql_e) {
-            alert.setHeaderText("Error reading database");
-            alert.setContentText(sql_e.getMessage());
-            alert.show();
+            AlertUtil.showAlert(AlertType.ERROR, "Error reading database", sql_e.getMessage());
         }
     }
 
@@ -303,6 +304,19 @@ public class EmployeeController implements Initializable {
         tvEmployee.setItems(getEmployees());
     }
 
+    /** @return Whether an Owner has this ssn. */
+    private boolean searchOwner(String ssn) {
+        String query = String.format("SELECT * from person WHERE ssn = %s", ssn);
+        try (Connection connection = DBConnection.getConnection();
+                Statement statement = connection.createStatement();
+                ResultSet queryResult = statement.executeQuery(query)) {
+            return queryResult.next();
+        } catch (SQLException sql_e) {
+            AlertUtil.showAlert(AlertType.ERROR, "Error reading database", sql_e.getMessage());
+            return false;
+        }
+    }
+
     /**
      * Gets all information of all Employees.
      * 
@@ -332,9 +346,7 @@ public class EmployeeController implements Initializable {
                         queryResult.getDate("hireDate")));
             }
         } catch (SQLException sql_e) {
-            alert.setHeaderText("Error reading database");
-            alert.setContentText(sql_e.getMessage());
-            alert.show();
+            AlertUtil.showAlert(AlertType.ERROR, "Error reading database", sql_e.getMessage());
         }
 
         return result;
