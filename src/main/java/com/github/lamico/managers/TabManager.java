@@ -22,7 +22,7 @@ public class TabManager {
 	public static final String OWNERS = "owner";
 	public static final String BROKERS = "brokers";
 	public static final String CLIENTS = "clients";
-	public static final String EMPLOYEES = "employees";
+	public static final String EMPLOYEES = "employee";
 	public static final String DASHBOARD = "dashboard";
 
 	private Map<String, Node> nodeMap = new HashMap<>();
@@ -51,6 +51,7 @@ public class TabManager {
 		nodeMap.put(LAND, ResourceManager.getFXMLLoader(LAND).load());
 		nodeMap.put(DASHBOARD, ResourceManager.getFXMLLoader(DASHBOARD).load());
 		nodeMap.put(OWNERS, ResourceManager.getFXMLLoader(OWNERS).load());
+		nodeMap.put(EMPLOYEES, ResourceManager.getFXMLLoader(EMPLOYEES).load());
 	}
 
 	/**

@@ -17,8 +17,7 @@ public class TextFormatterTypes {
     private static final Pattern ALPHANUMERIC_WORD_CHARS_PATTERN = Pattern.compile("\\w -*");
     private static final Pattern ALPHANUMERIC_WORD_CHARS_AND_COMMAS_PATTERN = Pattern.compile("[\\w, -]*");
     private static final Pattern SQL_DATE_PATTERN = Pattern.compile("\\d{0,4}(-\\d{0,2}){0,2}");
-    public static final Pattern EMAIL_PATTERN = Pattern
-            .compile("[a-zA-Z0-9_-]+(?:@[a-zA-Z.]*)?");
+    public static final Pattern EMAIL_PATTERN = Pattern.compile("[a-zA-Z0-9_-]+(?:@[a-zA-Z.]*)?");
 
     /**
      * Returns a TextFormatter that restricts input to integers with a maximum

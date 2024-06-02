@@ -129,7 +129,7 @@
                               <Tooltip text="Removes selected phone number from selected user." />
                            </tooltip>
                         </Button>
-                        <ComboBox fx:id="cbPhone" editable="true" layoutX="89.0" layoutY="-4.0" prefWidth="122.0" />
+                        <ComboBox fx:id="cbPhone" editable="true" layoutX="89.0" layoutY="-4.0" prefWidth="122.0" stylesheets="@../css/demo.css" />
                      </children>
                   </Pane>
                   <Pane prefHeight="200.0" prefWidth="200.0" translateY="15.0">
@@ -145,7 +145,7 @@
                               <Tooltip text="Removes an email from selected owner." />
                            </tooltip>
                         </Button>
-                        <ComboBox fx:id="cbEmail" editable="true" layoutX="89.0" layoutY="-4.0" prefWidth="122.0" />
+                        <ComboBox fx:id="cbEmail" editable="true" layoutX="89.0" layoutY="-4.0" prefWidth="122.0" stylesheets="@../css/demo.css" />
                      </children>
                   </Pane>
                </children>

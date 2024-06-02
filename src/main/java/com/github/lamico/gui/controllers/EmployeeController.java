@@ -4,7 +4,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import com.github.lamico.db.DBConnection;
-import com.github.lamico.entities.Person;
+import com.github.lamico.entities.Employee;
 import com.github.lamico.gui.utils.TextFormatterTypes;
 
 import javafx.collections.FXCollections;
@@ -30,18 +30,19 @@ import java.sql.Statement;
 import java.time.Instant;
 import java.time.ZoneId;
 
-public class OwnerController implements Initializable {
+public class EmployeeController implements Initializable {
     @FXML
-    private TableView<Person> tvOwner;
+    private TableView<Employee> tvEmployee;
 
     @FXML
-    private TableColumn<?, ?> tcBank, tcDate, tcName, tcSSN, tcAddress, tcPhone, tcEmail;
+    private TableColumn<?, ?> tcBank, tcDate, tcName, tcSSN, tcAddress, tcPhone, tcEmail, tcSalary, tcHireDate,
+            tcDepartment, tcPosition;
 
     @FXML
-    private TextField txtAddress, txtBank, txtName, txtSSN, txtPhone, txtEmail;
+    private TextField txtAddress, txtBank, txtName, txtSSN, txtPhone, txtEmail, txtSalary, txtPosition, txtDepartment;
 
     @FXML
-    private DatePicker txtDate;
+    private DatePicker txtDate, txtHireDate;
 
     @FXML
     private ComboBox<String> cbPhone, cbEmail;
@@ -52,26 +53,31 @@ public class OwnerController implements Initializable {
     private Alert alert = new Alert(AlertType.ERROR);
 
     public void handleRowSelection(MouseEvent event) {
-        Person owner = (Person) tvOwner.getSelectionModel().getSelectedItem();
-        if (owner == null)
+        Employee employee = (Employee) tvEmployee.getSelectionModel().getSelectedItem();
+        if (employee == null)
             return;
 
-        txtSSN.setText(owner.getSsn() + "");
-        txtName.setText(owner.getPName());
-        txtAddress.setText(owner.getAddress());
-        txtBank.setText(owner.getBankInfo());
+        txtSSN.setText(employee.getSsn() + "");
+        txtName.setText(employee.getPName());
+        txtAddress.setText(employee.getAddress());
+        txtBank.setText(employee.getBankInfo());
+        txtSalary.setText(employee.getSalary() + "");
+        txtDepartment.setText(employee.getDepartment());
+        txtPosition.setText(employee.getEPosition());
         txtDate.setValue(
-                Instant.ofEpochMilli(owner.getDateOfBirth().getTime()).atZone(ZoneId.systemDefault()).toLocalDate());
+                Instant.ofEpochMilli(employee.getDateOfBirth().getTime()).atZone(ZoneId.systemDefault()).toLocalDate());
+        txtHireDate.setValue(
+                Instant.ofEpochMilli(employee.getHireDate().getTime()).atZone(ZoneId.systemDefault()).toLocalDate());
 
         // Remove all items from phone and email ComboBoxes
         cbPhone.getItems().clear();
         cbEmail.getItems().clear();
         // Add selected phones and emails to ComboBoxes
-        cbPhone.getItems().addAll(owner.getPhone().split("\n"));
-        cbEmail.getItems().addAll(owner.getEmail().split("\n"));
+        cbPhone.getItems().addAll(employee.getPhone().split("\n"));
+        cbEmail.getItems().addAll(employee.getEmail().split("\n"));
     }
 
-    public void deleteOwner() {
+    public void deleteEmployee() {
         hideAllErrors();
 
         String ssn = txtSSN.getText().strip();
@@ -83,10 +89,11 @@ public class OwnerController implements Initializable {
         String query = String.format("DELETE FROM person WHERE ssn = '%s'", ssn);
         executeQuery(query);
 
-        showOwners();
+        showEmployees();
     }
 
-    public void insertOwner() {
+    // TODO: Fix problem with inserting an ssn that exists as a client or owner
+    public void insertEmployee() {
         hideAllErrors();
 
         String ssn = txtSSN.getText().strip();
@@ -94,6 +101,10 @@ public class OwnerController implements Initializable {
         String address = txtAddress.getText().strip();
         String birthDate = txtDate.getValue() == null ? null : txtDate.getValue().toString();
         String bankName = txtBank.getText().strip();
+        String department = txtDepartment.getText().strip();
+        String position = txtPosition.getText().strip();
+        String hireDate = txtDate.getValue() == null ? null : txtHireDate.getValue().toString();
+        String salary = txtSalary.getText();
 
         if (ssn.length() < 9) {
             showError("SSN Invalid");
@@ -104,14 +115,19 @@ public class OwnerController implements Initializable {
             return;
         }
 
-        String query = String.format("INSERT INTO person VALUES('%s', '%s', '%s', '%s', '%s')", ssn, name, address,
-                birthDate, bankName);
-        executeQuery(query);
+        // Add person to person table
+        String addPersonQuery = String.format("INSERT INTO person VALUES('%s', '%s', '%s', '%s', '%s')", ssn, name,
+                address, birthDate, bankName);
+        executeQuery(addPersonQuery);
+        // Add employee to employee table
+        String addEmployeeQuery = String.format("INSERT INTO employee VALUES(%s, '%s', '%s', '%s', '%s')", salary,
+                hireDate, position, department, ssn);
+        executeQuery(addEmployeeQuery);
 
-        showOwners();
+        showEmployees();
     }
 
-    public void updateOwner() {
+    public void updateEmployee() {
         hideAllErrors();
 
         String ssn = txtSSN.getText().strip();
@@ -119,6 +135,10 @@ public class OwnerController implements Initializable {
         String address = txtAddress.getText().strip();
         String birthDate = txtDate.getValue() == null ? null : txtDate.getValue().toString();
         String bankName = txtBank.getText().strip();
+        String department = txtDepartment.getText().strip();
+        String position = txtPosition.getText().strip();
+        String hireDate = txtDate.getValue() == null ? null : txtHireDate.getValue().toString();
+        String salary = txtSalary.getText();
 
         if (ssn.length() < 9) {
             showError("SSN Invalid");
@@ -129,12 +149,16 @@ public class OwnerController implements Initializable {
             return;
         }
 
-        String query = String.format(
+        String updatePersonQuery = String.format(
                 "UPDATE person SET pName = '%s', Address = '%s', dateOfBirth = '%s', bankInfo = '%s' WHERE ssn = '%s'",
                 name, address, birthDate, bankName, ssn);
-        executeQuery(query);
+        executeQuery(updatePersonQuery);
+        String updateEmployeeQuery = String.format(
+                "UPDATE employee SET salary = %s, department = '%s', ePosition = '%s', hireDate = '%s'", salary,
+                department, position, hireDate);
+        executeQuery(updateEmployeeQuery);
 
-        showOwners();
+        showEmployees();
     }
 
     public void addPhone() {
@@ -155,7 +179,7 @@ public class OwnerController implements Initializable {
         String query = String.format("INSERT INTO phone VALUES ('%s', '%s')", phone, ssn);
         executeQuery(query);
 
-        showOwners();
+        showEmployees();
     }
 
     public void removePhone() {
@@ -171,7 +195,7 @@ public class OwnerController implements Initializable {
                 cbPhone.getEditor().getText());
         executeQuery(query);
 
-        showOwners();
+        showEmployees();
     }
 
     public void addEmail() {
@@ -192,7 +216,7 @@ public class OwnerController implements Initializable {
         String query = String.format("INSERT INTO email VALUES ('%s', '%s')", email, ssn);
         executeQuery(query);
 
-        showOwners();
+        showEmployees();
     }
 
     public void removeEmail() {
@@ -208,7 +232,7 @@ public class OwnerController implements Initializable {
                 cbEmail.getEditor().getText());
         executeQuery(query);
 
-        showOwners();
+        showEmployees();
     }
 
     private void executeQuery(String query) {
@@ -218,13 +242,14 @@ public class OwnerController implements Initializable {
             statement.executeUpdate(query);
         } catch (SQLIntegrityConstraintViolationException e) {
             // This means we have a duplicate primary key
-            // duplicate primary key can mean a duplicate SSN, the owner already has this email or phone.
+            // Duplicate primary key can mean a duplicate SSN or the employee already has
+            // this email or phone.
             if (query.contains("email"))
                 showError("Email already added.");
             else if (query.contains("phone"))
                 showError("Phone number already added.");
             else
-                showError("Duplicate SSN");
+                showError("Duplicate SSN.");
         } catch (SQLException sql_e) {
             alert.setHeaderText("Error reading database");
             alert.setContentText(sql_e.getMessage());
@@ -252,8 +277,12 @@ public class OwnerController implements Initializable {
         tcAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
         tcPhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
         tcEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+        tcPosition.setCellValueFactory(new PropertyValueFactory<>("ePosition"));
+        tcHireDate.setCellValueFactory(new PropertyValueFactory<>("hireDate"));
+        tcSalary.setCellValueFactory(new PropertyValueFactory<>("salary"));
+        tcDepartment.setCellValueFactory(new PropertyValueFactory<>("department"));
 
-        showOwners();
+        showEmployees();
         restrictTextFields();
     }
 
@@ -262,41 +291,45 @@ public class OwnerController implements Initializable {
         txtBank.setTextFormatter(TextFormatterTypes.getAlphaWordCharsFormatter(0));
         txtName.setTextFormatter(TextFormatterTypes.getAlphaWordCharsFormatter(0));
         txtSSN.setTextFormatter(TextFormatterTypes.getIntFormatter(9));
+        txtSalary.setTextFormatter(TextFormatterTypes.getIntFormatter(10));
+        txtDepartment.setTextFormatter(TextFormatterTypes.getAlphaWordCharsFormatter(16));
+        txtPosition.setTextFormatter(TextFormatterTypes.getAlphaWordCharsFormatter(16));
+
         cbPhone.getEditor().setTextFormatter(TextFormatterTypes.getIntFormatter(15));
         cbEmail.getEditor().setTextFormatter(TextFormatterTypes.getEmailTextFormatter(64));
     }
 
-    private void showOwners() {
-        tvOwner.setItems(getOwners());
+    private void showEmployees() {
+        tvEmployee.setItems(getEmployees());
     }
 
     /**
-     * Gets all information of all Owners.
+     * Gets all information of all Employees.
      * 
-     * @return An ObservableList of all owners.
+     * @return An ObservableList of all employees.
      */
-    private ObservableList<Person> getOwners() {
-        ObservableList<Person> result = FXCollections.observableArrayList();
+    private ObservableList<Employee> getEmployees() {
+        ObservableList<Employee> result = FXCollections.observableArrayList();
 
-        String query = "SELECT p.*, " +
-                "GROUP_CONCAT(DISTINCT ph.phoneNumber SEPARATOR '\n') AS phones, " +
-                "GROUP_CONCAT(DISTINCT e.address SEPARATOR '\n') AS emails " +
-                "FROM person p " +
-                "LEFT JOIN phone ph ON p.ssn = ph.ssn " +
-                "LEFT JOIN email e ON p.ssn = e.ssn " +
-                "WHERE p.ssn not in (select ssn from employee) " + 
-                "and p.ssn not in (select ssn from clientTbl) " + 
-                "and p.ssn not in (select ssn from broker)" +
-                "GROUP BY p.ssn, p.pName";
+        String query = "SELECT e.*, p.ssn, p.pName, p.dateOfBirth, p.address, p.bankInfo, "
+                + "GROUP_CONCAT(DISTINCT ph.phoneNumber ORDER BY ph.phoneNumber SEPARATOR '\n') AS phones, "
+                + "GROUP_CONCAT(DISTINCT em.address ORDER BY em.address SEPARATOR '\n') AS emails "
+                + "FROM employee e "
+                + "JOIN person p ON e.ssn = p.ssn "
+                + "LEFT JOIN phone ph ON p.ssn = ph.ssn "
+                + "LEFT JOIN email em ON p.ssn = em.ssn "
+                + "GROUP BY e.ssn, p.ssn, p.pName, p.dateOfBirth, p.address, p.bankInfo";
         try (Connection connection = DBConnection.getConnection();
                 Statement statement = connection.createStatement();
                 ResultSet queryResult = statement.executeQuery(query)) {
 
             while (queryResult.next()) {
-                result.add(new Person(queryResult.getString("ssn"), queryResult.getString("pName"),
+                result.add(new Employee(queryResult.getString("ssn"), queryResult.getString("pName"),
                         queryResult.getString("Address"), queryResult.getDate("dateOfBirth"),
                         queryResult.getString("bankInfo"), queryResult.getString("phones"),
-                        queryResult.getString("emails")));
+                        queryResult.getString("emails"), queryResult.getString("ePosition"),
+                        queryResult.getString("department"), queryResult.getInt("salary"),
+                        queryResult.getDate("hireDate")));
             }
         } catch (SQLException sql_e) {
             alert.setHeaderText("Error reading database");
