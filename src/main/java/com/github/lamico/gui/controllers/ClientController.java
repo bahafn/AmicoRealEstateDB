@@ -5,6 +5,7 @@ import java.util.ResourceBundle;
 
 import com.github.lamico.db.DBConnection;
 import com.github.lamico.entities.Client;
+import com.github.lamico.entities.Person;
 import com.github.lamico.gui.utils.AlertUtil;
 import com.github.lamico.gui.utils.TextFormatterTypes;
 
@@ -117,7 +118,7 @@ public class ClientController implements Initializable {
         }
 
         // Check if ssn is already belongs to an owner
-        if (searchOwner(ssn)) {
+        if (Person.searchOwner(ssn)) {
             AlertUtil.showAlert(AlertType.INFORMATION, "Couldn't add Employee", "SSN already used by an owner.");
             return;
         }
@@ -309,19 +310,6 @@ public class ClientController implements Initializable {
 
     private void showClients() {
         tvClient.setItems(getClients());
-    }
-
-    /** @return Whether an Owner has this ssn. */
-    private boolean searchOwner(String ssn) {
-        String query = String.format("SELECT * from person WHERE ssn = %s", ssn);
-        try (Connection connection = DBConnection.getConnection();
-                Statement statement = connection.createStatement();
-                ResultSet queryResult = statement.executeQuery(query)) {
-            return queryResult.next();
-        } catch (SQLException sql_e) {
-            AlertUtil.showAlert(AlertType.ERROR, "Error reading database", sql_e.getMessage());
-            return false;
-        }
     }
 
     /**
