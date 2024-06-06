@@ -4,6 +4,7 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -16,9 +17,9 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="470.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.lamico.gui.controllers.ClientController">
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="470.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.lamico.gui.controllers.BrokerController">
    <center>
-      <TableView fx:id="tvClient" onMouseClicked="#handleRowSelection" prefHeight="470.0" prefWidth="480.0" BorderPane.alignment="CENTER">
+      <TableView fx:id="tvBroker" onMouseClicked="#handleRowSelection" prefHeight="470.0" prefWidth="480.0" BorderPane.alignment="CENTER">
         <columns>
           <TableColumn fx:id="tcSSN" prefWidth="75.0" text="SSN" />
           <TableColumn fx:id="tcName" prefWidth="75.0" text="Name" />
@@ -27,9 +28,11 @@
             <TableColumn fx:id="tcPhone" prefWidth="101.5999755859375" text="Phone Number" />
             <TableColumn fx:id="tcEmail" prefWidth="109.5999755859375" text="Email" />
             <TableColumn fx:id="tcDate" prefWidth="98.4000244140625" text="Date of Birth" />
-            <TableColumn fx:id="tcSponsor" prefWidth="75.0" text="Sponsor" />
-            <TableColumn fx:id="tcIncome" prefWidth="75.0" text="Income Level" />
-            <TableColumn fx:id="tcEmployer" prefWidth="75.0" text="Employer" />
+            <TableColumn fx:id="tcSalary" prefWidth="75.0" text="Salary" />
+            <TableColumn fx:id="tcDepartment" prefWidth="75.0" text="Department" />
+            <TableColumn fx:id="tcPosition" prefWidth="75.0" text="Position" />
+            <TableColumn fx:id="tcHireDate" prefWidth="75.0" text="Hire Date" />
+            <TableColumn fx:id="tcCommission" prefWidth="75.0" text="Commission" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -50,15 +53,15 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button mnemonicParsing="false" onAction="#insertClient" prefHeight="26.0" prefWidth="98.0" stylesheets="@../css/demo.css" text="Insert" translateX="5.0">
+                  <Button mnemonicParsing="false" onAction="#insertBroker" prefHeight="26.0" prefWidth="98.0" stylesheets="@../css/demo.css" text="Insert" translateX="5.0">
                      <tooltip>
                         <Tooltip text="Adds a new owner with the data above." />
                      </tooltip></Button>
-                  <Button mnemonicParsing="false" onAction="#updateClient" prefHeight="26.0" prefWidth="98.0" stylesheets="@../css/demo.css" text="Update" translateX="5.0" GridPane.columnIndex="1">
+                  <Button mnemonicParsing="false" onAction="#updateBroker" prefHeight="26.0" prefWidth="98.0" stylesheets="@../css/demo.css" text="Update" translateX="5.0" GridPane.columnIndex="1">
                      <tooltip>
                         <Tooltip text="Updates selected owner with the data above." />
                      </tooltip></Button>
-                  <Button mnemonicParsing="false" onAction="#deleteClient" prefHeight="26.0" prefWidth="98.0" stylesheets="@../css/demo.css" text="Delete" translateX="5.0" GridPane.rowIndex="1">
+                  <Button mnemonicParsing="false" onAction="#deleteBroker" prefHeight="26.0" prefWidth="98.0" stylesheets="@../css/demo.css" text="Delete" translateX="5.0" GridPane.rowIndex="1">
                      <tooltip>
                         <Tooltip text="Deletes selected owner." />
                      </tooltip></Button>
@@ -73,8 +76,9 @@
          <right>
             <ScrollPane hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" prefHeight="374.0" prefWidth="224.0" BorderPane.alignment="CENTER">
                <content>
-                  <VBox layoutY="50.0" prefHeight="285.0" prefWidth="210.0" spacing="10.0" translateX="-5.0" translateY="25.0">
+                  <VBox fx:id="mainVBox" prefHeight="285.0" prefWidth="210.0" spacing="10.0" translateX="-5.0" translateY="25.0">
                      <children>
+                        <RadioButton fx:id="rbCompanyBroker" mnemonicParsing="false" onAction="#changeCompanyBroker" text="Company Broker" translateX="60.0" translateY="-20.0" />
                         <Pane minHeight="30.0" prefHeight="30.0" prefWidth="210.0" translateY="-10.0">
                            <children>
                               <Label layoutX="9.0" text="SSN:" />
@@ -117,38 +121,18 @@
                         </Pane>
                         <Pane minHeight="30.0" prefHeight="200.0" prefWidth="200.0" translateY="-10.0">
                            <children>
+                              <Label layoutX="9.0" text="Share:" />
+                              <TextField fx:id="txtShare" layoutX="89.0" layoutY="-5.0" onKeyTyped="#hideAllErrors" prefHeight="25.0" prefWidth="122.0">
+                                 <tooltip>
+                                    <Tooltip text="Address can only have letters and commas" />
+                                 </tooltip>
+                              </TextField>
+                           </children>
+                        </Pane>
+                        <Pane minHeight="30.0" prefHeight="200.0" prefWidth="200.0" translateY="-10.0">
+                           <children>
                               <Label layoutX="9.0" text="Birth Date:" />
                               <DatePicker fx:id="txtDate" editable="false" layoutX="89.0" layoutY="-5.0" onKeyTyped="#hideAllErrors" prefHeight="25.0" prefWidth="122.0" />
-                           </children>
-                        </Pane>
-                        <Pane minHeight="30.0" prefHeight="0.0" prefWidth="210.0" translateY="-10.0">
-                           <children>
-                              <Label layoutX="9.0" text="Sponsor:" />
-                              <TextField fx:id="txtSponsor" layoutX="89.0" layoutY="-5.0" onKeyTyped="#hideAllErrors" prefHeight="25.0" prefWidth="122.0">
-                                 <tooltip>
-                                    <Tooltip text="Enter 9 digit SSN." />
-                                 </tooltip>
-                              </TextField>
-                           </children>
-                        </Pane>
-                        <Pane minHeight="30.0" prefHeight="0.0" prefWidth="210.0" translateY="-10.0">
-                           <children>
-                              <Label layoutX="9.0" text="Income level:" />
-                              <TextField fx:id="txtIncomeLevel" layoutX="89.0" layoutY="-5.0" onKeyTyped="#hideAllErrors" prefHeight="25.0" prefWidth="122.0">
-                                 <tooltip>
-                                    <Tooltip text="Enter 9 digit SSN." />
-                                 </tooltip>
-                              </TextField>
-                           </children>
-                        </Pane>
-                        <Pane minHeight="30.0" prefHeight="0.0" prefWidth="210.0" translateY="-10.0">
-                           <children>
-                              <Label layoutX="9.0" text="Employer:" />
-                              <TextField fx:id="txtEmployer" layoutX="89.0" layoutY="-5.0" onKeyTyped="#hideAllErrors" prefHeight="25.0" prefWidth="122.0">
-                                 <tooltip>
-                                    <Tooltip text="Enter 9 digit SSN." />
-                                 </tooltip>
-                              </TextField>
                            </children>
                         </Pane>
                         <Pane minHeight="60.0" prefHeight="200.0" prefWidth="230.0" translateY="-10.0">
@@ -183,7 +167,57 @@
                               <ComboBox fx:id="cbEmail" editable="true" layoutX="89.0" layoutY="-4.0" prefWidth="122.0" stylesheets="@../css/demo.css" />
                            </children>
                         </Pane>
-                        <Label />
+                        <VBox fx:id="vbEmployeeInfo" layoutY="20.0" prefHeight="200.0" prefWidth="210.0" spacing="10.0" translateY="-12.0">
+                           <children>
+                              <Pane minHeight="30.0" prefHeight="0.0" prefWidth="210.0">
+                                 <children>
+                                    <Label layoutX="9.0" text="Position:" />
+                                    <TextField fx:id="txtPosition" layoutX="89.0" layoutY="-5.0" onKeyTyped="#hideAllErrors" prefHeight="25.0" prefWidth="122.0">
+                                       <tooltip>
+                                          <Tooltip text="Enter 9 digit SSN." />
+                                       </tooltip>
+                                    </TextField>
+                                 </children>
+                              </Pane>
+                              <Pane minHeight="30.0" prefHeight="0.0" prefWidth="210.0">
+                                 <children>
+                                    <Label layoutX="9.0" text="Department:" />
+                                    <TextField fx:id="txtDepartment" layoutX="89.0" layoutY="-5.0" onKeyTyped="#hideAllErrors" prefHeight="25.0" prefWidth="122.0">
+                                       <tooltip>
+                                          <Tooltip text="Enter 9 digit SSN." />
+                                       </tooltip>
+                                    </TextField>
+                                 </children>
+                              </Pane>
+                              <Pane minHeight="30.0" prefHeight="0.0" prefWidth="210.0">
+                                 <children>
+                                    <Label layoutX="9.0" text="Salary:" />
+                                    <TextField fx:id="txtSalary" layoutX="89.0" layoutY="-5.0" onKeyTyped="#hideAllErrors" prefHeight="25.0" prefWidth="122.0">
+                                       <tooltip>
+                                          <Tooltip text="Enter 9 digit SSN." />
+                                       </tooltip>
+                                    </TextField>
+                                 </children>
+                              </Pane>
+                              <Pane minHeight="30.0" prefHeight="200.0" prefWidth="210.0">
+                                 <children>
+                                    <Label layoutX="9.0" text="Hire Date" />
+                                    <DatePicker fx:id="txtHireDate" editable="false" layoutX="89.0" layoutY="-5.0" onKeyTyped="#hideAllErrors" prefHeight="25.0" prefWidth="122.0" />
+                                 </children>
+                              </Pane>
+                              <Label />
+                           </children>
+                        </VBox>
+                        <Pane fx:id="pCommission" minHeight="60.0" prefHeight="200.0" prefWidth="200.0" translateY="-10.0">
+                           <children>
+                              <Label layoutX="9.0" text="Commission:" />
+                              <TextField fx:id="txtCommission" layoutX="89.0" layoutY="-5.0" onKeyTyped="#hideAllErrors" prefHeight="25.0" prefWidth="122.0">
+                                 <tooltip>
+                                    <Tooltip text="Address can only have letters and commas" />
+                                 </tooltip>
+                              </TextField>
+                           </children>
+                        </Pane>
                      </children>
                   </VBox>
                </content>

@@ -4,7 +4,9 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import com.github.lamico.db.DBConnection;
-import com.github.lamico.entities.Employee;
+import com.github.lamico.entities.Broker;
+import com.github.lamico.entities.CompanyBroker;
+import com.github.lamico.entities.IndependentBroker;
 import com.github.lamico.entities.Person;
 import com.github.lamico.gui.utils.AlertUtil;
 import com.github.lamico.gui.utils.TextFormatterTypes;
@@ -22,6 +24,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -31,16 +35,17 @@ import java.sql.Statement;
 import java.time.Instant;
 import java.time.ZoneId;
 
-public class EmployeeController implements Initializable {
+public class BrokerController implements Initializable {
     @FXML
-    private TableView<Employee> tvEmployee;
+    private TableView<Person> tvBroker;
 
     @FXML
-    private TableColumn<?, ?> tcBank, tcDate, tcName, tcSSN, tcAddress, tcPhone, tcEmail, tcSalary, tcHireDate,
-            tcDepartment, tcPosition;
+    private TableColumn<Person, ?> tcBank, tcDate, tcName, tcSSN, tcAddress, tcPhone, tcEmail, tcSalary, tcHireDate,
+            tcDepartment, tcPosition, tcCommission;
 
     @FXML
-    private TextField txtAddress, txtBank, txtName, txtSSN, txtPhone, txtEmail, txtSalary, txtPosition, txtDepartment;
+    private TextField txtAddress, txtBank, txtName, txtSSN, txtPhone, txtEmail, txtSalary, txtPosition, txtDepartment,
+            txtCommission, txtShare;
 
     @FXML
     private DatePicker txtDate, txtHireDate;
@@ -49,38 +54,52 @@ public class EmployeeController implements Initializable {
     private ComboBox<String> cbPhone, cbEmail;
 
     @FXML
+    private Pane pCommission;
+
+    @FXML
+    private VBox mainVBox, vbEmployeeInfo;
+
+    @FXML
     private Label lbGeneralError;
 
+    private boolean companyBroker = false;
+
     public void handleRowSelection(MouseEvent event) {
-        Employee employee = tvEmployee.getSelectionModel().getSelectedItem();
-        if (employee == null)
+        Broker broker = (Broker) tvBroker.getSelectionModel().getSelectedItem();
+        if (broker == null)
             return;
 
-        txtSSN.setText(employee.getSsn());
-        txtName.setText(employee.getPName());
-        txtAddress.setText(employee.getAddress());
-        txtBank.setText(employee.getBankInfo());
-        txtSalary.setText(employee.getSalary() + "");
-        txtDepartment.setText(employee.getDepartment());
-        txtPosition.setText(employee.getEPosition());
+        txtSSN.setText(broker.getSsn());
+        txtName.setText(broker.getPName());
+        txtAddress.setText(broker.getAddress());
+        txtBank.setText(broker.getBankInfo());
         txtDate.setValue(
-                Instant.ofEpochMilli(employee.getDateOfBirth().getTime()).atZone(ZoneId.systemDefault()).toLocalDate());
-        txtHireDate.setValue(
-                Instant.ofEpochMilli(employee.getHireDate().getTime()).atZone(ZoneId.systemDefault()).toLocalDate());
+                Instant.ofEpochMilli(broker.getDateOfBirth().getTime()).atZone(ZoneId.systemDefault()).toLocalDate());
+        if (companyBroker) {
+            CompanyBroker companyBroker = (CompanyBroker) broker;
+
+            txtHireDate.setValue(
+                    Instant.ofEpochMilli(companyBroker.getHireDate().getTime()).atZone(ZoneId.systemDefault())
+                            .toLocalDate());
+            txtSalary.setText(companyBroker.getSalary() + "");
+            txtDepartment.setText(companyBroker.getDepartment());
+            txtPosition.setText(companyBroker.getEPosition());
+        } else
+            txtCommission.setText(((IndependentBroker) broker).getCommission() + "");
 
         // Remove all items from phone and email ComboBoxes
         cbPhone.getItems().clear();
         cbEmail.getItems().clear();
         // Add selected phones and emails to ComboBoxes
-        cbPhone.getItems().addAll(employee.getPhone().split("\n"));
-        cbEmail.getItems().addAll(employee.getEmail().split("\n"));
+        cbPhone.getItems().addAll(broker.getPhone().split("\n"));
+        cbEmail.getItems().addAll(broker.getEmail().split("\n"));
     }
 
-    public void deleteEmployee() {
+    public void deleteBroker() {
         hideAllErrors();
 
         // Get selected Owner from TableView
-        Employee employee = tvEmployee.getSelectionModel().getSelectedItem();
+        Broker employee = (Broker) tvBroker.getSelectionModel().getSelectedItem();
         if (employee == null) {
             showError("Select an owner.");
             return;
@@ -95,10 +114,10 @@ public class EmployeeController implements Initializable {
         String query = String.format("DELETE FROM person WHERE ssn = '%s'", ssn);
         executeQuery(query);
 
-        showEmployees();
+        showBrokers();
     }
 
-    public void insertEmployee() {
+    public void insertBroker() {
         hideAllErrors();
 
         String ssn = txtSSN.getText().strip();
@@ -106,10 +125,13 @@ public class EmployeeController implements Initializable {
         String address = txtAddress.getText().strip();
         String birthDate = txtDate.getValue() == null ? null : txtDate.getValue().toString();
         String bankName = txtBank.getText().strip();
+
         String department = txtDepartment.getText().strip();
         String position = txtPosition.getText().strip();
-        String hireDate = txtDate.getValue() == null ? null : txtHireDate.getValue().toString();
+        String hireDate = txtHireDate.getValue() == null ? null : txtHireDate.getValue().toString();
         String salary = txtSalary.getText();
+        String commission = txtCommission.getText();
+        String share = txtShare.getText();
 
         if (ssn.length() < 9) {
             showError("SSN Invalid");
@@ -122,7 +144,7 @@ public class EmployeeController implements Initializable {
 
         // Check if ssn is already belongs to an owner
         if (Person.searchOwner(ssn)) {
-            AlertUtil.showAlert(AlertType.INFORMATION, "Couldn't add Employee", "SSN already used by an owner.");
+            AlertUtil.showAlert(AlertType.INFORMATION, "Couldn't add Broker", "SSN already used by an owner.");
             return;
         }
 
@@ -130,33 +152,46 @@ public class EmployeeController implements Initializable {
         String addPersonQuery = String.format("INSERT INTO person VALUES('%s', '%s', '%s', '%s', '%s')", ssn, name,
                 address, birthDate, bankName);
         executeQuery(addPersonQuery);
-        // Add employee to employee table
-        String addEmployeeQuery = String.format("INSERT INTO employee VALUES(%s, '%s', '%s', '%s', '%s')", salary,
-                hireDate, position, department, ssn);
-        executeQuery(addEmployeeQuery);
+        // Add broker to broker table
+        String addBrokerQuery = String.format("INSERT INTO broker VALUES(%s, '%s')", share, ssn);
+        executeQuery(addBrokerQuery);
 
-        showEmployees();
+        if (!companyBroker) {
+            // Add broker to IndependentBroker table
+            String addIBQuery = String.format("INSERT INTO independentBroker VALUES(%s, '%s')", commission, ssn);
+            executeQuery(addIBQuery);
+        } else {
+            // Add broker employee info to employee table
+            String addEmployeeQuery = String.format("INSERT INTO employee VALUES(%s, '%s', '%s', '%s', '%s')", salary,
+                    hireDate, position, department, ssn);
+            executeQuery(addEmployeeQuery);
+        }
+
+        showBrokers();
     }
 
-    public void updateEmployee() {
+    public void updateBroker() {
         hideAllErrors();
-        
+
         // Get selected Owner from TableView
-        Employee employee = tvEmployee.getSelectionModel().getSelectedItem();
-        if (employee == null) {
+        Broker broker = (Broker) tvBroker.getSelectionModel().getSelectedItem();
+        if (broker == null) {
             showError("Select an owner.");
             return;
         }
 
-        String ssn = employee.getSsn();
+        String ssn = broker.getSsn();
         String name = txtName.getText().strip();
         String address = txtAddress.getText().strip();
         String birthDate = txtDate.getValue() == null ? null : txtDate.getValue().toString();
         String bankName = txtBank.getText().strip();
+
         String department = txtDepartment.getText().strip();
         String position = txtPosition.getText().strip();
-        String hireDate = txtDate.getValue() == null ? null : txtHireDate.getValue().toString();
+        String hireDate = txtHireDate.getValue() == null ? null : txtHireDate.getValue().toString();
         String salary = txtSalary.getText();
+        String commission = txtCommission.getText();
+        String share = txtShare.getText();
 
         if (ssn.length() < 9) {
             showError("SSN Invalid");
@@ -167,16 +202,30 @@ public class EmployeeController implements Initializable {
             return;
         }
 
+        // Update info that is in the person table
         String updatePersonQuery = String.format(
                 "UPDATE person SET pName = '%s', Address = '%s', dateOfBirth = '%s', bankInfo = '%s' WHERE ssn = '%s'",
                 name, address, birthDate, bankName, ssn);
         executeQuery(updatePersonQuery);
-        String updateEmployeeQuery = String.format(
-                "UPDATE employee SET salary = %s, department = '%s', ePosition = '%s', hireDate = '%s' WHERE snn = '%s'",
-                salary, department, position, hireDate, ssn);
-        executeQuery(updateEmployeeQuery);
 
-        showEmployees();
+        // Update info that is in the broker table
+        String updateBrokerQuery = String.format("UPDATE broker SET pShare = %s WHERE ssn = '%s'", share, ssn);
+        executeQuery(updateBrokerQuery);
+
+        if (companyBroker) {
+            // Update info that is in the employee table
+            String updateEmployeeQuery = String.format(
+                    "UPDATE employee SET salary = %s, department = '%s', ePosition = '%s', hireDate = '%s' WHERE ssn = '%s'",
+                    salary, department, position, hireDate, ssn);
+            executeQuery(updateEmployeeQuery);
+        } else {
+            // Update info that is the independentBroker table
+            String updateIBQuery = String.format("UPDATE independentBroker SET commission = %s WHERE ssn = '%s'",
+                    commission, ssn);
+            executeQuery(updateIBQuery);
+        }
+
+        showBrokers();
     }
 
     public void addPhone() {
@@ -197,7 +246,7 @@ public class EmployeeController implements Initializable {
         String query = String.format("INSERT INTO phone VALUES ('%s', '%s')", phone, ssn);
         executeQuery(query);
 
-        showEmployees();
+        showBrokers();
     }
 
     public void removePhone() {
@@ -213,7 +262,7 @@ public class EmployeeController implements Initializable {
                 cbPhone.getEditor().getText());
         executeQuery(query);
 
-        showEmployees();
+        showBrokers();
     }
 
     public void addEmail() {
@@ -234,7 +283,7 @@ public class EmployeeController implements Initializable {
         String query = String.format("INSERT INTO email VALUES ('%s', '%s')", email, ssn);
         executeQuery(query);
 
-        showEmployees();
+        showBrokers();
     }
 
     public void removeEmail() {
@@ -250,7 +299,7 @@ public class EmployeeController implements Initializable {
                 cbEmail.getEditor().getText());
         executeQuery(query);
 
-        showEmployees();
+        showBrokers();
     }
 
     private void executeQuery(String query) {
@@ -269,6 +318,7 @@ public class EmployeeController implements Initializable {
             else
                 showError("Duplicate SSN.");
         } catch (SQLException sql_e) {
+            sql_e.printStackTrace();
             AlertUtil.showAlert(AlertType.ERROR, "Error reading database", sql_e.getMessage());
         }
     }
@@ -281,6 +331,34 @@ public class EmployeeController implements Initializable {
     /** Sets the visibility of all error labels to false. */
     public void hideAllErrors() {
         lbGeneralError.setVisible(false);
+    }
+
+    /**
+     * Changes the value of companyBroker var and hides or shows independent
+     * broker's inputs and employee's (company broker's) inputs.
+     */
+    public void changeCompanyBroker() {
+        companyBroker = !companyBroker;
+
+        // Remove not needed input fields and out fields
+        if (companyBroker) {
+            mainVBox.getChildren().remove(pCommission);
+            mainVBox.getChildren().add(vbEmployeeInfo);
+            tvBroker.getColumns().add(tcPosition);
+            tvBroker.getColumns().add(tcHireDate);
+            tvBroker.getColumns().add(tcSalary);
+            tvBroker.getColumns().add(tcDepartment);
+        } else {
+            mainVBox.getChildren().remove(vbEmployeeInfo);
+            tvBroker.getColumns().remove(tcPosition);
+            tvBroker.getColumns().remove(tcHireDate);
+            tvBroker.getColumns().remove(tcSalary);
+            tvBroker.getColumns().remove(tcDepartment);
+            mainVBox.getChildren().add(pCommission);
+        }
+
+        // Update TableView to only include wanted brokers
+        showBrokers();
     }
 
     @Override
@@ -297,8 +375,17 @@ public class EmployeeController implements Initializable {
         tcHireDate.setCellValueFactory(new PropertyValueFactory<>("hireDate"));
         tcSalary.setCellValueFactory(new PropertyValueFactory<>("salary"));
         tcDepartment.setCellValueFactory(new PropertyValueFactory<>("department"));
+        tcCommission.setCellValueFactory(new PropertyValueFactory<>("commission"));
 
-        showEmployees();
+        // Hide all employee info input and output fields
+        mainVBox.getChildren().remove(vbEmployeeInfo);
+        mainVBox.getChildren().remove(vbEmployeeInfo);
+        tvBroker.getColumns().remove(tcPosition);
+        tvBroker.getColumns().remove(tcHireDate);
+        tvBroker.getColumns().remove(tcSalary);
+        tvBroker.getColumns().remove(tcDepartment);
+
+        showBrokers();
         restrictTextFields();
     }
 
@@ -310,42 +397,66 @@ public class EmployeeController implements Initializable {
         txtSalary.setTextFormatter(TextFormatterTypes.getIntFormatter(10));
         txtDepartment.setTextFormatter(TextFormatterTypes.getAlphanumericWordCharsAndCommasFormatter(16));
         txtPosition.setTextFormatter(TextFormatterTypes.getMaxLengthFormatter(16));
+        txtShare.setTextFormatter(TextFormatterTypes.getDoubleTextFormatter(0));
+        txtCommission.setTextFormatter(TextFormatterTypes.getIntFormatter(10));
 
         cbPhone.getEditor().setTextFormatter(TextFormatterTypes.getIntFormatter(10));
         cbEmail.getEditor().setTextFormatter(TextFormatterTypes.getEmailTextFormatter(64));
     }
 
-    private void showEmployees() {
-        tvEmployee.setItems(getEmployees());
+    private void showBrokers() {
+        tvBroker.setItems(getBrokers());
     }
 
     /**
-     * Gets all information of all Employees.
+     * Gets all information of all Brokers.
      * 
-     * @return An ObservableList of all employees.
+     * @return An ObservableList of all brokers.
      */
-    private ObservableList<Employee> getEmployees() {
-        ObservableList<Employee> result = FXCollections.observableArrayList();
+    private ObservableList<Person> getBrokers() {
+        ObservableList<Person> result = FXCollections.observableArrayList();
 
-        String query = "SELECT e.*, p.pName, p.dateOfBirth, p.address, p.bankInfo, "
-                + "GROUP_CONCAT(DISTINCT ph.phoneNumber ORDER BY ph.phoneNumber SEPARATOR '\n') AS phones, "
-                + "GROUP_CONCAT(DISTINCT em.address ORDER BY em.address SEPARATOR '\n') AS emails "
-                + "FROM employee e "
-                + "JOIN person p ON e.ssn = p.ssn "
-                + "LEFT JOIN phone ph ON p.ssn = ph.ssn "
-                + "LEFT JOIN email em ON p.ssn = em.ssn "
-                + "GROUP BY e.ssn, p.pName, p.dateOfBirth, p.address, p.bankInfo";
+        String query;
+        if (companyBroker) {
+            query = "SELECT b.*, p.pName, p.dateOfBirth, p.address, p.bankInfo, e.ePosition, e.salary, e.department, e.hireDate, "
+                    + "GROUP_CONCAT(DISTINCT ph.phoneNumber ORDER BY ph.phoneNumber SEPARATOR '\n') AS phones, "
+                    + "GROUP_CONCAT(DISTINCT em.address ORDER BY em.address SEPARATOR '\n') AS emails "
+                    + "FROM broker b "
+                    + "JOIN employee e ON b.ssn = e.ssn "
+                    + "JOIN person p ON b.ssn = p.ssn "
+                    + "LEFT JOIN phone ph ON p.ssn = ph.ssn "
+                    + "LEFT JOIN email em ON p.ssn = em.ssn "
+                    + "GROUP BY b.ssn, p.ssn, p.pName, p.dateOfBirth, p.address, p.bankInfo";
+        } else {
+            query = "SELECT ib.*, b.bShare, p.pName, p.dateOfBirth, p.address, p.bankInfo, "
+                    + "GROUP_CONCAT(DISTINCT ph.phoneNumber ORDER BY ph.phoneNumber SEPARATOR '\n') AS phones, "
+                    + "GROUP_CONCAT(DISTINCT em.address ORDER BY em.address SEPARATOR '\n') AS emails "
+                    + "FROM independentBroker ib "
+                    + "JOIN broker b ON ib.ssn = b.ssn "
+                    + "JOIN person p ON b.ssn = p.ssn "
+                    + "LEFT JOIN phone ph ON p.ssn = ph.ssn "
+                    + "LEFT JOIN email em ON p.ssn = em.ssn "
+                    + "GROUP BY ib.ssn , p.ssn , p.pName , p.dateOfBirth , p.address , p.bankInfo";
+        }
         try (Connection connection = DBConnection.getConnection();
                 Statement statement = connection.createStatement();
                 ResultSet queryResult = statement.executeQuery(query)) {
 
             while (queryResult.next()) {
-                result.add(new Employee(queryResult.getString("ssn"), queryResult.getString("pName"),
-                        queryResult.getString("Address"), queryResult.getDate("dateOfBirth"),
-                        queryResult.getString("bankInfo"), queryResult.getString("phones"),
-                        queryResult.getString("emails"), queryResult.getString("ePosition"),
-                        queryResult.getString("department"), queryResult.getInt("salary"),
-                        queryResult.getDate("hireDate")));
+                if (companyBroker) {
+                    result.add(new CompanyBroker(queryResult.getString("ssn"), queryResult.getString("pName"),
+                            queryResult.getString("Address"), queryResult.getDate("dateOfBirth"),
+                            queryResult.getString("bankInfo"), queryResult.getString("phones"),
+                            queryResult.getString("emails"), queryResult.getDouble("bShare"),
+                            queryResult.getString("ePosition"), queryResult.getString("department"),
+                            queryResult.getInt("salary"), queryResult.getDate("hireDate")));
+                } else {
+                    result.add(new IndependentBroker(queryResult.getString("ssn"), queryResult.getString("pName"),
+                            queryResult.getString("Address"), queryResult.getDate("dateOfBirth"),
+                            queryResult.getString("bankInfo"), queryResult.getString("phones"),
+                            queryResult.getString("emails"), queryResult.getDouble("bShare"),
+                            queryResult.getInt("commission")));
+                }
             }
         } catch (SQLException sql_e) {
             AlertUtil.showAlert(AlertType.ERROR, "Error reading database", sql_e.getMessage());

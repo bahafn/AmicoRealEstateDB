@@ -17,7 +17,8 @@ public class TextFormatterTypes {
     private static final Pattern ALPHANUMERIC_WORD_CHARS_PATTERN = Pattern.compile("\\w -*");
     private static final Pattern ALPHANUMERIC_WORD_CHARS_AND_COMMAS_PATTERN = Pattern.compile("[\\w, -]*");
     private static final Pattern SQL_DATE_PATTERN = Pattern.compile("\\d{0,4}(-\\d{0,2}){0,2}");
-    public static final Pattern EMAIL_PATTERN = Pattern.compile("[a-zA-Z0-9_-]+(?:@[a-zA-Z.]*)?");
+    private static final Pattern EMAIL_PATTERN = Pattern.compile("[a-zA-Z0-9_-]+(?:@[a-zA-Z.]*)?");
+    private static final Pattern DOUBLE_PATTERN = Pattern.compile("[0-9]+(\\.[0-9]*)?");
 
     /**
      * Returns a TextFormatter that restricts input to integers with a maximum
@@ -133,7 +134,25 @@ public class TextFormatterTypes {
         UnaryOperator<Change> filter = c -> {
             String newText = c.getControlNewText(); // Get control text
 
-            if ((newText.isEmpty() || EMAIL_PATTERN.matcher(newText).matches()))
+            if (newText.isEmpty() || EMAIL_PATTERN.matcher(newText).matches())
+                return c;
+
+            return null;
+        };
+
+        return new TextFormatter<>(filter);
+    }
+
+    /**
+     * Creates a TextFormatter that restricts input to double values.
+     * 
+     * @return Created TextFormatter Object.
+     */
+    public static TextFormatter<Double> getDoubleTextFormatter(int maxLength) {
+        UnaryOperator<Change> filter = c -> {
+            String newText = c.getControlNewText();
+
+            if (newText.isEmpty() || DOUBLE_PATTERN.matcher(newText).matches())
                 return c;
 
             return null;

@@ -52,7 +52,7 @@ public class ClientController implements Initializable {
     private Label lbGeneralError;
 
     public void handleRowSelection(MouseEvent event) {
-        Client client = (Client) tvClient.getSelectionModel().getSelectedItem();
+        Client client = tvClient.getSelectionModel().getSelectedItem();
         if (client == null)
             return;
 
@@ -320,7 +320,7 @@ public class ClientController implements Initializable {
     private ObservableList<Client> getClients() {
         ObservableList<Client> result = FXCollections.observableArrayList();
 
-        String query = "SELECT c.*, p.ssn, p.pName, p.dateOfBirth, p.address, p.bankInfo, " +
+        String query = "SELECT c.*, p.pName, p.dateOfBirth, p.address, p.bankInfo, " +
                 "GROUP_CONCAT(DISTINCT ph.phoneNumber SEPARATOR '\n') AS phones, " +
                 "GROUP_CONCAT(DISTINCT e.address SEPARATOR '\n') AS emails " +
                 "FROM clientTbl c " +

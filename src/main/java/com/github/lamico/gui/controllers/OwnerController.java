@@ -50,7 +50,7 @@ public class OwnerController implements Initializable {
     private Label lbGeneralError;
 
     public void handleRowSelection(MouseEvent event) {
-        Person owner = (Person) tvOwner.getSelectionModel().getSelectedItem();
+        Person owner = tvOwner.getSelectionModel().getSelectedItem();
         if (owner == null)
             return;
 

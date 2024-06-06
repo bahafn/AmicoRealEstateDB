@@ -72,7 +72,7 @@
             </GridPane>
          </bottom>
          <right>
-            <ScrollPane hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" prefHeight="374.0" prefWidth="224.0" vvalue="1.0" BorderPane.alignment="CENTER">
+            <ScrollPane hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" prefHeight="374.0" prefWidth="224.0" BorderPane.alignment="CENTER">
                <content>
                   <VBox prefHeight="285.0" prefWidth="210.0" spacing="10.0" translateX="-5.0" translateY="25.0">
                      <children>
