@@ -7,7 +7,8 @@ import com.github.lamico.db.DBConnection;
 import com.github.lamico.entities.Client;
 import com.github.lamico.entities.Person;
 import com.github.lamico.gui.utils.AlertUtil;
-import com.github.lamico.gui.utils.SQLUtils;
+import com.github.lamico.gui.utils.DateUtil;
+import com.github.lamico.gui.utils.SQLUtil;
 import com.github.lamico.gui.utils.TextFormatterTypes;
 
 import javafx.collections.FXCollections;
@@ -29,8 +30,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
-import java.time.Instant;
-import java.time.ZoneId;
 
 public class ClientController implements Initializable {
     @FXML
@@ -64,8 +63,7 @@ public class ClientController implements Initializable {
         txtSponsor.setText(client.getSponsor());
         txtIncomeLevel.setText(client.getIncomeLevel() + "");
         txtEmployer.setText(client.getEmployer());
-        txtDate.setValue(
-                Instant.ofEpochMilli(client.getDateOfBirth().getTime()).atZone(ZoneId.systemDefault()).toLocalDate());
+        txtDate.setValue(DateUtil.sqlDateToLocalDate(client.getDateOfBirth()));
 
         // Remove all items from phone and email ComboBoxes
         cbPhone.getItems().clear();
@@ -101,14 +99,14 @@ public class ClientController implements Initializable {
         hideAllErrors();
 
         // Get info from input form
-        String ssn = SQLUtils.formatStringForQuery(txtSSN.getText(), true);
-        String name = SQLUtils.formatStringForQuery(txtName.getText(), true);
-        String address = SQLUtils.formatStringForQuery(txtAddress.getText(), true);
-        String birthDate = SQLUtils.formatDateForQuery(txtDate.getValue());
-        String bankName = SQLUtils.formatStringForQuery(txtBank.getText(), true);
-        String sponsor = SQLUtils.formatStringForQuery(txtSponsor.getText(), true);
-        String incomeLevel = SQLUtils.formatStringForQuery(txtIncomeLevel.getText(), false);
-        String employer = SQLUtils.formatStringForQuery(txtEmployer.getText(), true);
+        String ssn = SQLUtil.formatStringForQuery(txtSSN.getText(), true);
+        String name = SQLUtil.formatStringForQuery(txtName.getText(), true);
+        String address = SQLUtil.formatStringForQuery(txtAddress.getText(), true);
+        String birthDate = SQLUtil.formatDateForQuery(txtDate.getValue());
+        String bankName = SQLUtil.formatStringForQuery(txtBank.getText(), true);
+        String sponsor = SQLUtil.formatStringForQuery(txtSponsor.getText(), true);
+        String incomeLevel = SQLUtil.formatStringForQuery(txtIncomeLevel.getText(), false);
+        String employer = SQLUtil.formatStringForQuery(txtEmployer.getText(), true);
 
         if (ssn.length() < 9) {
             showError("SSN Invalid");
@@ -147,13 +145,13 @@ public class ClientController implements Initializable {
         }
 
         String ssn = client.getSsn();
-        String name = SQLUtils.formatStringForQuery(txtName.getText(), true);
-        String address = SQLUtils.formatStringForQuery(txtAddress.getText(), true);
-        String birthDate = SQLUtils.formatDateForQuery(txtDate.getValue());
-        String bankName = SQLUtils.formatStringForQuery(txtBank.getText(), true);
-        String sponsor = SQLUtils.formatStringForQuery(txtSponsor.getText(), true);
-        String incomeLevel = SQLUtils.formatStringForQuery(txtIncomeLevel.getText(), false);
-        String employer = SQLUtils.formatStringForQuery(txtEmployer.getText(), true);
+        String name = SQLUtil.formatStringForQuery(txtName.getText(), true);
+        String address = SQLUtil.formatStringForQuery(txtAddress.getText(), true);
+        String birthDate = SQLUtil.formatDateForQuery(txtDate.getValue());
+        String bankName = SQLUtil.formatStringForQuery(txtBank.getText(), true);
+        String sponsor = SQLUtil.formatStringForQuery(txtSponsor.getText(), true);
+        String incomeLevel = SQLUtil.formatStringForQuery(txtIncomeLevel.getText(), false);
+        String employer = SQLUtil.formatStringForQuery(txtEmployer.getText(), true);
 
         if (ssn.length() < 9) {
             showError("SSN Invalid");

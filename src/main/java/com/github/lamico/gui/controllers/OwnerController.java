@@ -6,7 +6,8 @@ import java.util.ResourceBundle;
 import com.github.lamico.db.DBConnection;
 import com.github.lamico.entities.Person;
 import com.github.lamico.gui.utils.AlertUtil;
-import com.github.lamico.gui.utils.SQLUtils;
+import com.github.lamico.gui.utils.DateUtil;
+import com.github.lamico.gui.utils.SQLUtil;
 import com.github.lamico.gui.utils.TextFormatterTypes;
 
 import javafx.collections.FXCollections;
@@ -28,8 +29,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
-import java.time.Instant;
-import java.time.ZoneId;
 
 public class OwnerController implements Initializable {
     @FXML
@@ -59,8 +58,7 @@ public class OwnerController implements Initializable {
         txtName.setText(owner.getPName());
         txtAddress.setText(owner.getAddress());
         txtBank.setText(owner.getBankInfo());
-        txtDate.setValue(
-                Instant.ofEpochMilli(owner.getDateOfBirth().getTime()).atZone(ZoneId.systemDefault()).toLocalDate());
+        txtDate.setValue(DateUtil.sqlDateToLocalDate(owner.getDateOfBirth()));
 
         // Remove all items from phone and email ComboBoxes
         cbPhone.getItems().clear();
@@ -96,11 +94,11 @@ public class OwnerController implements Initializable {
         hideAllErrors();
 
         // Get info from input form
-        String ssn = SQLUtils.formatStringForQuery(txtSSN.getText(), true);
-        String name = SQLUtils.formatStringForQuery(txtName.getText(), true);
-        String address = SQLUtils.formatStringForQuery(txtAddress.getText(), true);
-        String birthDate = SQLUtils.formatDateForQuery(txtDate.getValue());
-        String bankName = SQLUtils.formatStringForQuery(txtBank.getText(), true);
+        String ssn = SQLUtil.formatStringForQuery(txtSSN.getText(), true);
+        String name = SQLUtil.formatStringForQuery(txtName.getText(), true);
+        String address = SQLUtil.formatStringForQuery(txtAddress.getText(), true);
+        String birthDate = SQLUtil.formatDateForQuery(txtDate.getValue());
+        String bankName = SQLUtil.formatStringForQuery(txtBank.getText(), true);
 
         if (ssn.length() < 9) {
             showError("SSN Invalid");
@@ -130,10 +128,10 @@ public class OwnerController implements Initializable {
         }
 
         String ssn = owner.getSsn();
-        String name = SQLUtils.formatStringForQuery(txtName.getText(), true);
-        String address = SQLUtils.formatStringForQuery(txtAddress.getText(), true);
-        String birthDate = SQLUtils.formatDateForQuery(txtDate.getValue());
-        String bankName = SQLUtils.formatStringForQuery(txtBank.getText(), true);
+        String name = SQLUtil.formatStringForQuery(txtName.getText(), true);
+        String address = SQLUtil.formatStringForQuery(txtAddress.getText(), true);
+        String birthDate = SQLUtil.formatDateForQuery(txtDate.getValue());
+        String bankName = SQLUtil.formatStringForQuery(txtBank.getText(), true);
 
         if (ssn.length() < 9) {
             showError("SSN Invalid");
@@ -229,7 +227,7 @@ public class OwnerController implements Initializable {
 
     private void executeQuery(String query) {
         try {
-            SQLUtils.executeQuery(query);
+            SQLUtil.executeQuery(query);
         } catch (SQLIntegrityConstraintViolationException sql_icve) {
             // This means we have a duplicate primary key
             // Duplicate primary key can mean a duplicate SSN or the employee already has

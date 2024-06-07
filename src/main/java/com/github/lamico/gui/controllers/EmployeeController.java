@@ -7,7 +7,8 @@ import com.github.lamico.db.DBConnection;
 import com.github.lamico.entities.Employee;
 import com.github.lamico.entities.Person;
 import com.github.lamico.gui.utils.AlertUtil;
-import com.github.lamico.gui.utils.SQLUtils;
+import com.github.lamico.gui.utils.DateUtil;
+import com.github.lamico.gui.utils.SQLUtil;
 import com.github.lamico.gui.utils.TextFormatterTypes;
 
 import javafx.collections.FXCollections;
@@ -29,8 +30,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
-import java.time.Instant;
-import java.time.ZoneId;
 
 public class EmployeeController implements Initializable {
     @FXML
@@ -64,10 +63,8 @@ public class EmployeeController implements Initializable {
         txtSalary.setText(employee.getSalary() + "");
         txtDepartment.setText(employee.getDepartment());
         txtPosition.setText(employee.getEPosition());
-        txtDate.setValue(
-                Instant.ofEpochMilli(employee.getDateOfBirth().getTime()).atZone(ZoneId.systemDefault()).toLocalDate());
-        txtHireDate.setValue(
-                Instant.ofEpochMilli(employee.getHireDate().getTime()).atZone(ZoneId.systemDefault()).toLocalDate());
+        txtDate.setValue(DateUtil.sqlDateToLocalDate(employee.getDateOfBirth()));
+        txtHireDate.setValue(DateUtil.sqlDateToLocalDate(employee.getHireDate()));
 
         // Remove all items from phone and email ComboBoxes
         cbPhone.getItems().clear();
@@ -103,15 +100,15 @@ public class EmployeeController implements Initializable {
         hideAllErrors();
 
         // Get info from input form
-        String ssn = SQLUtils.formatStringForQuery(txtSSN.getText(), true);
-        String name = SQLUtils.formatStringForQuery(txtName.getText(), true);
-        String address = SQLUtils.formatStringForQuery(txtAddress.getText(), true);
-        String birthDate = SQLUtils.formatDateForQuery(txtDate.getValue());
-        String bankName = SQLUtils.formatStringForQuery(txtBank.getText(), true);
-        String department = SQLUtils.formatStringForQuery(txtDepartment.getText(), true);
-        String position = SQLUtils.formatStringForQuery(txtPosition.getText(), true);
-        String hireDate = SQLUtils.formatDateForQuery(txtHireDate.getValue());
-        String salary = SQLUtils.formatStringForQuery(txtSalary.getText(), false);
+        String ssn = SQLUtil.formatStringForQuery(txtSSN.getText(), true);
+        String name = SQLUtil.formatStringForQuery(txtName.getText(), true);
+        String address = SQLUtil.formatStringForQuery(txtAddress.getText(), true);
+        String birthDate = SQLUtil.formatDateForQuery(txtDate.getValue());
+        String bankName = SQLUtil.formatStringForQuery(txtBank.getText(), true);
+        String department = SQLUtil.formatStringForQuery(txtDepartment.getText(), true);
+        String position = SQLUtil.formatStringForQuery(txtPosition.getText(), true);
+        String hireDate = SQLUtil.formatDateForQuery(txtHireDate.getValue());
+        String salary = SQLUtil.formatStringForQuery(txtSalary.getText(), false);
 
         if (ssn.length() < 9) {
             showError("SSN Invalid");
@@ -155,14 +152,14 @@ public class EmployeeController implements Initializable {
         String ssn = employee.getSsn();
 
         // Get info from input form
-        String name = SQLUtils.formatStringForQuery(txtName.getText(), true);
-        String address = SQLUtils.formatStringForQuery(txtAddress.getText(), true);
-        String birthDate = SQLUtils.formatDateForQuery(txtDate.getValue());
-        String bankName = SQLUtils.formatStringForQuery(txtBank.getText(), true);
-        String department = SQLUtils.formatStringForQuery(txtDepartment.getText(), true);
-        String position = SQLUtils.formatStringForQuery(txtPosition.getText(), true);
-        String hireDate = SQLUtils.formatDateForQuery(txtHireDate.getValue());
-        String salary = SQLUtils.formatStringForQuery(txtSalary.getText(), false);
+        String name = SQLUtil.formatStringForQuery(txtName.getText(), true);
+        String address = SQLUtil.formatStringForQuery(txtAddress.getText(), true);
+        String birthDate = SQLUtil.formatDateForQuery(txtDate.getValue());
+        String bankName = SQLUtil.formatStringForQuery(txtBank.getText(), true);
+        String department = SQLUtil.formatStringForQuery(txtDepartment.getText(), true);
+        String position = SQLUtil.formatStringForQuery(txtPosition.getText(), true);
+        String hireDate = SQLUtil.formatDateForQuery(txtHireDate.getValue());
+        String salary = SQLUtil.formatStringForQuery(txtSalary.getText(), false);
 
         if (ssn.length() < 9) {
             showError("SSN Invalid");
@@ -262,7 +259,7 @@ public class EmployeeController implements Initializable {
 
     private void executeQuery(String query) {
         try {
-            SQLUtils.executeQuery(query);
+            SQLUtil.executeQuery(query);
         } catch (SQLIntegrityConstraintViolationException sql_icve) {
             // This means we have a duplicate primary key
             // Duplicate primary key can mean a duplicate SSN or the employee already has

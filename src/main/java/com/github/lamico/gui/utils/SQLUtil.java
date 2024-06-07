@@ -8,8 +8,8 @@ import java.sql.SQLIntegrityConstraintViolationException;
 
 import com.github.lamico.db.DBConnection;
 
-public class SQLUtils {
-    private SQLUtils() {
+public class SQLUtil {
+    private SQLUtil() {
     }
 
     /** Executes an SQL statement without returning anything. */
