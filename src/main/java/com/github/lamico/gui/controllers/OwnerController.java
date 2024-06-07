@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 import com.github.lamico.db.DBConnection;
 import com.github.lamico.entities.Person;
 import com.github.lamico.gui.utils.AlertUtil;
+import com.github.lamico.gui.utils.SQLUtils;
 import com.github.lamico.gui.utils.TextFormatterTypes;
 
 import javafx.collections.FXCollections;
@@ -94,22 +95,24 @@ public class OwnerController implements Initializable {
     public void insertOwner() {
         hideAllErrors();
 
-        String ssn = txtSSN.getText().strip();
-        String name = txtName.getText().strip();
-        String address = txtAddress.getText().strip();
-        String birthDate = txtDate.getValue() == null ? null : txtDate.getValue().toString();
-        String bankName = txtBank.getText().strip();
+        // Get info from input form
+        String ssn = SQLUtils.formatStringForQuery(txtSSN.getText(), true);
+        String name = SQLUtils.formatStringForQuery(txtName.getText(), true);
+        String address = SQLUtils.formatStringForQuery(txtAddress.getText(), true);
+        String birthDate = SQLUtils.formatDateForQuery(txtDate.getValue());
+        String bankName = SQLUtils.formatStringForQuery(txtBank.getText(), true);
 
         if (ssn.length() < 9) {
             showError("SSN Invalid");
             return;
         }
-        if (name.isEmpty() || address.isEmpty() || birthDate == null || bankName.isEmpty()) {
+        // Check if any of the required fields is empty.
+        if (bankName.equals("null")) {
             showError("Empty Fields");
             return;
         }
 
-        String query = String.format("INSERT INTO person VALUES('%s', '%s', '%s', '%s', '%s')", ssn, name, address,
+        String query = String.format("INSERT INTO person VALUES(%s, %s, %s, %s, %s)", ssn, name, address,
                 birthDate, bankName);
         executeQuery(query);
 
@@ -127,22 +130,23 @@ public class OwnerController implements Initializable {
         }
 
         String ssn = owner.getSsn();
-        String name = txtName.getText().strip();
-        String address = txtAddress.getText().strip();
-        String birthDate = txtDate.getValue() == null ? null : txtDate.getValue().toString();
-        String bankName = txtBank.getText().strip();
+        String name = SQLUtils.formatStringForQuery(txtName.getText(), true);
+        String address = SQLUtils.formatStringForQuery(txtAddress.getText(), true);
+        String birthDate = SQLUtils.formatDateForQuery(txtDate.getValue());
+        String bankName = SQLUtils.formatStringForQuery(txtBank.getText(), true);
 
         if (ssn.length() < 9) {
             showError("SSN Invalid");
             return;
         }
-        if (name.isEmpty() || address.isEmpty() || birthDate.isEmpty() || bankName.isEmpty()) {
+        // Check if any of the required fields is empty.
+        if (bankName.equals("null")) {
             showError("Empty Fields");
             return;
         }
 
         String query = String.format(
-                "UPDATE person SET pName = '%s', Address = '%s', dateOfBirth = '%s', bankInfo = '%s' WHERE ssn = '%s'",
+                "UPDATE person SET pName = %s, Address = %s, dateOfBirth = %s, bankInfo = %s WHERE ssn = %s",
                 name, address, birthDate, bankName, ssn);
         executeQuery(query);
 
@@ -224,21 +228,20 @@ public class OwnerController implements Initializable {
     }
 
     private void executeQuery(String query) {
-        Connection connection = DBConnection.getConnection();
-
-        try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate(query);
-        } catch (SQLIntegrityConstraintViolationException e) {
+        try {
+            SQLUtils.executeQuery(query);
+        } catch (SQLIntegrityConstraintViolationException sql_icve) {
             // This means we have a duplicate primary key
-            // duplicate primary key can mean a duplicate SSN, the owner already has this email or phone.
+            // Duplicate primary key can mean a duplicate SSN or the employee already has
+            // this email or phone.
             if (query.contains("email"))
                 showError("Email already added.");
             else if (query.contains("phone"))
                 showError("Phone number already added.");
             else
-                showError("Duplicate SSN");
+                showError("Duplicate SSN.");
         } catch (SQLException sql_e) {
-            AlertUtil.showAlert(AlertType.ERROR, "Error reading database", sql_e.getMessage());
+            AlertUtil.showAlert(AlertType.ERROR, "Database Error", sql_e.getMessage());
         }
     }
 

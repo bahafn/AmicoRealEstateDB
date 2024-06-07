@@ -9,6 +9,7 @@ import com.github.lamico.entities.CompanyBroker;
 import com.github.lamico.entities.IndependentBroker;
 import com.github.lamico.entities.Person;
 import com.github.lamico.gui.utils.AlertUtil;
+import com.github.lamico.gui.utils.SQLUtils;
 import com.github.lamico.gui.utils.TextFormatterTypes;
 
 import javafx.collections.FXCollections;
@@ -98,14 +99,14 @@ public class BrokerController implements Initializable {
     public void deleteBroker() {
         hideAllErrors();
 
-        // Get selected Owner from TableView
-        Broker employee = (Broker) tvBroker.getSelectionModel().getSelectedItem();
-        if (employee == null) {
-            showError("Select an owner.");
+        // Get selected broker from TableView
+        Broker broker = (Broker) tvBroker.getSelectionModel().getSelectedItem();
+        if (broker == null) {
+            showError("Select a broker.");
             return;
         }
 
-        String ssn = employee.getSsn();
+        String ssn = broker.getSsn();
         if (ssn.length() < 9) {
             showError("SSN Invalid");
             return;
@@ -137,32 +138,34 @@ public class BrokerController implements Initializable {
             showError("SSN Invalid");
             return;
         }
-        if (name.isEmpty() || address.isEmpty() || birthDate == null || bankName.isEmpty()) {
+        // Check if any of the required fields is empty
+        if (bankName.equals("null") || (companyBroker && share.equals("null"))
+                || (!companyBroker && commission.equals("null"))) {
             showError("Empty Fields");
             return;
         }
 
-        // Check if ssn is already belongs to an owner
-        if (Person.searchOwner(ssn)) {
-            AlertUtil.showAlert(AlertType.INFORMATION, "Couldn't add Broker", "SSN already used by an owner.");
+        // Check if ssn is already added
+        if (Person.searchPerson(ssn)) {
+            AlertUtil.showAlert(AlertType.INFORMATION, "Couldn't add Broker", "SSN already used.");
             return;
         }
 
         // Add person to person table
-        String addPersonQuery = String.format("INSERT INTO person VALUES('%s', '%s', '%s', '%s', '%s')", ssn, name,
+        String addPersonQuery = String.format("INSERT INTO person VALUES(%s, %s, %s, %s, %s)", ssn, name,
                 address, birthDate, bankName);
         executeQuery(addPersonQuery);
         // Add broker to broker table
-        String addBrokerQuery = String.format("INSERT INTO broker VALUES(%s, '%s')", share, ssn);
+        String addBrokerQuery = String.format("INSERT INTO broker VALUES(%s, %s)", share, ssn);
         executeQuery(addBrokerQuery);
 
         if (!companyBroker) {
             // Add broker to IndependentBroker table
-            String addIBQuery = String.format("INSERT INTO independentBroker VALUES(%s, '%s')", commission, ssn);
+            String addIBQuery = String.format("INSERT INTO independentBroker VALUES(%s, %s)", commission, ssn);
             executeQuery(addIBQuery);
         } else {
-            // Add broker employee info to employee table
-            String addEmployeeQuery = String.format("INSERT INTO employee VALUES(%s, '%s', '%s', '%s', '%s')", salary,
+            // Add broker's employee info to employee table
+            String addEmployeeQuery = String.format("INSERT INTO employee VALUES(%s, %s, %s, %s, %s)", salary,
                     hireDate, position, department, ssn);
             executeQuery(addEmployeeQuery);
         }
@@ -173,54 +176,57 @@ public class BrokerController implements Initializable {
     public void updateBroker() {
         hideAllErrors();
 
-        // Get selected Owner from TableView
+        // Get selected broker from TableView
         Broker broker = (Broker) tvBroker.getSelectionModel().getSelectedItem();
         if (broker == null) {
-            showError("Select an owner.");
+            showError("Select a broker.");
             return;
         }
 
-        String ssn = broker.getSsn();
-        String name = txtName.getText().strip();
-        String address = txtAddress.getText().strip();
-        String birthDate = txtDate.getValue() == null ? null : txtDate.getValue().toString();
-        String bankName = txtBank.getText().strip();
+        // Get info from input form
+        String ssn = SQLUtils.formatStringForQuery(txtSSN.getText(), true);
+        String name = SQLUtils.formatStringForQuery(txtName.getText(), true);
+        String address = SQLUtils.formatStringForQuery(txtAddress.getText(), true);
+        String birthDate = SQLUtils.formatDateForQuery(txtDate.getValue());
+        String bankName = SQLUtils.formatStringForQuery(txtBank.getText(), true);
 
-        String department = txtDepartment.getText().strip();
-        String position = txtPosition.getText().strip();
-        String hireDate = txtHireDate.getValue() == null ? null : txtHireDate.getValue().toString();
-        String salary = txtSalary.getText();
-        String commission = txtCommission.getText();
-        String share = txtShare.getText();
+        String department = SQLUtils.formatStringForQuery(txtDepartment.getText(), true);
+        String position = SQLUtils.formatStringForQuery(txtPosition.getText(), true);
+        String hireDate = SQLUtils.formatDateForQuery(txtHireDate.getValue());
+        String salary = SQLUtils.formatStringForQuery(txtSalary.getText(), false);
+        String commission = SQLUtils.formatStringForQuery(txtCommission.getText(), false);
+        String share = SQLUtils.formatStringForQuery(txtShare.getText(), false);
 
         if (ssn.length() < 9) {
             showError("SSN Invalid");
             return;
         }
-        if (name.isEmpty() || address.isEmpty() || birthDate.isEmpty() || bankName.isEmpty()) {
+        // Check if any of the required fields is empty
+        if (bankName.equals("null") || (companyBroker && share.equals("null"))
+                || (!companyBroker && commission.equals("null"))) {
             showError("Empty Fields");
             return;
         }
 
         // Update info that is in the person table
         String updatePersonQuery = String.format(
-                "UPDATE person SET pName = '%s', Address = '%s', dateOfBirth = '%s', bankInfo = '%s' WHERE ssn = '%s'",
+                "UPDATE person SET pName = %s, Address = %s, dateOfBirth = %s, bankInfo = %s WHERE ssn = %s",
                 name, address, birthDate, bankName, ssn);
         executeQuery(updatePersonQuery);
 
         // Update info that is in the broker table
-        String updateBrokerQuery = String.format("UPDATE broker SET pShare = %s WHERE ssn = '%s'", share, ssn);
+        String updateBrokerQuery = String.format("UPDATE broker SET pShare = %s WHERE ssn = %s", share, ssn);
         executeQuery(updateBrokerQuery);
 
         if (companyBroker) {
             // Update info that is in the employee table
             String updateEmployeeQuery = String.format(
-                    "UPDATE employee SET salary = %s, department = '%s', ePosition = '%s', hireDate = '%s' WHERE ssn = '%s'",
+                    "UPDATE employee SET salary = %s, department = %s, ePosition = %s, hireDate = %s WHERE ssn = %s",
                     salary, department, position, hireDate, ssn);
             executeQuery(updateEmployeeQuery);
         } else {
             // Update info that is the independentBroker table
-            String updateIBQuery = String.format("UPDATE independentBroker SET commission = %s WHERE ssn = '%s'",
+            String updateIBQuery = String.format("UPDATE independentBroker SET commission = %s WHERE ssn = %s",
                     commission, ssn);
             executeQuery(updateIBQuery);
         }
@@ -301,15 +307,13 @@ public class BrokerController implements Initializable {
 
         showBrokers();
     }
-
+    
     private void executeQuery(String query) {
-        Connection connection = DBConnection.getConnection();
-
-        try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate(query);
-        } catch (SQLIntegrityConstraintViolationException e) {
+        try {
+            SQLUtils.executeQuery(query);
+        } catch (SQLIntegrityConstraintViolationException sql_icve) {
             // This means we have a duplicate primary key
-            // Duplicate primary key can mean a duplicate SSN or the employee already has
+            // Duplicate primary key can mean a duplicate SSN or the broker already has
             // this email or phone.
             if (query.contains("email"))
                 showError("Email already added.");
@@ -318,8 +322,7 @@ public class BrokerController implements Initializable {
             else
                 showError("Duplicate SSN.");
         } catch (SQLException sql_e) {
-            sql_e.printStackTrace();
-            AlertUtil.showAlert(AlertType.ERROR, "Error reading database", sql_e.getMessage());
+            AlertUtil.showAlert(AlertType.ERROR, "Database Error", sql_e.getMessage());
         }
     }
 

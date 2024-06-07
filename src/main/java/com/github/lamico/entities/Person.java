@@ -88,8 +88,8 @@ public class Person {
         this.email = email;
     }
 
-    /** @return Whether an Owner has this ssn. */
-    public static boolean searchOwner(String ssn) {
+    /** @return Whether an Person has this ssn. */
+    public static boolean searchPerson(String ssn) {
         String query = String.format("SELECT * from person WHERE ssn = %s", ssn);
         try (Connection connection = DBConnection.getConnection();
                 Statement statement = connection.createStatement();

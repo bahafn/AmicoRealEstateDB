@@ -7,6 +7,7 @@ import com.github.lamico.db.DBConnection;
 import com.github.lamico.entities.Client;
 import com.github.lamico.entities.Person;
 import com.github.lamico.gui.utils.AlertUtil;
+import com.github.lamico.gui.utils.SQLUtils;
 import com.github.lamico.gui.utils.TextFormatterTypes;
 
 import javafx.collections.FXCollections;
@@ -77,10 +78,10 @@ public class ClientController implements Initializable {
     public void deleteClient() {
         hideAllErrors();
 
-        // Get selected Owner from TableView
+        // Get selected Client from TableView
         Client client = tvClient.getSelectionModel().getSelectedItem();
         if (client == null) {
-            showError("Select an owner.");
+            showError("Select a client.");
             return;
         }
 
@@ -99,34 +100,36 @@ public class ClientController implements Initializable {
     public void insertClient() {
         hideAllErrors();
 
-        String ssn = txtSSN.getText().strip();
-        String name = txtName.getText().strip();
-        String address = txtAddress.getText().strip();
-        String birthDate = txtDate.getValue() == null ? null : txtDate.getValue().toString();
-        String bankName = txtBank.getText().strip();
-        String sponsor = txtSponsor.getText().strip();
-        String incomeLevel = txtIncomeLevel.getText().strip();
-        String employer = txtEmployer.getText().strip();
+        // Get info from input form
+        String ssn = SQLUtils.formatStringForQuery(txtSSN.getText(), true);
+        String name = SQLUtils.formatStringForQuery(txtName.getText(), true);
+        String address = SQLUtils.formatStringForQuery(txtAddress.getText(), true);
+        String birthDate = SQLUtils.formatDateForQuery(txtDate.getValue());
+        String bankName = SQLUtils.formatStringForQuery(txtBank.getText(), true);
+        String sponsor = SQLUtils.formatStringForQuery(txtSponsor.getText(), true);
+        String incomeLevel = SQLUtils.formatStringForQuery(txtIncomeLevel.getText(), false);
+        String employer = SQLUtils.formatStringForQuery(txtEmployer.getText(), true);
 
         if (ssn.length() < 9) {
             showError("SSN Invalid");
             return;
         }
-        if (name.isEmpty() || address.isEmpty() || birthDate == null || bankName.isEmpty()) {
+        // Check if any of the required fields is empty.
+        if (sponsor.equals("null")) {
             showError("Empty Fields");
             return;
         }
 
-        // Check if ssn is already belongs to an owner
-        if (Person.searchOwner(ssn)) {
-            AlertUtil.showAlert(AlertType.INFORMATION, "Couldn't add Employee", "SSN already used by an owner.");
+        // Check if ssn is already used
+        if (Person.searchPerson(ssn)) {
+            AlertUtil.showAlert(AlertType.INFORMATION, "Couldn't add Employee", "SSN already used.");
             return;
         }
 
-        String insertPersonQuery = String.format("INSERT INTO person VALUES('%s', '%s', '%s', '%s', '%s')", ssn, name,
+        String insertPersonQuery = String.format("INSERT INTO person VALUES(%s, %s, %s, %s, %s)", ssn, name,
                 address, birthDate, bankName);
         executeQuery(insertPersonQuery);
-        String insertClientQuery = String.format("INSERT INTO clientTbl VALUES('%s', %s, '%s', '%s')", sponsor,
+        String insertClientQuery = String.format("INSERT INTO clientTbl VALUES(%s, %s, %s, %s)", sponsor,
                 incomeLevel, employer, ssn);
         executeQuery(insertClientQuery);
 
@@ -136,37 +139,38 @@ public class ClientController implements Initializable {
     public void updateClient() {
         hideAllErrors();
 
-        // Get selected Owner from TableView
+        // Get selected client from TableView
         Client client = tvClient.getSelectionModel().getSelectedItem();
         if (client == null) {
-            showError("Select an owner.");
+            showError("Select a client.");
             return;
         }
 
         String ssn = client.getSsn();
-        String name = txtName.getText().strip();
-        String address = txtAddress.getText().strip();
-        String birthDate = txtDate.getValue() == null ? null : txtDate.getValue().toString();
-        String bankName = txtBank.getText().strip();
-        String sponsor = txtSponsor.getText().strip();
-        String incomeLevel = txtIncomeLevel.getText().strip();
-        String employer = txtEmployer.getText().strip();
+        String name = SQLUtils.formatStringForQuery(txtName.getText(), true);
+        String address = SQLUtils.formatStringForQuery(txtAddress.getText(), true);
+        String birthDate = SQLUtils.formatDateForQuery(txtDate.getValue());
+        String bankName = SQLUtils.formatStringForQuery(txtBank.getText(), true);
+        String sponsor = SQLUtils.formatStringForQuery(txtSponsor.getText(), true);
+        String incomeLevel = SQLUtils.formatStringForQuery(txtIncomeLevel.getText(), false);
+        String employer = SQLUtils.formatStringForQuery(txtEmployer.getText(), true);
 
         if (ssn.length() < 9) {
             showError("SSN Invalid");
             return;
         }
-        if (name.isEmpty() || address.isEmpty() || birthDate.isEmpty() || bankName.isEmpty()) {
+        // Check if any of the required fields is empty.
+        if (sponsor.equals("null")) {
             showError("Empty Fields");
             return;
         }
 
         String updatePersonQuery = String.format(
-                "UPDATE person SET pName = '%s', Address = '%s', dateOfBirth = '%s', bankInfo = '%s' WHERE ssn = '%s'",
+                "UPDATE person SET pName = %s, Address = %s, dateOfBirth = %s, bankInfo = %s WHERE ssn = %s",
                 name, address, birthDate, bankName, ssn);
         executeQuery(updatePersonQuery);
         String updateClientQuery = String.format(
-                "UPDATE clientTbl SET sponsor = '%s', incomeLevel = %s, employeementInfo = '%s' WHERE ssn = '%s'",
+                "UPDATE clientTbl SET sponsor = %s, incomeLevel = %s, employeementInfo = %s WHERE ssn = %s",
                 sponsor, incomeLevel, employer, ssn);
         executeQuery(updateClientQuery);
 
@@ -254,7 +258,7 @@ public class ClientController implements Initializable {
             statement.executeUpdate(query);
         } catch (SQLIntegrityConstraintViolationException e) {
             // This means we have a duplicate primary key
-            // duplicate primary key can mean a duplicate SSN, the owner already has this
+            // duplicate primary key can mean a duplicate SSN, the client already has this
             // email or phone.
             if (query.contains("email"))
                 showError("Email already added.");
