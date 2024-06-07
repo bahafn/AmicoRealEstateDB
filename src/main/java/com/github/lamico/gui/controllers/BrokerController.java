@@ -121,18 +121,19 @@ public class BrokerController implements Initializable {
     public void insertBroker() {
         hideAllErrors();
 
-        String ssn = txtSSN.getText().strip();
-        String name = txtName.getText().strip();
-        String address = txtAddress.getText().strip();
-        String birthDate = txtDate.getValue() == null ? null : txtDate.getValue().toString();
-        String bankName = txtBank.getText().strip();
+        // Get info from input form
+        String ssn = SQLUtils.formatStringForQuery(txtSSN.getText(), true);
+        String name = SQLUtils.formatStringForQuery(txtName.getText(), true);
+        String address = SQLUtils.formatStringForQuery(txtAddress.getText(), true);
+        String birthDate = SQLUtils.formatDateForQuery(txtDate.getValue());
+        String bankName = SQLUtils.formatStringForQuery(txtBank.getText(), true);
 
-        String department = txtDepartment.getText().strip();
-        String position = txtPosition.getText().strip();
-        String hireDate = txtHireDate.getValue() == null ? null : txtHireDate.getValue().toString();
-        String salary = txtSalary.getText();
-        String commission = txtCommission.getText();
-        String share = txtShare.getText();
+        String department = SQLUtils.formatStringForQuery(txtDepartment.getText(), true);
+        String position = SQLUtils.formatStringForQuery(txtPosition.getText(), true);
+        String hireDate = SQLUtils.formatDateForQuery(txtHireDate.getValue());
+        String salary = SQLUtils.formatStringForQuery(txtSalary.getText(), false);
+        String commission = SQLUtils.formatStringForQuery(txtCommission.getText(), false);
+        String share = SQLUtils.formatStringForQuery(txtShare.getText(), false);
 
         if (ssn.length() < 9) {
             showError("SSN Invalid");
@@ -184,7 +185,7 @@ public class BrokerController implements Initializable {
         }
 
         // Get info from input form
-        String ssn = SQLUtils.formatStringForQuery(txtSSN.getText(), true);
+        String ssn = broker.getSsn();
         String name = SQLUtils.formatStringForQuery(txtName.getText(), true);
         String address = SQLUtils.formatStringForQuery(txtAddress.getText(), true);
         String birthDate = SQLUtils.formatDateForQuery(txtDate.getValue());
@@ -202,7 +203,8 @@ public class BrokerController implements Initializable {
             return;
         }
         // Check if any of the required fields is empty
-        if (bankName.equals("null") || (companyBroker && share.equals("null"))
+        if (bankName.equals("null") || share.equals("null") || (companyBroker && (department.equals("null")
+                || position.equals("null") || salary.equals("null")))
                 || (!companyBroker && commission.equals("null"))) {
             showError("Empty Fields");
             return;
@@ -215,7 +217,7 @@ public class BrokerController implements Initializable {
         executeQuery(updatePersonQuery);
 
         // Update info that is in the broker table
-        String updateBrokerQuery = String.format("UPDATE broker SET pShare = %s WHERE ssn = %s", share, ssn);
+        String updateBrokerQuery = String.format("UPDATE broker SET bShare = %s WHERE ssn = %s", share, ssn);
         executeQuery(updateBrokerQuery);
 
         if (companyBroker) {
@@ -307,11 +309,12 @@ public class BrokerController implements Initializable {
 
         showBrokers();
     }
-    
+
     private void executeQuery(String query) {
         try {
             SQLUtils.executeQuery(query);
         } catch (SQLIntegrityConstraintViolationException sql_icve) {
+            sql_icve.printStackTrace();
             // This means we have a duplicate primary key
             // Duplicate primary key can mean a duplicate SSN or the broker already has
             // this email or phone.
