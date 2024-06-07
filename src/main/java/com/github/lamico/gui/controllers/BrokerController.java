@@ -42,7 +42,7 @@ public class BrokerController implements Initializable {
 
     @FXML
     private TableColumn<Person, ?> tcBank, tcDate, tcName, tcSSN, tcAddress, tcPhone, tcEmail, tcSalary, tcHireDate,
-            tcDepartment, tcPosition, tcCommission;
+            tcDepartment, tcPosition, tcCommission, tcShare;
 
     @FXML
     private TextField txtAddress, txtBank, txtName, txtSSN, txtPhone, txtEmail, txtSalary, txtPosition, txtDepartment,
@@ -74,6 +74,7 @@ public class BrokerController implements Initializable {
         txtName.setText(broker.getPName());
         txtAddress.setText(broker.getAddress());
         txtBank.setText(broker.getBankInfo());
+        txtShare.setText(broker.getShare() + "");
         txtDate.setValue(
                 Instant.ofEpochMilli(broker.getDateOfBirth().getTime()).atZone(ZoneId.systemDefault()).toLocalDate());
         if (companyBroker) {
@@ -382,6 +383,7 @@ public class BrokerController implements Initializable {
         tcSalary.setCellValueFactory(new PropertyValueFactory<>("salary"));
         tcDepartment.setCellValueFactory(new PropertyValueFactory<>("department"));
         tcCommission.setCellValueFactory(new PropertyValueFactory<>("commission"));
+        tcShare.setCellValueFactory(new PropertyValueFactory<>("share"));
 
         // Hide all employee info input and output fields
         mainVBox.getChildren().remove(vbEmployeeInfo);

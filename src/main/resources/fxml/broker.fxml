@@ -33,6 +33,7 @@
             <TableColumn fx:id="tcPosition" prefWidth="75.0" text="Position" />
             <TableColumn fx:id="tcHireDate" prefWidth="75.0" text="Hire Date" />
             <TableColumn fx:id="tcCommission" prefWidth="75.0" text="Commission" />
+            <TableColumn fx:id="tcShare" prefWidth="75.0" text="Share" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
