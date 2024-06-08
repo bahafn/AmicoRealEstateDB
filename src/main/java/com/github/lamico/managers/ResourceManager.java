@@ -4,6 +4,11 @@ import java.io.InputStream;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 
 /**
  * A utility class for loading and accessing resources such as FXML files, CSS
@@ -59,5 +64,19 @@ public class ResourceManager {
 		if (is == null)
 			return null;
 		return new Image(is);
+	}
+	
+	/**	
+	 * Returns a background instance for the specified image file.
+	 * @param name the name of the image file
+	 * @return a background instance
+	 */
+	public static Background getBackground(String name) {
+		Image image = ResourceManager.getImage(name);
+		BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT,
+				BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+				new BackgroundSize(1.0, 1.0, true, true, true, true));
+
+		return new Background(backgroundImage);
 	}
 }

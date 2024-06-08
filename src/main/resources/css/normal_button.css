@@ -1,0 +1,16 @@
+.button {
+    -fx-font-weight: bold;
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-border-color: black;
+    -fx-border-radius: 3.0 3.0 3.0 3.0;
+    -fx-background-insets: 0;
+}
+
+.button:hover {
+	-fx-text-fill: rgb(220.0, 220.0, 220.0);
+}
+
+.button:pressed {
+	-fx-text-fill: black;
+}

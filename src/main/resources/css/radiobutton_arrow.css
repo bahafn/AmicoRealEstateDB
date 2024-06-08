@@ -1,0 +1,28 @@
+.radio-button .radio {
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+}
+
+.radio-button .dot {
+    -fx-padding: 7;
+    -fx-background-color: white; /* default color when not selected */
+    -fx-background-radius: 0;
+    -fx-border-color: black;
+    -fx-border-width: 1;
+    -fx-shape: "M 0 0 L 5 5 L 0 10 Z"; /* triangle shape pointing to the right */
+    -fx-background-size: 10 10;
+    -fx-background-position: center;
+    -fx-scale-shape: true;
+}
+
+.radio-button:selected .dot {
+    -fx-background-color: black;
+    -fx-border-color: white;
+    -fx-border-width: 1;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-padding: 7;
+}
