@@ -76,6 +76,7 @@
                            <tooltip>
                               <Tooltip text="Enter 9 digit SSN." />
                            </tooltip></TextField>
+                        <Label layoutX="38.0" text="*" textFill="RED" />
                      </children>
                   </Pane>
                   <Pane prefHeight="200.0" prefWidth="200.0" translateY="-10.0">
@@ -89,6 +90,7 @@
                   </Pane>
                   <Pane prefHeight="200.0" prefWidth="200.0" translateY="-10.0">
                      <children>
+                        <Label layoutX="84.0" text="*" textFill="RED" />
                         <Label layoutX="9.0" text="Bank Name:" />
                         <TextField fx:id="txtBank" layoutX="89.0" layoutY="-5.0" onKeyTyped="#hideAllErrors" prefHeight="25.0" prefWidth="122.0">
                            <tooltip>

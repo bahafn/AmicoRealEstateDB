@@ -25,7 +25,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
@@ -64,7 +63,7 @@ public class BrokerController implements Initializable {
 
     private boolean companyBroker = false;
 
-    public void handleRowSelection(MouseEvent event) {
+    public void handleRowSelection() {
         Broker broker = (Broker) tvBroker.getSelectionModel().getSelectedItem();
         if (broker == null)
             return;
@@ -137,9 +136,10 @@ public class BrokerController implements Initializable {
             return;
         }
         // Check if any of the required fields is empty
-        if (bankName.equals("null") || (companyBroker && share.equals("null"))
+        if (bankName.equals("null") || share.equals("null") || (companyBroker && (department.equals("null")
+                || position.equals("null") || salary.equals("null")))
                 || (!companyBroker && commission.equals("null"))) {
-            showError("Empty Fields");
+            showError("Empty required Fields (*)");
             return;
         }
 
@@ -177,7 +177,7 @@ public class BrokerController implements Initializable {
         // Get selected broker from TableView
         Broker broker = (Broker) tvBroker.getSelectionModel().getSelectedItem();
         if (broker == null) {
-            showError("Select a broker.");
+            showError("Empty required Fields (*)");
             return;
         }
 
@@ -366,7 +366,20 @@ public class BrokerController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Set up cell factories
+        // Hide all employee info input and output fields
+        mainVBox.getChildren().remove(vbEmployeeInfo);
+        mainVBox.getChildren().remove(vbEmployeeInfo);
+        tvBroker.getColumns().remove(tcPosition);
+        tvBroker.getColumns().remove(tcHireDate);
+        tvBroker.getColumns().remove(tcSalary);
+        tvBroker.getColumns().remove(tcDepartment);
+
+        setUpTableColumns();
+        showBrokers();
+        restrictTextFields();
+    }
+
+    private void setUpTableColumns() {
         tcName.setCellValueFactory(new PropertyValueFactory<>("pName"));
         tcSSN.setCellValueFactory(new PropertyValueFactory<>("ssn"));
         tcDate.setCellValueFactory(new PropertyValueFactory<>("dateOfBirth"));
@@ -380,17 +393,6 @@ public class BrokerController implements Initializable {
         tcDepartment.setCellValueFactory(new PropertyValueFactory<>("department"));
         tcCommission.setCellValueFactory(new PropertyValueFactory<>("commission"));
         tcShare.setCellValueFactory(new PropertyValueFactory<>("share"));
-
-        // Hide all employee info input and output fields
-        mainVBox.getChildren().remove(vbEmployeeInfo);
-        mainVBox.getChildren().remove(vbEmployeeInfo);
-        tvBroker.getColumns().remove(tcPosition);
-        tvBroker.getColumns().remove(tcHireDate);
-        tvBroker.getColumns().remove(tcSalary);
-        tvBroker.getColumns().remove(tcDepartment);
-
-        showBrokers();
-        restrictTextFields();
     }
 
     private void restrictTextFields() {

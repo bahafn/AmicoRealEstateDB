@@ -75,7 +75,7 @@
             </GridPane>
          </bottom>
          <right>
-            <ScrollPane hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" prefHeight="374.0" prefWidth="224.0" BorderPane.alignment="CENTER">
+            <ScrollPane hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" prefHeight="374.0" prefWidth="224.0" vvalue="1.0" BorderPane.alignment="CENTER">
                <content>
                   <VBox fx:id="mainVBox" prefHeight="285.0" prefWidth="210.0" spacing="10.0" translateX="-5.0" translateY="25.0">
                      <children>
@@ -88,6 +88,7 @@
                                     <Tooltip text="Enter 9 digit SSN." />
                                  </tooltip>
                               </TextField>
+                              <Label layoutX="38.0" text="*" textFill="RED" />
                            </children>
                         </Pane>
                         <Pane minHeight="30.0" prefHeight="200.0" prefWidth="200.0" translateY="-10.0">
@@ -108,6 +109,7 @@
                                     <Tooltip text="Bank name can only have letters." />
                                  </tooltip>
                               </TextField>
+                              <Label layoutX="83.0" text="*" textFill="RED" />
                            </children>
                         </Pane>
                         <Pane minHeight="30.0" prefHeight="200.0" prefWidth="200.0" translateY="-10.0">
@@ -128,6 +130,7 @@
                                     <Tooltip text="Address can only have letters and commas" />
                                  </tooltip>
                               </TextField>
+                              <Label layoutX="50.0" text="*" textFill="RED" />
                            </children>
                         </Pane>
                         <Pane minHeight="30.0" prefHeight="200.0" prefWidth="200.0" translateY="-10.0">
@@ -172,6 +175,7 @@
                            <children>
                               <Pane minHeight="30.0" prefHeight="0.0" prefWidth="210.0">
                                  <children>
+                                    <Label layoutX="63.0" text="*" textFill="RED" />
                                     <Label layoutX="9.0" text="Position:" />
                                     <TextField fx:id="txtPosition" layoutX="89.0" layoutY="-5.0" onKeyTyped="#hideAllErrors" prefHeight="25.0" prefWidth="122.0">
                                        <tooltip>
@@ -188,6 +192,7 @@
                                           <Tooltip text="Enter 9 digit SSN." />
                                        </tooltip>
                                     </TextField>
+                                    <Label layoutX="85.0" text="*" textFill="RED" />
                                  </children>
                               </Pane>
                               <Pane minHeight="30.0" prefHeight="0.0" prefWidth="210.0">
@@ -198,6 +203,7 @@
                                           <Tooltip text="Enter 9 digit SSN." />
                                        </tooltip>
                                     </TextField>
+                                    <Label layoutX="50.0" text="*" textFill="RED" />
                                  </children>
                               </Pane>
                               <Pane minHeight="30.0" prefHeight="200.0" prefWidth="210.0">
@@ -217,6 +223,7 @@
                                     <Tooltip text="Address can only have letters and commas" />
                                  </tooltip>
                               </TextField>
+                              <Label layoutX="85.0" text="*" textFill="RED" />
                            </children>
                         </Pane>
                      </children>

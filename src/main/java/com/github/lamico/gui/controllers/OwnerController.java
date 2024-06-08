@@ -22,7 +22,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -49,7 +48,7 @@ public class OwnerController implements Initializable {
     @FXML
     private Label lbGeneralError;
 
-    public void handleRowSelection(MouseEvent event) {
+    public void handleRowSelection() {
         Person owner = tvOwner.getSelectionModel().getSelectedItem();
         if (owner == null)
             return;
@@ -106,7 +105,7 @@ public class OwnerController implements Initializable {
         }
         // Check if any of the required fields is empty.
         if (bankName.equals("null")) {
-            showError("Empty Fields");
+            showError("Empty required Fields (*)");
             return;
         }
 
@@ -139,7 +138,7 @@ public class OwnerController implements Initializable {
         }
         // Check if any of the required fields is empty.
         if (bankName.equals("null")) {
-            showError("Empty Fields");
+            showError("Empty required Fields (*)");
             return;
         }
 
@@ -255,7 +254,12 @@ public class OwnerController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Set up cell factories
+        setUpTableColumns();
+        showOwners();
+        restrictTextFields();
+    }
+
+    private void setUpTableColumns() {
         tcName.setCellValueFactory(new PropertyValueFactory<>("pName"));
         tcSSN.setCellValueFactory(new PropertyValueFactory<>("ssn"));
         tcDate.setCellValueFactory(new PropertyValueFactory<>("dateOfBirth"));
@@ -263,9 +267,6 @@ public class OwnerController implements Initializable {
         tcAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
         tcPhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
         tcEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
-
-        showOwners();
-        restrictTextFields();
     }
 
     private void restrictTextFields() {

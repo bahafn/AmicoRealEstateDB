@@ -23,7 +23,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -51,7 +50,7 @@ public class ClientController implements Initializable {
     @FXML
     private Label lbGeneralError;
 
-    public void handleRowSelection(MouseEvent event) {
+    public void handleRowSelection() {
         Client client = tvClient.getSelectionModel().getSelectedItem();
         if (client == null)
             return;
@@ -113,8 +112,8 @@ public class ClientController implements Initializable {
             return;
         }
         // Check if any of the required fields is empty.
-        if (sponsor.equals("null")) {
-            showError("Empty Fields");
+        if (bankName.equals("null") || sponsor.equals("null")) {
+            showError("Empty required Fields (*)");
             return;
         }
 
@@ -159,7 +158,7 @@ public class ClientController implements Initializable {
         }
         // Check if any of the required fields is empty.
         if (sponsor.equals("null")) {
-            showError("Empty Fields");
+            showError("Empty required Fields (*)");
             return;
         }
 
@@ -281,7 +280,12 @@ public class ClientController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Set up cell factories
+        setUpTableColumns();
+        showClients();
+        restrictTextFields();
+    }
+
+    private void setUpTableColumns() {
         tcName.setCellValueFactory(new PropertyValueFactory<>("pName"));
         tcSSN.setCellValueFactory(new PropertyValueFactory<>("ssn"));
         tcDate.setCellValueFactory(new PropertyValueFactory<>("dateOfBirth"));
@@ -292,9 +296,6 @@ public class ClientController implements Initializable {
         tcSponsor.setCellValueFactory(new PropertyValueFactory<>("sponsor"));
         tcEmployer.setCellValueFactory(new PropertyValueFactory<>("employer"));
         tcIncome.setCellValueFactory(new PropertyValueFactory<>("incomeLevel"));
-
-        showClients();
-        restrictTextFields();
     }
 
     private void restrictTextFields() {

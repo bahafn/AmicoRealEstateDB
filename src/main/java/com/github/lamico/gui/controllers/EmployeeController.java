@@ -23,7 +23,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -51,7 +50,7 @@ public class EmployeeController implements Initializable {
     @FXML
     private Label lbGeneralError;
 
-    public void handleRowSelection(MouseEvent event) {
+    public void handleRowSelection() {
         Employee employee = tvEmployee.getSelectionModel().getSelectedItem();
         if (employee == null)
             return;
@@ -116,7 +115,7 @@ public class EmployeeController implements Initializable {
         }
         // Check if any of the required fields is empty.
         if (bankName.equals("null") || department.equals("null") || position.equals("null") || salary.equals("null")) {
-            showError("Empty required fields.");
+            showError("Empty required fields (*)");
             return;
         }
 
@@ -167,7 +166,7 @@ public class EmployeeController implements Initializable {
         }
         // Check if any of the required fields is empty.
         if (bankName.equals("null") || department.equals("null") || position.equals("null") || salary.equals("null")) {
-            showError("Empty required fields.");
+            showError("Empty required Fields (*)");
             return;
         }
 
@@ -287,7 +286,12 @@ public class EmployeeController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Set up cell factories
+        setUpTableColumns();
+        showEmployees();
+        restrictTextFields();
+    }
+
+    private void setUpTableColumns() {
         tcName.setCellValueFactory(new PropertyValueFactory<>("pName"));
         tcSSN.setCellValueFactory(new PropertyValueFactory<>("ssn"));
         tcDate.setCellValueFactory(new PropertyValueFactory<>("dateOfBirth"));
@@ -299,9 +303,6 @@ public class EmployeeController implements Initializable {
         tcHireDate.setCellValueFactory(new PropertyValueFactory<>("hireDate"));
         tcSalary.setCellValueFactory(new PropertyValueFactory<>("salary"));
         tcDepartment.setCellValueFactory(new PropertyValueFactory<>("department"));
-
-        showEmployees();
-        restrictTextFields();
     }
 
     private void restrictTextFields() {
