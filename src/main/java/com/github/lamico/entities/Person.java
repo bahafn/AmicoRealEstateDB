@@ -12,103 +12,104 @@ import com.github.lamico.gui.utils.AlertUtil;
 import javafx.scene.control.Alert.AlertType;
 
 public class Person {
-    private String ssn;
-    private String pName;
-    private String address;
-    private Date dateOfBirth;
-    private String bankInfo;
+	private String ssn;
+	private String pName;
+	private String address;
+	private Date dateOfBirth;
+	private String bankInfo;
 
-    private String phone;
-    private String email;
+	private String phone;
+	private String email;
 
-    public Person(String ssn, String pName, String address, Date dateOfBirth, String bankInfo, String phone,
-            String email) {
-        this.ssn = ssn;
-        this.pName = pName;
-        this.address = address;
-        this.dateOfBirth = dateOfBirth;
-        this.bankInfo = bankInfo;
-        this.phone = phone;
-        this.email = email;
-    }
+	public Person(String ssn, String pName, String address, Date dateOfBirth, String bankInfo, String phone,
+			String email) {
+		this.ssn = ssn;
+		this.pName = pName;
+		this.address = address;
+		this.dateOfBirth = dateOfBirth;
+		this.bankInfo = bankInfo;
+		this.phone = phone;
+		this.email = email;
+	}
 
-    public String getSsn() {
-        return ssn;
-    }
+	public Person(String ssn, String pName, String email) {
+		this.ssn = ssn;
+		this.pName = pName;
+		this.email = email;
+	}
 
-    public void setSsn(String ssn) {
-        this.ssn = ssn;
-    }
+	public String getSsn() {
+		return ssn;
+	}
 
-    public String getPName() {
-        return pName;
-    }
+	public void setSsn(String ssn) {
+		this.ssn = ssn;
+	}
 
-    public void setPName(String pName) {
-        this.pName = pName;
-    }
+	public String getPName() {
+		return pName;
+	}
 
-    public String getAddress() {
-        return address;
-    }
+	public void setPName(String pName) {
+		this.pName = pName;
+	}
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
+	public String getAddress() {
+		return address;
+	}
 
-    public Date getDateOfBirth() {
-        return dateOfBirth;
-    }
+	public void setAddress(String address) {
+		this.address = address;
+	}
 
-    public void setDateOfBirth(Date dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
+	public Date getDateOfBirth() {
+		return dateOfBirth;
+	}
 
-    public String getBankInfo() {
-        return bankInfo;
-    }
+	public void setDateOfBirth(Date dateOfBirth) {
+		this.dateOfBirth = dateOfBirth;
+	}
 
-    public void setBankInfo(String bankInfo) {
-        this.bankInfo = bankInfo;
-    }
+	public String getBankInfo() {
+		return bankInfo;
+	}
 
-    public String getPhone() {
-        return phone == null ? "" : phone;
-    }
+	public void setBankInfo(String bankInfo) {
+		this.bankInfo = bankInfo;
+	}
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
+	public String getPhone() {
+		return phone == null ? "" : phone;
+	}
 
-    public String getEmail() {
-        return email == null ? "" : email;
-    }
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	public String getEmail() {
+		return email == null ? "" : email;
+	}
 
-    /** @return Whether an Person has this ssn. */
-    public static boolean searchPerson(String ssn) {
-        String query = String.format("SELECT * from person WHERE ssn = %s", ssn);
-        try (Connection connection = DBConnection.getConnection();
-                Statement statement = connection.createStatement();
-                ResultSet queryResult = statement.executeQuery(query)) {
-            return queryResult.next();
-        } catch (SQLException sql_e) {
-            AlertUtil.showAlert(AlertType.ERROR, "Error reading database", sql_e.getMessage());
-            return false;
-        }
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    @Override
-    public String toString() {
-        return "Person{" +
-                "ssn=" + ssn +
-                ", pName='" + pName + '\'' +
-                ", address='" + address + '\'' +
-                ", dateOfBirth=" + dateOfBirth +
-                ", bankInfo='" + bankInfo + '\'' +
-                '}';
-    }
+	/** @return Whether an Person has this ssn. */
+	public static boolean searchPerson(String ssn) {
+		String query = String.format("SELECT * from person WHERE ssn = %s", ssn);
+		try (Connection connection = DBConnection.getConnection();
+				Statement statement = connection.createStatement();
+				ResultSet queryResult = statement.executeQuery(query)) {
+			return queryResult.next();
+		} catch (SQLException sql_e) {
+			AlertUtil.showAlert(AlertType.ERROR, "Error reading database", sql_e.getMessage());
+			return false;
+		}
+	}
+
+	@Override
+	public String toString() {
+		return "Person{" + "ssn=" + ssn + ", pName='" + pName + '\'' + ", address='" + address + '\'' + ", dateOfBirth="
+				+ dateOfBirth + ", bankInfo='" + bankInfo + '\'' + '}';
+	}
 }
