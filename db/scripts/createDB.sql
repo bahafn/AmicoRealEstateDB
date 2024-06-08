@@ -202,7 +202,7 @@ CREATE TABLE `email` (
   `address` varchar(64) NOT NULL,
   `ssn` char(9) NOT NULL,
   PRIMARY KEY (`ssn`,`address`),
-  CONSTRAINT `email_ibfk_1` FOREIGN KEY (`ssn`) REFERENCES `person` (`ssn`)
+  CONSTRAINT `email_ibfk_1` FOREIGN KEY (`ssn`) REFERENCES `person` (`ssn`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -331,7 +331,7 @@ CREATE TABLE `phone` (
   `phoneNumber` char(10) NOT NULL,
   `ssn` char(9) NOT NULL,
   PRIMARY KEY (`ssn`,`phoneNumber`),
-  CONSTRAINT `phone_ibfk_1` FOREIGN KEY (`ssn`) REFERENCES `person` (`ssn`)
+  CONSTRAINT `phone_ibfk_1` FOREIGN KEY (`ssn`) REFERENCES `person` (`ssn`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
