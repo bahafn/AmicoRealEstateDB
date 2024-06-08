@@ -58,6 +58,8 @@ public class TabManager {
 		registerTab(CLIENTS);
 		registerTab(EMPLOYEES);
 		registerTab(DASHBOARD);
+		registerTab(TRANSACTIONS);
+		registerTab(CONTRACTS);
 	}
 	
 	private void registerTab(String name) throws IOException {
