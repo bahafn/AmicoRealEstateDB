@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 
@@ -24,8 +25,10 @@ public class TabManager {
 	public static final String CLIENTS = "client";
 	public static final String EMPLOYEES = "employee";
 	public static final String DASHBOARD = "dashboard";
+	public static final String PROPERTY = "property";
 
 	private Map<String, Node> nodeMap = new HashMap<>();
+	private Map<String, FXMLLoader> loaderMap = new HashMap<>();
 	private BorderPane root;
 
 	/**
@@ -46,14 +49,20 @@ public class TabManager {
 	 *                     they aren't found
 	 */
 	private void initialise() throws IOException {
-		nodeMap.put(BUILDINGS, ResourceManager.getFXMLLoader(BUILDINGS).load());
-		nodeMap.put(APARTMENTS, ResourceManager.getFXMLLoader(APARTMENTS).load());
-		nodeMap.put(LAND, ResourceManager.getFXMLLoader(LAND).load());
-		nodeMap.put(DASHBOARD, ResourceManager.getFXMLLoader(DASHBOARD).load());
-		nodeMap.put(OWNERS, ResourceManager.getFXMLLoader(OWNERS).load());
-		nodeMap.put(EMPLOYEES, ResourceManager.getFXMLLoader(EMPLOYEES).load());
-		nodeMap.put(CLIENTS, ResourceManager.getFXMLLoader(CLIENTS).load());
-		nodeMap.put(BROKERS, ResourceManager.getFXMLLoader(BROKERS).load());
+		registerTab(PROPERTY);
+		registerTab(BUILDINGS);
+		registerTab(LAND);
+		registerTab(APARTMENTS);
+		registerTab(OWNERS);
+		registerTab(BROKERS);
+		registerTab(CLIENTS);
+		registerTab(EMPLOYEES);
+		registerTab(DASHBOARD);
+	}
+	
+	private void registerTab(String name) throws IOException {
+		loaderMap.put(name, ResourceManager.getFXMLLoader(name));
+		nodeMap.put(name, getFXMLLoader(name).load());
 	}
 
 	/**
@@ -73,6 +82,26 @@ public class TabManager {
 	 */
 	public Node getTab(String tab) {
 		return nodeMap.get(tab);
+	}
+	
+	/**
+	 * Gets the FXML loader for the given tab.
+	 *
+	 * @param tab the name of the tab to get the FXML loader for
+	 * @return the FXML loader for the given tab
+	 */
+	public FXMLLoader getFXMLLoader(String tab) {
+		return loaderMap.get(tab);
+	}
+	
+	/**
+	 * Gets the controller for the given tab.
+	 *
+	 * @param tab the name of the tab to get the controller for
+	 * @return the controller for the given tab
+	 */
+	public Object getController(String tab) {
+		return getFXMLLoader(tab).getController();
 	}
 
 	/**

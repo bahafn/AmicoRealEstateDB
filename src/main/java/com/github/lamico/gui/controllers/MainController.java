@@ -20,7 +20,7 @@ import javafx.scene.layout.HBox;
 
 public class MainController {
 	// Go to this class to set up your tab
-	private TabManager tabManager;
+	private static TabManager tabManager;
 
 	@FXML
 	private BorderPane bpRoot;
@@ -139,7 +139,7 @@ public class MainController {
 		Clock.makeClock(lbTime);
 		lbTime.setStyle("-fx-text-fill: white;");
 
-		tabManager = new TabManager(bpRoot);
+		MainController.tabManager = new TabManager(bpRoot);
 		btDashboard.fire();
 	}
 
@@ -156,6 +156,10 @@ public class MainController {
 				updateTabStyles(selectedButton, otherButton);
 			}
 		}
+	}
+
+	public static TabManager getTabManager() {
+		return tabManager;
 	}
 
 }
