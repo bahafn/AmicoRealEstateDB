@@ -86,7 +86,7 @@ DROP TABLE IF EXISTS `building`;
 CREATE TABLE `building` (
   `prNum` int NOT NULL,
   `landNum` int NOT NULL,
-  `bName` varchar(20) NOT NULL,
+  `bName` varchar(40) NOT NULL,
   `yearBuilt` int DEFAULT NULL,
   `floorNum` int NOT NULL,
   PRIMARY KEY (`prNum`),
@@ -226,8 +226,8 @@ DROP TABLE IF EXISTS `employee`;
 CREATE TABLE `employee` (
   `salary` int NOT NULL,
   `hireDate` date DEFAULT NULL,
-  `ePosition` varchar(64) NOT NULL,
-  `department` varchar(64) NOT NULL,
+  `ePosition` varchar(16) NOT NULL,
+  `department` varchar(16) NOT NULL,
   `ssn` char(9) NOT NULL,
   PRIMARY KEY (`ssn`),
   CONSTRAINT `employee_ibfk_1` FOREIGN KEY (`ssn`) REFERENCES `person` (`ssn`) ON DELETE CASCADE
@@ -303,7 +303,7 @@ DROP TABLE IF EXISTS `person`;
 CREATE TABLE `person` (
   `ssn` char(9) NOT NULL,
   `pName` varchar(32) DEFAULT NULL,
-  `address` varchar(64) DEFAULT NULL,
+  `address` varchar(32) DEFAULT NULL,
   `dateOfBirth` date DEFAULT NULL,
   `bankInfo` varchar(32) NOT NULL,
   PRIMARY KEY (`ssn`)
@@ -385,7 +385,7 @@ DROP TABLE IF EXISTS `rentalapartment`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rentalapartment` (
   `prNum` int NOT NULL,
-  `price` decimal(10,2) NOT NULL,
+  `rent` decimal(8,2) NOT NULL,
   PRIMARY KEY (`prNum`),
   CONSTRAINT `rentalapartment_ibfk_1` FOREIGN KEY (`prNum`) REFERENCES `apartment` (`prNum`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -397,6 +397,7 @@ CREATE TABLE `rentalapartment` (
 
 LOCK TABLES `rentalapartment` WRITE;
 /*!40000 ALTER TABLE `rentalapartment` DISABLE KEYS */;
+INSERT INTO `rentalapartment` VALUES (2,2500.00),(6,2000.00),(10,1500.00),(14,1000.00);
 /*!40000 ALTER TABLE `rentalapartment` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -409,7 +410,7 @@ DROP TABLE IF EXISTS `saleapartment`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `saleapartment` (
   `prNum` int NOT NULL,
-  `rent` decimal(8,2) NOT NULL,
+  `price` decimal(10,2) NOT NULL,
   PRIMARY KEY (`prNum`),
   CONSTRAINT `saleapartment_ibfk_1` FOREIGN KEY (`prNum`) REFERENCES `apartment` (`prNum`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -421,6 +422,7 @@ CREATE TABLE `saleapartment` (
 
 LOCK TABLES `saleapartment` WRITE;
 /*!40000 ALTER TABLE `saleapartment` DISABLE KEYS */;
+INSERT INTO `saleapartment` VALUES (4,70000.00),(8,60000.00),(12,50000.00);
 /*!40000 ALTER TABLE `saleapartment` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -462,4 +464,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-06-08 18:34:28
+-- Dump completed on 2024-06-09 11:38:27
