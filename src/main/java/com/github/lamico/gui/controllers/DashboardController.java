@@ -111,7 +111,7 @@ public class DashboardController implements Initializable {
 				+ "(SELECT commission FROM IndependentBroker WHERE IndependentBroker.ssn = Contract.brokerSSN)) AS total_spending "
 				+ "FROM Contract " + "GROUP BY month " + "UNION ALL "
 				+ "SELECT DATE_FORMAT(hireDate, '%Y-%m') AS month, SUM(salary) AS total_spending " + "FROM Employee "
-				+ "GROUP BY month";
+				+ "GROUP BY month " + "ORDER BY month";
 
 		try (Connection connection = DBConnection.getConnection();
 				Statement statement = connection.createStatement();
@@ -145,7 +145,7 @@ public class DashboardController implements Initializable {
 		String query = "SELECT DATE_FORMAT(CDate, '%Y-%m') AS month, "
 				+ "SUM(CAST(price AS DECIMAL) - (CAST(price AS DECIMAL) * (SELECT bShare FROM Broker WHERE Broker.ssn = Contract.brokerSSN) / 100) - "
 				+ "(SELECT commission FROM IndependentBroker WHERE IndependentBroker.ssn = Contract.brokerSSN)) AS total_gains "
-				+ "FROM Contract " + "GROUP BY month";
+				+ "FROM Contract " + "GROUP BY month " + "ORDER BY month";
 
 		try (Connection connection = DBConnection.getConnection();
 				Statement statement = connection.createStatement();
