@@ -186,3 +186,41 @@
     -fx-border-width: 0;
 }
 
+.date-picker {
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-border-color: #D3D3D3;
+    -fx-border-width: 1;
+    -fx-border-radius: 3.0 3.0 3.0 3.0;
+    -fx-font-weight: normal;
+}
+
+.date-picker .arrow-button {
+    -fx-background-color: white;
+}
+
+.date-picker .arrow-button .arrow {
+    -fx-background-color: black;
+}
+
+.date-picker .text-input {
+    -fx-padding: 3.0,3.0,3.0,3.0;
+    -fx-border-radius: 3.0 3.0 3.0 3.0;
+    -fx-border-color: #D3D3D3;
+    -fx-highlight-fill: black;
+}
+
+.date-picker .calendar-picker-view .month-year-pane {
+    -fx-background-color: white;
+    -fx-text-fill: black;
+}
+
+.date-picker .calendar-picker-view .day-cell {
+    -fx-background-color: white;
+    -fx-text-fill: black;
+}
+
+.date-picker .calendar-picker-view .day-cell:hover {
+    -fx-background-color: black;
+    -fx-text-fill: white;
+}

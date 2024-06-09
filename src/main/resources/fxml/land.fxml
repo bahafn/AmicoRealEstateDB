@@ -9,6 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" opacity="0.9" prefHeight="500.0" prefWidth="1197.0" stylesheets="@../css/normal_button.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.lamico.gui.controllers.LandController">
    <children>
@@ -29,66 +30,93 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#6ec8fa" height="364.0" layoutX="813.0" layoutY="20.0" opacity="0.92" stroke="BLACK" strokeType="INSIDE" width="319.0" />
-      <VBox layoutX="832.0" layoutY="34.0" prefHeight="286.0" prefWidth="254.0" spacing="3.0">
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#a60136" height="364.0" layoutX="813.0" layoutY="20.0" opacity="0.92" stroke="BLACK" strokeType="INSIDE" width="319.0" />
+      <VBox layoutX="832.0" layoutY="47.0" prefHeight="286.0" prefWidth="254.0" spacing="3.0">
          <children>
             <HBox maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="223.0">
                <children>
-                  <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="120.0" text="Plot Number" />
+                  <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="120.0" text="Plot Number" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font></Label>
                   <TextField fx:id="txtPlot" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
                </children>
             </HBox>
             <HBox maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="223.0">
                <children>
-                  <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="120.0" text="Block" />
+                  <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="120.0" text="Block" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font></Label>
                   <TextField fx:id="txtBlock" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
                </children>
             </HBox>
             <HBox maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="223.0">
                <children>
-                  <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="120.0" text="Valuation" />
+                  <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="120.0" text="Valuation" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font></Label>
                   <TextField fx:id="txtValuation" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
                </children>
             </HBox>
             <HBox maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="223.0">
                <children>
-                  <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="120.0" text="Area" />
+                  <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="120.0" text="Area" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font></Label>
                   <TextField fx:id="txtArea" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
                </children>
             </HBox>
             <HBox maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="223.0">
                <children>
-                  <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="120.0" text="Owner" />
+                  <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="120.0" text="Owner" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font></Label>
                   <TextField fx:id="txtOwner" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
                </children>
             </HBox>
             <HBox maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="223.0">
                <children>
-                  <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="120.0" text="City" />
+                  <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="120.0" text="City" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font></Label>
                   <TextField fx:id="txtCity" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
                </children>
             </HBox>
             <HBox maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="223.0">
                <children>
-                  <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="120.0" text="Street" />
+                  <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="120.0" text="Street" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font></Label>
                   <TextField fx:id="txtStreet" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
                </children>
             </HBox>
             <HBox maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="223.0">
                <children>
-                  <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="120.0" text="Condition" />
+                  <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="120.0" text="Condition" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font></Label>
                   <TextField fx:id="txtCondition" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
                </children>
             </HBox>
             <HBox maxWidth="1.7976931348623157E308" prefHeight="32.0" prefWidth="254.0">
                <children>
-                  <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="37.0" prefWidth="112.0" text="Area Description" />
+                  <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="37.0" prefWidth="112.0" text="Area Description" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font></Label>
                   <TextField fx:id="txtDescription" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="29.0" prefWidth="142.0" />
                </children>
             </HBox>
          </children>
       </VBox>
-      <Button fx:id="btUpdate" layoutX="832.0" layoutY="333.0" mnemonicParsing="false" onAction="#update" stylesheets="@../css/normal_button.css" text="Update" />
-      <Button fx:id="btDelete" layoutX="1031.0" layoutY="333.0" mnemonicParsing="false" onAction="#delete" stylesheets="@../css/normal_button.css" text="Delete" />
+      <Button fx:id="btUpdate" layoutX="832.0" layoutY="333.0" mnemonicParsing="false" onAction="#update" prefWidth="70.0" stylesheets="@../css/normal_button.css" text="Update" />
+      <Button fx:id="btDelete" layoutX="1015.0" layoutY="333.0" mnemonicParsing="false" onAction="#delete" prefWidth="70.0" stylesheets="@../css/normal_button.css" text="Delete" />
    </children>
 </AnchorPane>
