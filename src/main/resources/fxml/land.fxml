@@ -30,7 +30,7 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#a60136" height="364.0" layoutX="813.0" layoutY="20.0" opacity="0.92" stroke="BLACK" strokeType="INSIDE" width="319.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#a60136" height="364.0" layoutX="813.0" layoutY="20.0" opacity="0.92" stroke="BLACK" strokeType="INSIDE" width="307.0" />
       <VBox layoutX="832.0" layoutY="47.0" prefHeight="286.0" prefWidth="254.0" spacing="3.0">
          <children>
             <HBox maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="223.0">

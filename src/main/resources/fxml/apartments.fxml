@@ -21,7 +21,7 @@
             <Button fx:id="btRegisterNew" layoutX="14.0" layoutY="589.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#registerNewProperty" opacity="0.83" text="Register New Apartment" AnchorPane.bottomAnchor="15.0" />
             <Accordion fx:id="acAccordion" layoutY="31.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="500.0" minWidth="800.0" opacity="0.8" prefHeight="520.0" prefWidth="1210.0" stylesheets="@../css/accordion.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <panes>
-                <TitledPane animated="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="300.0" prefWidth="1118.0" style="-fx-background-color: #ff6767;" text="Rental Apartments">
+                <TitledPane animated="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="300.0" prefWidth="1118.0" style="-fx-background-color: #ff5500; -fx-opacity: 1;" text="Rental Apartments">
                   <content>
                     <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
@@ -131,7 +131,7 @@
                         </AnchorPane>
                   </content>
                 </TitledPane>
-                <TitledPane animated="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: #ff0000;" text="Sale Apartments">
+                <TitledPane animated="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: #ff5500;" text="Sale Apartments">
                   <content>
                     <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
