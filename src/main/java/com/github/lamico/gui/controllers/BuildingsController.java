@@ -102,6 +102,12 @@ public class BuildingsController {
 
 	@FXML
 	private TextField txtYear;
+	
+	@FXML
+    void refresh(ActionEvent event) throws SQLException {
+		show();
+    }
+
 
 	@FXML
 	void update(ActionEvent event) {

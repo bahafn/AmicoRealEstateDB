@@ -95,6 +95,11 @@ public class LandController {
 	private TextField txtValuation;
 
 	@FXML
+	void refresh(ActionEvent event) throws SQLException {
+		show();
+	}
+
+	@FXML
 	void delete(ActionEvent event) {
 		Land selectedLand = tbvTable.getSelectionModel().getSelectedItem();
 		if (selectedLand != null) {
@@ -114,6 +119,7 @@ public class LandController {
 	public void show() throws SQLException {
 		showAllLand();
 	}
+
 	private void clearAllFields() {
 		txtArea.clear();
 		txtBlock.clear();
