@@ -13,8 +13,6 @@ import java.util.ResourceBundle;
 import com.github.lamico.db.DBConnection;
 import com.github.lamico.entities.Transaction;
 import com.github.lamico.gui.utils.AlertUtil;
-import com.github.lamico.gui.utils.TextFormatterTypes;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -80,7 +78,7 @@ public class TransactionController implements Initializable {
 
     public void insertTransaction() {
         hideAllErrors();
-        String TransactionId = txtTransactionId.getText().strip();
+        String ID = txtTransactionId.getText().strip();
         String amount = txtAmount.getText().strip();
         String recipient = txtRecipient.getText().strip();
         String sender = txtSender.getText().strip();
@@ -88,13 +86,13 @@ public class TransactionController implements Initializable {
       
         String paymentDate = txtPaymentDate.getValue() == null ? null : txtPaymentDate.getValue().toString();
 
-        if (amount.isEmpty() || recipient.isEmpty() || sender.isEmpty() || contractNo.isEmpty() || TransactionId.isEmpty() || paymentDate == null) {
+        if (amount.isEmpty() || recipient.isEmpty() || sender.isEmpty() || contractNo.isEmpty() || ID.isEmpty() || paymentDate == null) {
             showError("Empty Fields");
             return;
         }
 
         String query = String.format("INSERT INTO transaction VALUES('%s', '%s', '%s', '%s', '%s', '%s')", 
-                paymentDate, amount, recipient, sender, contractNo, txtTransactionId);
+        		ID, paymentDate, amount ,recipient, sender, contractNo);
         executeQuery(query);
 
         showTransactions();
@@ -113,17 +111,17 @@ public class TransactionController implements Initializable {
         String recipient = txtRecipient.getText().strip();
         String sender = txtSender.getText().strip();
         String contractNo = txtContractNo.getText().strip();
-        String TransactionId = txtTransactionId.getText().strip();
+        String ID = txtTransactionId.getText().strip();
         String paymentDate = txtPaymentDate.getValue() == null ? null : txtPaymentDate.getValue().toString();
 
-        if (amount.isEmpty() || recipient.isEmpty() || sender.isEmpty() || contractNo.isEmpty() || TransactionId.isEmpty() || paymentDate == null) {
+        if (amount.isEmpty() || recipient.isEmpty() || sender.isEmpty() || contractNo.isEmpty() || ID.isEmpty() || paymentDate == null) {
             showError("Empty Fields");
             return;
         }
 
         String query = String.format(
-                "UPDATE transaction SET paymentDate = '%s', amount = '%s', recipient = '%s', sender = '%s', TransactionId = '%s' WHERE contractNo = '%s'",
-                paymentDate, amount, recipient, sender, TransactionId, contractNo);
+                "UPDATE transaction SET ID = '%s', paymentDate = '%s', amount = '%s' ,recipient = '%s', sender = '%s' WHERE contractNo = '%s'",
+                ID ,paymentDate,amount, recipient, sender, contractNo);
         executeQuery(query);
 
         showTransactions();
@@ -152,23 +150,24 @@ public class TransactionController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        tcTransactionId.setCellValueFactory(new PropertyValueFactory<>("ID"));
         tcPaymentDate.setCellValueFactory(new PropertyValueFactory<>("paymentDate"));
         tcAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
         tcRecipient.setCellValueFactory(new PropertyValueFactory<>("recipient"));
         tcSender.setCellValueFactory(new PropertyValueFactory<>("sender"));
         tcContractNo.setCellValueFactory(new PropertyValueFactory<>("contractNo"));
-        tcTransactionId.setCellValueFactory(new PropertyValueFactory<>("TransactionId"));
+   
 
         showTransactions();
         restrictTextFields();
     }
 
     private void restrictTextFields() {
-        txtAmount.setTextFormatter(TextFormatterTypes.getSQLDateFormatter());
-        txtRecipient.setTextFormatter(TextFormatterTypes.getAlphaWordCharsFormatter(0));
-        txtSender.setTextFormatter(TextFormatterTypes.getAlphaWordCharsFormatter(0));
-        txtContractNo.setTextFormatter(TextFormatterTypes.getIntFormatter(0));
-        txtTransactionId.setTextFormatter(TextFormatterTypes.getIntFormatter(9));
+//        txtAmount.setTextFormatter(TextFormatterTypes.getDoubleTextFormatter(0));
+//        txtRecipient.setTextFormatter(TextFormatterTypes.getAlphaWordCharsFormatter(0));
+//        txtSender.setTextFormatter(TextFormatterTypes.getAlphaWordCharsFormatter(0));
+//        txtContractNo.setTextFormatter(TextFormatterTypes.getIntFormatter(0));
+//        txtTransactionId.setTextFormatter(TextFormatterTypes.getAlphaWordCharsFormatter(0));
     }
 
     private void showTransactions() {
@@ -183,16 +182,16 @@ public class TransactionController implements Initializable {
              Statement statement = connection.createStatement();
              ResultSet queryResult = statement.executeQuery(query)) {
 
-            while (queryResult.next()) {
-                result.add(new Transaction(
-                		queryResult.getString("id"),
-                        queryResult.getDate("paymentDate"),
-                        queryResult.getDouble("amount"),
-                        queryResult.getString("recipient"),
-                        queryResult.getString("sender"),
-                        queryResult.getString("contractNo")
-                         ));
-            }
+        	 while (queryResult.next()) {
+                 result.add(new Transaction(
+                 		queryResult.getString("ID"),
+                 		   queryResult.getDate("paymentDate"),
+                         queryResult.getDouble("amount"),
+                         queryResult.getString("recipient"),
+                         queryResult.getString("sender"),
+                         queryResult.getString("contractNo")
+                          ));
+             }
         } catch (SQLException sql_e) {
             AlertUtil.showAlert(AlertType.ERROR, "Error reading database", sql_e.getMessage());
         }
