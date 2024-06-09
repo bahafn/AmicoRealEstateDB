@@ -73,7 +73,7 @@ public class PropertyController {
 	@FXML
 	private TextField txtValuation;
 
-	private String backTo;
+	private String from;
 
 	@FXML
 	void handleRowSelection(MouseEvent event) {
@@ -102,53 +102,6 @@ public class PropertyController {
 
 	@FXML
 	void register(ActionEvent event) {
-		MainController.getTabManager().switchTo(backTo);
-	}
-
-	@FXML
-	void initialize() {
-		backgroundMap.put(TabManager.BUILDINGS, ResourceManager.getBackground("buildings.jpg"));
-		backgroundMap.put(TabManager.APARTMENTS, ResourceManager.getBackground("flat.jpg"));
-		backgroundMap.put(TabManager.LAND, ResourceManager.getBackground("land.png"));
-		
-		restrictFields();
-	}
-
-	private void restrictFields() {
-		txtArea.setTextFormatter(TextFormatterTypes.getDoubleTextFormatter(0));
-		txtValuation.setTextFormatter(TextFormatterTypes.getDoubleTextFormatter(0));
-		
-		txtCondition.setTextFormatter(TextFormatterTypes.getAlphaWordCharsFormatter(255));
-		txtDescription.setTextFormatter(TextFormatterTypes.getAlphanumericWordCharsAndCommasFormatter(255));
-		
-		txtOwner.setTextFormatter(TextFormatterTypes.getIntFormatter(9));
-		txtCity.setTextFormatter(TextFormatterTypes.getAlphaWordCharsFormatter(40));
-		txtStreet.setTextFormatter(TextFormatterTypes.getAlphanumericWordCharsAndCommasFormatter(40));
-		
-	}
-
-	public void showRegisterScreen(String from) {
-		root.setBackground(backgroundMap.get(from));
-
-		clearAllFields();
-		hideOwners();
-
-		this.backTo = from;
-
-		MainController.getTabManager().switchTo(TabManager.PROPERTY);
-	}
-
-	public void clearAllFields() {
-		txtArea.clear();
-		txtCity.clear();
-		txtCondition.clear();
-		txtDescription.clear();
-		txtOwner.clear();
-		txtStreet.clear();
-		txtValuation.clear();
-	}
-
-	public void registerProperty() {
 		String description = txtArea.getText().strip();
 		String city = txtCity.getText().strip();
 		String condition = txtCondition.getText().strip();
@@ -161,6 +114,48 @@ public class PropertyController {
 					owner);
 		} catch (SQLException e) {
 		}
+	}
+
+	@FXML
+	void initialize() {
+		backgroundMap.put(TabManager.BUILDINGS, ResourceManager.getBackground("buildings.jpg"));
+		backgroundMap.put(TabManager.APARTMENTS, ResourceManager.getBackground("flat.jpg"));
+		backgroundMap.put(TabManager.LAND, ResourceManager.getBackground("land.png"));
+
+		restrictFields();
+	}
+
+	private void restrictFields() {
+		txtArea.setTextFormatter(TextFormatterTypes.getDecimalTextFormatter(12, 2));
+		txtValuation.setTextFormatter(TextFormatterTypes.getDecimalTextFormatter(12, 2));
+
+		txtCondition.setTextFormatter(TextFormatterTypes.getAlphaWordCharsFormatter(255));
+		txtDescription.setTextFormatter(TextFormatterTypes.getAlphanumericWordCharsAndCommasFormatter(255));
+
+		txtOwner.setTextFormatter(TextFormatterTypes.getIntFormatter(9));
+		txtCity.setTextFormatter(TextFormatterTypes.getAlphaWordCharsFormatter(40));
+		txtStreet.setTextFormatter(TextFormatterTypes.getAlphanumericWordCharsAndCommasFormatter(40));
+	}
+
+	public void showRegisterScreen(String from) {
+		root.setBackground(backgroundMap.get(from));
+
+		clearAllFields();
+		hideOwners();
+
+		this.from = from;
+
+		MainController.getTabManager().switchTo(TabManager.PROPERTY);
+	}
+
+	public void clearAllFields() {
+		txtArea.clear();
+		txtCity.clear();
+		txtCondition.clear();
+		txtDescription.clear();
+		txtOwner.clear();
+		txtStreet.clear();
+		txtValuation.clear();
 	}
 
 	public void showOwners() {

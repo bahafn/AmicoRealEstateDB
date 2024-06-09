@@ -18,7 +18,7 @@ public class PropertyRegistrationManager {
 	public static synchronized void registerRealEstate(String prCondition, String city, String streetName,
 			double valuation, String areaDescription, double area, String ownerSSN) throws SQLException {
 		// Check if previous registration has finished, if not, delete the real estate
-		if (!finishedRegistering && connection != null) {
+		if (!finishedRegistering && connection != null && !connection.isClosed()) {
 			connection.rollback();
 			connection.close();
 		}
@@ -51,6 +51,7 @@ public class PropertyRegistrationManager {
 				throw new SQLException("Creating property failed, no ID obtained.");
 			}
 		}
+		connection.rollback();
 
 	}
 

@@ -4,12 +4,34 @@ import com.github.lamico.managers.TabManager;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.input.MouseEvent;
 
 public class BuildingsController {
 
 	@FXML
-	private Button btRegisterNew;
+    private TableView<?> tbvTable;
+
+    @FXML
+    private TableColumn<?, ?> tvFloors;
+
+    @FXML
+    private TableColumn<?, ?> tvLand;
+
+    @FXML
+    private TableColumn<?, ?> tvName;
+
+    @FXML
+    private TableColumn<?, ?> tvPrNum;
+
+    @FXML
+    private TableColumn<?, ?> tvYear;
+
+    @FXML
+    void handleRowSelection(MouseEvent event) {
+    }
+
 
 	@FXML
 	void registerNewProperty(ActionEvent event) {
