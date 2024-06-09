@@ -120,6 +120,7 @@
                               </VBox>
                               <Button fx:id="btUpdateRent" layoutX="919.0" layoutY="382.0" mnemonicParsing="false" onAction="#updateRent" text="Update" />
                               <Button fx:id="btDeleteRent" layoutX="1098.0" layoutY="382.0" mnemonicParsing="false" onAction="#deleteRent" text="Delete" />
+                              <Button layoutX="1015.0" layoutY="382.0" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
                            </children>
                         </AnchorPane>
                   </content>
@@ -224,6 +225,7 @@
                               </VBox>
                               <Button fx:id="btUpdateSale" layoutX="919.0" layoutY="382.0" mnemonicParsing="false" onAction="#updateSale" text="Update" />
                               <Button fx:id="btDeleteSale" layoutX="1114.0" layoutY="382.0" mnemonicParsing="false" onAction="#deleteSale" text="Delete" />
+                              <Button layoutX="1014.0" layoutY="382.0" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
                            </children>
                         </AnchorPane>
                   </content>

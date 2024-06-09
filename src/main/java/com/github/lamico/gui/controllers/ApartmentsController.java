@@ -197,6 +197,12 @@ public class ApartmentsController {
 
 	@FXML
 	private TextField txtUnitSale;
+	
+	@FXML
+    void refresh(ActionEvent event) throws SQLException {
+		show();
+    }
+
 
 	@FXML
 	void deleteRent(ActionEvent event) {

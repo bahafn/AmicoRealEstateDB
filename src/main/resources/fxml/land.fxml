@@ -118,5 +118,6 @@
       </VBox>
       <Button fx:id="btUpdate" layoutX="832.0" layoutY="333.0" mnemonicParsing="false" onAction="#update" prefWidth="70.0" stylesheets="@../css/normal_button.css" text="Update" />
       <Button fx:id="btDelete" layoutX="1015.0" layoutY="333.0" mnemonicParsing="false" onAction="#delete" prefWidth="70.0" stylesheets="@../css/normal_button.css" text="Delete" />
+      <Button layoutX="924.0" layoutY="333.0" mnemonicParsing="false" onAction="#refresh" prefWidth="70.0" stylesheets="@../css/normal_button.css" text="Refresh" />
    </children>
 </AnchorPane>
