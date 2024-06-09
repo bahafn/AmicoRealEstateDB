@@ -154,8 +154,15 @@ public class DashboardController implements Initializable {
     }
 
     public void refresh() {
+        // Set up the top text information
         setUpTextCounters();
+
+        // Set information in graphs
         setUpGraph();
+
+        // Set information in tables
+        setUpTableColumns();
+        setUpEmployeeTable();
     }
 
     /** Takes a query containing COUNT SQL function and returns the number */

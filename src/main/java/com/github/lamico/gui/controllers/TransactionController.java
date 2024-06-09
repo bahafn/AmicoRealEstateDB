@@ -185,7 +185,7 @@ public class TransactionController implements Initializable {
 
             while (queryResult.next()) {
                 result.add(new Transaction(
-                		queryResult.getString("TransactionId"),
+                		queryResult.getString("id"),
                         queryResult.getDate("paymentDate"),
                         queryResult.getDouble("amount"),
                         queryResult.getString("recipient"),
