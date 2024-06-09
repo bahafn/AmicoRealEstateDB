@@ -11,6 +11,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -21,6 +22,9 @@ public class ApartmentsController {
 
 	@FXML
 	private Button btRegisterNew;
+
+	@FXML
+	private Accordion acAccordion;
 
 	@FXML
 	private TableView<RentalApartment> tbvRentalTable;
@@ -108,6 +112,7 @@ public class ApartmentsController {
 	void initialize() throws SQLException {
 		showSale();
 		showRent();
+		acAccordion.setExpandedPane(acAccordion.getPanes().get(0));
 	}
 
 	private void showRent() throws SQLException {
