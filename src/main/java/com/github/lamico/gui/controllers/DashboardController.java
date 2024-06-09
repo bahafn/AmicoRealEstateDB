@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.ResourceBundle;
 
 import com.github.lamico.db.DBConnection;
+import com.github.lamico.entities.RealEstateAreas;
 import com.github.lamico.gui.utils.AlertUtil;
 
 import javafx.collections.FXCollections;
@@ -46,7 +47,7 @@ public class DashboardController implements Initializable {
 	private LineChart<?, ?> lcBuildingPriceOverTheYears;
 
 	@FXML
-	private TableView<?> tbvRealEstateAreas;
+	private TableView<RealEstateAreas> tbvRealEstateAreas;
 
 	@FXML
 	private TableColumn<?, ?> tvMostPopularAreas, tvAverageRealEstateSellingPrice, tvNumberOfSellers;
@@ -70,6 +71,36 @@ public class DashboardController implements Initializable {
 		setUpTableColumns();
 		setUpEmployeeTable();
 		setUpPricePerAreaChart();
+		showMostPopularAreas();
+	}
+
+	private void showMostPopularAreas() {
+		String query = "SELECT city, AVG(valuation) AS avg_price, COUNT(*) AS seller_count " + "FROM RealEstate "
+				+ "GROUP BY city " + "ORDER BY COUNT(*) DESC";
+
+		ObservableList<RealEstateAreas> data = FXCollections.observableArrayList();
+
+		try (Connection connection = DBConnection.getConnection();
+				Statement statement = connection.createStatement();
+				ResultSet resultSet = statement.executeQuery(query)) {
+
+			while (resultSet.next()) {
+				String city = resultSet.getString("city");
+				double avgPrice = resultSet.getDouble("avg_price");
+				int sellerCount = resultSet.getInt("seller_count");
+
+				data.add(new RealEstateAreas(city, avgPrice, sellerCount));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			AlertUtil.showAlert(AlertType.ERROR, "Error", "Error fetching data: " + e.getMessage());
+		}
+
+		tbvRealEstateAreas.setItems(data);
+		tvMostPopularAreas.setCellValueFactory(new PropertyValueFactory<>("city"));
+		tvAverageRealEstateSellingPrice.setCellValueFactory(new PropertyValueFactory<>("avgPrice"));
+		tvNumberOfSellers.setCellValueFactory(new PropertyValueFactory<>("sellerCount"));
 	}
 
 	private void setUpPricePerAreaChart() {
@@ -82,17 +113,13 @@ public class DashboardController implements Initializable {
 		XYChart.Series<String, Number> series = new XYChart.Series<>();
 
 		String query = "SELECT 'Real Estate' AS property_type, AVG(valuation / area) AS avg_price_per_sqm "
-		        + "FROM RealEstate "
-		        + "UNION ALL "
-		        + "SELECT 'Land', AVG(re.valuation / re.area) "
-		        + "FROM Land le INNER JOIN RealEstate re ON le.prNum = re.prNum "
-		        + "UNION ALL "
-		        + "SELECT 'Building', AVG(re.valuation / re.area) "
-		        + "FROM Building be INNER JOIN RealEstate re ON be.prNum = re.prNum "
-		        + "UNION ALL "
-		        + "SELECT 'Apartment', AVG(re.valuation / re.area) "
-		        + "FROM Apartment ap INNER JOIN RealEstate re ON ap.prNum = re.prNum "
-		        + "INNER JOIN SaleApartment sa ON ap.prNum = sa.prNum";
+				+ "FROM RealEstate " + "UNION ALL " + "SELECT 'Land', AVG(re.valuation / re.area) "
+				+ "FROM Land le INNER JOIN RealEstate re ON le.prNum = re.prNum " + "UNION ALL "
+				+ "SELECT 'Building', AVG(re.valuation / re.area) "
+				+ "FROM Building be INNER JOIN RealEstate re ON be.prNum = re.prNum " + "UNION ALL "
+				+ "SELECT 'Apartment', AVG(re.valuation / re.area) "
+				+ "FROM Apartment ap INNER JOIN RealEstate re ON ap.prNum = re.prNum "
+				+ "INNER JOIN SaleApartment sa ON ap.prNum = sa.prNum";
 
 		try (Connection connection = DBConnection.getConnection();
 				Statement statement = connection.createStatement();
@@ -205,6 +232,8 @@ public class DashboardController implements Initializable {
 	public void refresh() {
 		setUpTextCounters();
 		setUpGraph();
+		setUpPricePerAreaChart();
+		showMostPopularAreas();
 	}
 
 	/** Takes a query containing COUNT SQL function and returns the number */
