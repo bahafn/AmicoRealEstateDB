@@ -58,6 +58,13 @@ public class DashboardController implements Initializable {
 			txtTotalValue;
 
 	@FXML
+	LineChart<String, Number> lcMonthlySpending;
+
+	@FXML
+	LineChart<String, Number> lcMonthlyGains;
+	
+	
+	@FXML
 	public TableColumn<?, ?> tcDepartment, tcAvgSalary, tcMinSalary, tcMaxSalary;
 
 	@Override
@@ -86,6 +93,78 @@ public class DashboardController implements Initializable {
 		setUpEmployeeTable();
 		setUpPricePerAreaChart();
 		showMostPopularAreas();
+		setUpMonthlySpendingChart();
+		setUpMonthlyGainsChart();
+	}
+
+	private void setUpMonthlySpendingChart() {
+		// Clear existing data
+		lcMonthlySpending.getData().clear();
+
+		lcMonthlySpending.getXAxis().setLabel("Month");
+		lcMonthlySpending.getYAxis().setLabel("Total Spending");
+
+		XYChart.Series<String, Number> series = new XYChart.Series<>();
+		series.setName("Monthly Spending");
+
+		String query = "SELECT DATE_FORMAT(CDate, '%Y-%m') AS month, "
+				+ "SUM((CAST(price AS DECIMAL) * (SELECT bShare FROM Broker WHERE Broker.ssn = Contract.brokerSSN) / 100) + "
+				+ "(SELECT commission FROM IndependentBroker WHERE IndependentBroker.ssn = Contract.brokerSSN)) AS total_spending "
+				+ "FROM Contract " + "GROUP BY month " + "UNION ALL "
+				+ "SELECT DATE_FORMAT(hireDate, '%Y-%m') AS month, SUM(salary) AS total_spending " + "FROM Employee "
+				+ "GROUP BY month";
+
+		try (Connection connection = DBConnection.getConnection();
+				Statement statement = connection.createStatement();
+				ResultSet resultSet = statement.executeQuery(query)) {
+
+			while (resultSet.next()) {
+				String month = resultSet.getString("month");
+				double totalSpending = resultSet.getDouble("total_spending");
+				XYChart.Data<String, Number> data = new XYChart.Data<>(month, totalSpending);
+				series.getData().add(data);
+			}
+
+			// Add series to the line chart
+			lcMonthlySpending.getData().add(series);
+
+		} catch (SQLException e) {
+			AlertUtil.showAlert(AlertType.ERROR, "Error", "Error fetching data: " + e.getMessage());
+		}
+	}
+
+	private void setUpMonthlyGainsChart() {
+		// Clear existing data
+		lcMonthlyGains.getData().clear();
+
+		lcMonthlyGains.getXAxis().setLabel("Month");
+		lcMonthlyGains.getYAxis().setLabel("Total Gains");
+
+		XYChart.Series<String, Number> series = new XYChart.Series<>();
+		series.setName("Monthly Gains");
+
+		String query = "SELECT DATE_FORMAT(CDate, '%Y-%m') AS month, "
+				+ "SUM(CAST(price AS DECIMAL) - (CAST(price AS DECIMAL) * (SELECT bShare FROM Broker WHERE Broker.ssn = Contract.brokerSSN) / 100) - "
+				+ "(SELECT commission FROM IndependentBroker WHERE IndependentBroker.ssn = Contract.brokerSSN)) AS total_gains "
+				+ "FROM Contract " + "GROUP BY month";
+
+		try (Connection connection = DBConnection.getConnection();
+				Statement statement = connection.createStatement();
+				ResultSet resultSet = statement.executeQuery(query)) {
+
+			while (resultSet.next()) {
+				String month = resultSet.getString("month");
+				double totalGains = resultSet.getDouble("total_gains");
+				XYChart.Data<String, Number> data = new XYChart.Data<>(month, totalGains);
+				series.getData().add(data);
+			}
+
+			// Add series to the line chart
+			lcMonthlyGains.getData().add(series);
+
+		} catch (SQLException e) {
+			AlertUtil.showAlert(AlertType.ERROR, "Error", "Error fetching data: " + e.getMessage());
+		}
 	}
 
 	private void updateBuildingPriceOverTheYears() {
