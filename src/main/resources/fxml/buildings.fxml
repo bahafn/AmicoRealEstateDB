@@ -13,9 +13,9 @@
 
 <AnchorPane fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" opacity="0.9" prefHeight="509.0" prefWidth="1156.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.lamico.gui.controllers.BuildingsController">
    <children>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#a60136" height="366.0" layoutX="842.0" layoutY="21.0" opacity="0.92" stroke="BLACK" strokeType="INSIDE" width="313.0" />
-      <Button fx:id="btRegisterNew" layoutX="14.0" layoutY="400.0" mnemonicParsing="false" onAction="#registerNewProperty" stylesheets="@../css/normal_button.css" text="Register New Property" AnchorPane.bottomAnchor="15.199999999999989" />
-      <TableView fx:id="tbvTable" layoutX="26.0" layoutY="21.0" onMouseClicked="#handleRowSelection" prefHeight="366.0" prefWidth="788.0" AnchorPane.leftAnchor="26.0" AnchorPane.topAnchor="21.0">
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#a60136" height="366.0" layoutX="829.0" layoutY="20.0" opacity="0.92" stroke="BLACK" strokeType="INSIDE" width="313.0" />
+      <Button fx:id="btRegisterNew" layoutY="460.0" mnemonicParsing="false" onAction="#registerNewProperty" stylesheets="@../css/normal_button.css" text="Register New Property" AnchorPane.bottomAnchor="21.80000000000001" />
+      <TableView fx:id="tbvTable" layoutX="14.0" layoutY="20.0" onMouseClicked="#handleRowSelection" prefHeight="366.0" prefWidth="788.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="20.0">
         <columns>
           <TableColumn fx:id="tvPrNum" editable="false" prefWidth="75.0" text="Property" />
           <TableColumn fx:id="tvLand" editable="false" prefWidth="70.4000244140625" text="Land" />
@@ -33,7 +33,7 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <VBox layoutX="871.0" layoutY="36.0" prefHeight="286.0" prefWidth="254.0" spacing="3.0">
+      <VBox layoutX="858.0" layoutY="35.0" prefHeight="286.0" prefWidth="254.0" spacing="3.0">
          <children>
             <HBox maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="223.0">
                <children>
@@ -127,10 +127,10 @@
             </HBox>
          </children>
       </VBox>
-      <Button fx:id="btUpdate" layoutX="871.0" layoutY="342.0" mnemonicParsing="false" onAction="#update" prefWidth="70.0" stylesheets="@../css/normal_button.css" text="Update" />
-      <Button fx:id="btDelete" layoutX="1054.0" layoutY="342.0" mnemonicParsing="false" onAction="#delete" prefWidth="70.0" stylesheets="@../css/normal_button.css" text="Delete" />
-      <Button layoutX="963.0" layoutY="342.0" mnemonicParsing="false" onAction="#refresh" prefWidth="70.0" stylesheets="@../css/normal_button.css" text="Refresh" />
-      <Label fx:id="lbError" alignment="CENTER" layoutX="876.0" layoutY="387.0" prefHeight="28.0" prefWidth="243.0" stylesheets="@../css/text_image.css" textFill="RED">
+      <Button fx:id="btUpdate" layoutX="858.0" layoutY="341.0" mnemonicParsing="false" onAction="#update" prefWidth="70.0" stylesheets="@../css/normal_button.css" text="Update" />
+      <Button fx:id="btDelete" layoutX="1041.0" layoutY="341.0" mnemonicParsing="false" onAction="#delete" prefWidth="70.0" stylesheets="@../css/normal_button.css" text="Delete" />
+      <Button layoutX="950.0" layoutY="341.0" mnemonicParsing="false" onAction="#refresh" prefWidth="70.0" stylesheets="@../css/normal_button.css" text="Refresh" />
+      <Label fx:id="lbError" alignment="CENTER" layoutX="863.0" layoutY="386.0" prefHeight="28.0" prefWidth="243.0" stylesheets="@../css/text_image.css" textFill="RED">
          <font>
             <Font size="14.0" />
          </font>
