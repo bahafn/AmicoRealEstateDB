@@ -37,7 +37,7 @@ public class OwnerController implements Initializable {
     private TableColumn<?, ?> tcBank, tcDate, tcName, tcSSN, tcAddress, tcPhone, tcEmail;
 
     @FXML
-    private TextField txtAddress, txtBank, txtName, txtSSN, txtPhone, txtEmail;
+    private TextField txtAddress, txtBank, txtName, txtSSN;
 
     @FXML
     private DatePicker txtDate;
@@ -274,9 +274,21 @@ public class OwnerController implements Initializable {
         txtBank.setTextFormatter(TextFormatterTypes.getAlphaWordCharsFormatter(0));
         txtName.setTextFormatter(TextFormatterTypes.getAlphaWordCharsFormatter(0));
         txtSSN.setTextFormatter(TextFormatterTypes.getIntFormatter(9));
-        
+
         cbPhone.getEditor().setTextFormatter(TextFormatterTypes.getIntFormatter(10));
         cbEmail.getEditor().setTextFormatter(TextFormatterTypes.getEmailTextFormatter(64));
+    }
+
+    public void refresh() {
+        clearTextFields();
+        showOwners();
+    }
+
+    private void clearTextFields() {
+        txtAddress.clear();
+        txtBank.clear();
+        txtName.clear();
+        txtSSN.clear();
     }
 
     private void showOwners() {
@@ -297,8 +309,8 @@ public class OwnerController implements Initializable {
                 "FROM person p " +
                 "LEFT JOIN phone ph ON p.ssn = ph.ssn " +
                 "LEFT JOIN email e ON p.ssn = e.ssn " +
-                "WHERE p.ssn not in (select ssn from employee) " + 
-                "and p.ssn not in (select ssn from clientTbl) " + 
+                "WHERE p.ssn not in (select ssn from employee) " +
+                "and p.ssn not in (select ssn from clientTbl) " +
                 "and p.ssn not in (select ssn from broker)" +
                 "GROUP BY p.ssn, p.pName";
         try (Connection connection = DBConnection.getConnection();

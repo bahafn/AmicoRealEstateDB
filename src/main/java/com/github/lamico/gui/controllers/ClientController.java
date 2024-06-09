@@ -39,7 +39,7 @@ public class ClientController implements Initializable {
             tcEmployer;
 
     @FXML
-    private TextField txtAddress, txtBank, txtName, txtSSN, txtPhone, txtEmail, txtSponsor, txtIncomeLevel, txtEmployer;
+    private TextField txtAddress, txtBank, txtName, txtSSN, txtSponsor, txtIncomeLevel, txtEmployer;
 
     @FXML
     private DatePicker txtDate;
@@ -309,6 +309,21 @@ public class ClientController implements Initializable {
 
         cbPhone.getEditor().setTextFormatter(TextFormatterTypes.getIntFormatter(10));
         cbEmail.getEditor().setTextFormatter(TextFormatterTypes.getEmailTextFormatter(64));
+    }
+
+    public void refresh() {
+        clearTextFields();
+        showClients();
+    }
+
+    private void clearTextFields() {
+        txtAddress.clear();
+        txtBank.clear();
+        txtName.clear();
+        txtSSN.clear();
+        txtSponsor.clear();
+        txtIncomeLevel.clear();
+        txtEmployer.clear();
     }
 
     private void showClients() {

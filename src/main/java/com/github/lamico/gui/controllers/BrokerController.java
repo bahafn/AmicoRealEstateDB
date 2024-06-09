@@ -410,6 +410,25 @@ public class BrokerController implements Initializable {
         cbEmail.getEditor().setTextFormatter(TextFormatterTypes.getEmailTextFormatter(64));
     }
 
+    public void refresh() {
+        clearTextFields();
+        showBrokers();
+    }
+
+    private void clearTextFields() {
+        txtAddress.clear();
+        txtBank.clear();
+        txtName.clear();
+        txtSSN.clear();
+        txtPhone.clear();
+        txtEmail.clear();
+        txtSalary.clear();
+        txtPosition.clear();
+        txtDepartment.clear();
+        txtCommission.clear();
+        txtShare.clear();
+    }
+
     private void showBrokers() {
         tvBroker.setItems(getBrokers());
     }
