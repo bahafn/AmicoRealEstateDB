@@ -8,7 +8,8 @@
 .text-area {
 	-fx-padding: 0.0;
 	-fx-background-insets: 0.0;
-	-fx-border-width: 0.0;
+	-fx-border-width: 1;
+	-fx-border-color: black;
  	-fx-text-fill: black;
 	-fx-highlight-fill: black;
 	-fx-font-size: 12;
