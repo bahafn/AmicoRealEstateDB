@@ -140,7 +140,7 @@ public class PropertyController {
 		backgroundMap.put(TabManager.BUILDINGS, ResourceManager.getBackground("buildings.jpg"));
 		backgroundMap.put(TabManager.APARTMENTS, ResourceManager.getBackground("flat.jpg"));
 		backgroundMap.put(TabManager.LAND, ResourceManager.getBackground("land.png"));
-
+		
 		restrictFields();
 	}
 

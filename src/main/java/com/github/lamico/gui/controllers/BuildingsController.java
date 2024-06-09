@@ -242,4 +242,8 @@ public class BuildingsController {
 		}
 	}
 
+	public void show() throws SQLException {
+		showAllBuildings();
+	}
+
 }

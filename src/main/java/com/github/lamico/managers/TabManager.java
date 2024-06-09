@@ -64,6 +64,8 @@ public class TabManager {
 		registerTab(TRANSACTIONS);
 		registerTab(CONTRACTS);
 		registerTab(APARTMENT_REGISTER);
+		registerTab(BUILDING_REGISTER);
+		registerTab(LAND_REGISTER);
 	}
 	
 	private void registerTab(String name) throws IOException {

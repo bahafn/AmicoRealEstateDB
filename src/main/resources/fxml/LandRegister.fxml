@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+
+<BorderPane fx:id="root" prefHeight="435.0" prefWidth="107.0" stylesheets="@../css/normal_button.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.lamico.gui.controllers.LandRegisterController">
+   <center>
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="435.0" prefWidth="753.0">
+         <children>
+            <Group layoutX="274.0" layoutY="-1.0">
+               <children>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#a60136" height="437.0" layoutX="12.0" layoutY="1.0" opacity="0.89" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="288.0" />
+                  <VBox alignment="TOP_CENTER" layoutX="27.0" layoutY="37.0" prefHeight="347.0" prefWidth="258.0">
+                     <children>
+                        <Label maxWidth="1.7976931348623157E308" text="Plot Number" textFill="WHITE" VBox.vgrow="ALWAYS">
+                           <font>
+                              <Font size="13.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="txtPlot" maxWidth="1.7976931348623157E308" prefWidth="222.0" VBox.vgrow="ALWAYS" />
+                        <Label maxWidth="1.7976931348623157E308" text="Block" textFill="WHITE" VBox.vgrow="ALWAYS">
+                           <font>
+                              <Font size="13.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="txtBlock" maxWidth="1.7976931348623157E308" />
+                        <HBox alignment="CENTER_LEFT" spacing="2.0" />
+                     </children>
+                  </VBox>
+                  <Label alignment="CENTER" layoutX="66.0" layoutY="2.0" prefHeight="27.0" prefWidth="180.0" style="-fx-font-size: 18;" text="Register Land" textFill="WHITE">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="btRegister" layoutX="28.0" layoutY="394.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#register" prefHeight="27.0" prefWidth="255.0" stylesheets="@../css/normal_button.css" text="Register" />
+               </children>
+            </Group>
+            <ImageView fitHeight="162.0" fitWidth="437.0" layoutX="-13.0" layoutY="138.0" pickOnBounds="true" rotate="-90.0">
+               <image>
+                  <Image url="@../images/lamico_white_txt.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>

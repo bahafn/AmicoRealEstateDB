@@ -18,183 +18,180 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.lamico.gui.controllers.ApartmentRegisterController">
-   <children>
-      <BorderPane fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="435.0" prefWidth="107.0" stylesheets="@../css/normal_button.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <center>
-            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="435.0" prefWidth="948.0">
+
+<BorderPane fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="435.0" prefWidth="107.0" stylesheets="@../css/normal_button.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.lamico.gui.controllers.ApartmentRegisterController">
+   <center>
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="435.0" prefWidth="948.0">
+         <children>
+            <Group layoutX="274.0" layoutY="-1.0">
                <children>
-                  <Group layoutX="274.0" layoutY="-1.0">
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#a60136" height="437.0" layoutX="12.0" layoutY="1.0" opacity="0.89" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="290.0" />
+                  <VBox alignment="TOP_CENTER" layoutX="27.0" layoutY="37.0" prefHeight="312.0" prefWidth="258.0" spacing="5.0">
                      <children>
-                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#a60136" height="437.0" layoutX="12.0" layoutY="1.0" opacity="0.89" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="290.0" />
-                        <VBox alignment="TOP_CENTER" layoutX="27.0" layoutY="37.0" prefHeight="312.0" prefWidth="258.0" spacing="5.0">
+                        <VBox>
                            <children>
-                              <VBox>
-                                 <children>
-                                    <Label maxWidth="1.7976931348623157E308" text="Unit Number" textFill="WHITE">
-                                       <font>
-                                          <Font size="13.0" />
-                                       </font>
-                                    </Label>
-                                    <TextField fx:id="txtUnitNumber" maxWidth="1.7976931348623157E308" prefWidth="222.0" />
-                                 </children>
-                              </VBox>
-                              <VBox>
-                                 <children>
-                                    <Label maxWidth="1.7976931348623157E308" text="Total Rooms" textFill="WHITE">
-                                       <font>
-                                          <Font size="13.0" />
-                                       </font>
-                                    </Label>
-                                    <TextField fx:id="txtTotal" maxWidth="1.7976931348623157E308" />
-                                 </children>
-                              </VBox>
-                              <VBox>
-                                 <children>
-                                    <HBox spacing="5.0">
-                                       <children>
-                                          <VBox>
-                                             <children>
-                                                <Label maxWidth="1.7976931348623157E308" text="Bathrooms" textFill="WHITE">
-                                                   <font>
-                                                      <Font size="13.0" />
-                                                   </font>
-                                                </Label>
-                                                <TextField fx:id="txtBathrooms" maxWidth="1.7976931348623157E308" />
-                                             </children>
-                                          </VBox>
-                                          <VBox>
-                                             <children>
-                                                <Label maxWidth="1.7976931348623157E308" text="Bedrooms" textFill="WHITE">
-                                                   <font>
-                                                      <Font size="13.0" />
-                                                   </font>
-                                                </Label>
-                                                <TextField fx:id="txtBedrooms" maxWidth="1.7976931348623157E308" />
-                                             </children>
-                                          </VBox>
-                                       </children>
-                                    </HBox>
-                                    <HBox spacing="5.0">
-                                       <children>
-                                          <VBox>
-                                             <children>
-                                                <Label maxWidth="1.7976931348623157E308" text="Living Rooms" textFill="WHITE">
-                                                   <font>
-                                                      <Font size="13.0" />
-                                                   </font>
-                                                </Label>
-                                                <TextField fx:id="txtLivingRooms" maxWidth="1.7976931348623157E308" />
-                                             </children>
-                                          </VBox>
-                                          <VBox>
-                                             <children>
-                                                <Label maxWidth="1.7976931348623157E308" text="Kitchen Type" textFill="WHITE">
-                                                   <font>
-                                                      <Font size="13.0" />
-                                                   </font>
-                                                </Label>
-                                                <TextField fx:id="txtKitchen" maxWidth="1.7976931348623157E308" />
-                                             </children>
-                                          </VBox>
-                                       </children>
-                                    </HBox>
-                                 </children>
-                              </VBox>
-                              <VBox>
-                                 <children>
-                                    <Label maxWidth="1.7976931348623157E308" text="Building" textFill="WHITE">
-                                       <font>
-                                          <Font size="13.0" />
-                                       </font>
-                                    </Label>
-                                    <HBox alignment="CENTER_LEFT" spacing="2.0">
-                                       <children>
-                                          <TextField fx:id="txtBuilding" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="246.0" />
-                                          <RadioButton fx:id="rbShowBuildings" contentDisplay="CENTER" mnemonicParsing="false" onAction="#displayBuildingTable" stylesheets="@../css/radiobutton_arrow.css" />
-                                       </children>
-                                    </HBox>
-                                 </children>
-                              </VBox>
-                              <VBox alignment="CENTER" spacing="5.0">
-                                 <children>
-                                    <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="100.0" stylesheets="@../css/root.css">
-                                       <children>
-                                          <RadioButton fx:id="rbGarden" mnemonicParsing="false" text="Garden" textFill="WHITE">
-                                             <font>
-                                                <Font size="13.0" />
-                                             </font>
-                                          </RadioButton>
-                                          <RadioButton fx:id="rbBalcony" mnemonicParsing="false" text="Balcony" textFill="WHITE">
-                                             <font>
-                                                <Font size="13.0" />
-                                             </font>
-                                          </RadioButton>
-                                       </children>
-                                    </HBox>
-                                    <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="119.0" stylesheets="@../css/root.css">
-                                       <children>
-                                          <RadioButton fx:id="rbSale" mnemonicParsing="false" onAction="#switchToSale" selected="true" text="Sale" textFill="WHITE">
-                                             <font>
-                                                <Font size="13.0" />
-                                             </font>
-                                             <toggleGroup>
-                                                <ToggleGroup fx:id="apartmentTypeGroup" />
-                                             </toggleGroup>
-                                          </RadioButton>
-                                          <RadioButton fx:id="rbRent" mnemonicParsing="false" onAction="#switchToRent" text="Rent" textFill="WHITE" toggleGroup="$apartmentTypeGroup">
-                                             <font>
-                                                <Font size="13.0" />
-                                             </font>
-                                          </RadioButton>
-                                       </children>
-                                    </HBox>
-                                 </children>
-                                 <VBox.margin>
-                                    <Insets />
-                                 </VBox.margin>
-                                 <padding>
-                                    <Insets top="10.0" />
-                                 </padding>
-                              </VBox>
-                              <VBox>
-                                 <children>
-                                    <Label fx:id="lbType" maxWidth="1.7976931348623157E308" text="Price" textFill="WHITE">
-                                       <font>
-                                          <Font size="13.0" />
-                                       </font>
-                                    </Label>
-                                    <TextField fx:id="txtAmount" maxWidth="1.7976931348623157E308" prefWidth="222.0" />
-                                 </children>
-                              </VBox>
+                              <Label maxWidth="1.7976931348623157E308" text="Unit Number" textFill="WHITE">
+                                 <font>
+                                    <Font size="13.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="txtUnitNumber" maxWidth="1.7976931348623157E308" prefWidth="222.0" />
                            </children>
                         </VBox>
-                        <Label alignment="CENTER" layoutX="64.0" layoutY="2.0" prefHeight="27.0" prefWidth="186.0" style="-fx-font-size: 18;" text="Register Apartment" textFill="WHITE">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Label>
-                        <TableView fx:id="tbvTable" disable="true" layoutX="333.0" layoutY="37.0" onMouseClicked="#handleRowSelection" opacity="0.9" prefHeight="361.0" prefWidth="332.0">
-                          <columns>
-                            <TableColumn fx:id="tvPrNum" editable="false" prefWidth="74.4000244140625" resizable="false" text="Property" />
-                            <TableColumn fx:id="tvName" editable="false" prefWidth="161.59991455078125" text="Name" />
-                              <TableColumn fx:id="tvFloors" editable="false" prefWidth="94.4000244140625" resizable="false" text="Floors" />
-                          </columns>
-                           <columnResizePolicy>
-                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                           </columnResizePolicy>
-                        </TableView>
-                        <Button fx:id="btRegister" layoutX="28.0" layoutY="394.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#register" prefHeight="27.0" prefWidth="255.0" stylesheets="@../css/normal_button.css" text="Register" />
+                        <VBox>
+                           <children>
+                              <Label maxWidth="1.7976931348623157E308" text="Total Rooms" textFill="WHITE">
+                                 <font>
+                                    <Font size="13.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="txtTotal" maxWidth="1.7976931348623157E308" />
+                           </children>
+                        </VBox>
+                        <VBox>
+                           <children>
+                              <HBox spacing="5.0">
+                                 <children>
+                                    <VBox>
+                                       <children>
+                                          <Label maxWidth="1.7976931348623157E308" text="Bathrooms" textFill="WHITE">
+                                             <font>
+                                                <Font size="13.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField fx:id="txtBathrooms" maxWidth="1.7976931348623157E308" />
+                                       </children>
+                                    </VBox>
+                                    <VBox>
+                                       <children>
+                                          <Label maxWidth="1.7976931348623157E308" text="Bedrooms" textFill="WHITE">
+                                             <font>
+                                                <Font size="13.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField fx:id="txtBedrooms" maxWidth="1.7976931348623157E308" />
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                              <HBox spacing="5.0">
+                                 <children>
+                                    <VBox>
+                                       <children>
+                                          <Label maxWidth="1.7976931348623157E308" text="Living Rooms" textFill="WHITE">
+                                             <font>
+                                                <Font size="13.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField fx:id="txtLivingRooms" maxWidth="1.7976931348623157E308" />
+                                       </children>
+                                    </VBox>
+                                    <VBox>
+                                       <children>
+                                          <Label maxWidth="1.7976931348623157E308" text="Kitchen Type" textFill="WHITE">
+                                             <font>
+                                                <Font size="13.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField fx:id="txtKitchen" maxWidth="1.7976931348623157E308" />
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        <VBox>
+                           <children>
+                              <Label maxWidth="1.7976931348623157E308" text="Building" textFill="WHITE">
+                                 <font>
+                                    <Font size="13.0" />
+                                 </font>
+                              </Label>
+                              <HBox alignment="CENTER_LEFT" spacing="2.0">
+                                 <children>
+                                    <TextField fx:id="txtBuilding" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="246.0" />
+                                    <RadioButton fx:id="rbShowBuildings" contentDisplay="CENTER" mnemonicParsing="false" onAction="#displayBuildingTable" stylesheets="@../css/radiobutton_arrow.css" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" spacing="5.0">
+                           <children>
+                              <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="100.0" stylesheets="@../css/root.css">
+                                 <children>
+                                    <RadioButton fx:id="rbGarden" mnemonicParsing="false" text="Garden" textFill="WHITE">
+                                       <font>
+                                          <Font size="13.0" />
+                                       </font>
+                                    </RadioButton>
+                                    <RadioButton fx:id="rbBalcony" mnemonicParsing="false" text="Balcony" textFill="WHITE">
+                                       <font>
+                                          <Font size="13.0" />
+                                       </font>
+                                    </RadioButton>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="119.0" stylesheets="@../css/root.css">
+                                 <children>
+                                    <RadioButton fx:id="rbSale" mnemonicParsing="false" onAction="#switchToSale" selected="true" text="Sale" textFill="WHITE">
+                                       <font>
+                                          <Font size="13.0" />
+                                       </font>
+                                       <toggleGroup>
+                                          <ToggleGroup fx:id="apartmentTypeGroup" />
+                                       </toggleGroup>
+                                    </RadioButton>
+                                    <RadioButton fx:id="rbRent" mnemonicParsing="false" onAction="#switchToRent" text="Rent" textFill="WHITE" toggleGroup="$apartmentTypeGroup">
+                                       <font>
+                                          <Font size="13.0" />
+                                       </font>
+                                    </RadioButton>
+                                 </children>
+                              </HBox>
+                           </children>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <padding>
+                              <Insets top="10.0" />
+                           </padding>
+                        </VBox>
+                        <VBox>
+                           <children>
+                              <Label fx:id="lbType" maxWidth="1.7976931348623157E308" text="Price" textFill="WHITE">
+                                 <font>
+                                    <Font size="13.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="txtAmount" maxWidth="1.7976931348623157E308" prefWidth="222.0" />
+                           </children>
+                        </VBox>
                      </children>
-                  </Group>
-                  <ImageView fitHeight="162.0" fitWidth="437.0" layoutX="-13.0" layoutY="138.0" pickOnBounds="true" rotate="-90.0">
-                     <image>
-                        <Image url="@../images/lamico_white_txt.png" />
-                     </image>
-                  </ImageView>
+                  </VBox>
+                  <Label alignment="CENTER" layoutX="64.0" layoutY="2.0" prefHeight="27.0" prefWidth="186.0" style="-fx-font-size: 18;" text="Register Apartment" textFill="WHITE">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <TableView fx:id="tbvTable" disable="true" layoutX="333.0" layoutY="37.0" onMouseClicked="#handleRowSelection" opacity="0.9" prefHeight="361.0" prefWidth="332.0">
+                    <columns>
+                      <TableColumn fx:id="tvPrNum" editable="false" prefWidth="74.4000244140625" resizable="false" text="Property" />
+                      <TableColumn fx:id="tvName" editable="false" prefWidth="161.59991455078125" text="Name" />
+                        <TableColumn fx:id="tvFloors" editable="false" prefWidth="94.4000244140625" resizable="false" text="Floors" />
+                    </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                  </TableView>
+                  <Button fx:id="btRegister" layoutX="28.0" layoutY="394.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#register" prefHeight="27.0" prefWidth="255.0" stylesheets="@../css/normal_button.css" text="Register" />
                </children>
-            </AnchorPane>
-         </center>
-      </BorderPane>
-   </children>
-</AnchorPane>
+            </Group>
+            <ImageView fitHeight="162.0" fitWidth="437.0" layoutX="-13.0" layoutY="138.0" pickOnBounds="true" rotate="-90.0">
+               <image>
+                  <Image url="@../images/lamico_white_txt.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>

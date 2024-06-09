@@ -295,8 +295,7 @@ public class ApartmentsController {
 		txtUnitRent.clear();
 		rbBalconyRent.setSelected(false);
 		rbGardenRent.setSelected(false);
-		
-		
+
 		txtBedSale.clear();
 		txtBathSale.clear();
 		txtBedSale.clear();
@@ -406,8 +405,7 @@ public class ApartmentsController {
 
 	@FXML
 	void initialize() throws SQLException {
-		showSale();
-		showRent();
+		show();
 		acAccordion.setExpandedPane(acAccordion.getPanes().get(0));
 		restrictTextFields();
 		root.setBackground(ResourceManager.getBackground("flat.jpg"));
@@ -454,6 +452,10 @@ public class ApartmentsController {
 		tvRent.setCellValueFactory(new PropertyValueFactory<>("rent"));
 	}
 
+	public void show() throws SQLException {
+		showSale();
+		showRent();
+	}
 	private void showSale() throws SQLException {
 		tbvSaleTable.setItems(getSaleApartments());
 		tvPrNumSale.setCellValueFactory(new PropertyValueFactory<>("prNum"));

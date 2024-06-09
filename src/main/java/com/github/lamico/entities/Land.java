@@ -11,6 +11,12 @@ public class Land extends RealEstate {
 		this.plotNum = plotNum;
 		this.blockNum = blockNum;
 	}
+	
+	public Land(int prNum, int plotNum, int blockNum) {
+		setPrNum(prNum);
+		this.plotNum = plotNum;
+		this.blockNum = blockNum;
+	}
 
 	public int getPlotNum() {
 		return plotNum;

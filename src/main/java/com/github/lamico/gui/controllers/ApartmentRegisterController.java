@@ -132,9 +132,15 @@ public class ApartmentRegisterController {
 				PropertyRegistrationManager.registerSaleApartment(amount);
 			}
 			PropertyRegistrationManager.commitTransaction();
+			((ApartmentsController) MainController.getTabManager().getController(TabManager.APARTMENTS)).show();
 			MainController.getTabManager().switchTo(TabManager.APARTMENTS);
 		} catch (SQLException e) {
 			e.printStackTrace();
+			try {
+				PropertyRegistrationManager.rollbackTransaction();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
 		}
 	}
 
@@ -152,7 +158,6 @@ public class ApartmentRegisterController {
 	void initialize() {
 		root.setBackground(ResourceManager.getBackground("flat.jpg"));
 		clearAllFields();
-		hideBuildings();
 		restrictFields();
 	}
 
@@ -167,7 +172,7 @@ public class ApartmentRegisterController {
 		txtBuilding.clear();
 		rbBalcony.setSelected(false);
 		rbGarden.setSelected(false);
-		rbShowBuildings.setSelected(false);
+		hideBuildings();
 	}
 
 	private void restrictFields() {
@@ -208,8 +213,8 @@ public class ApartmentRegisterController {
 				result.add(new Building(queryResult.getInt("prNum"), queryResult.getString("bName"),
 						queryResult.getInt("floorNum")));
 			}
-		} catch (SQLException sqle) {
-			sqle.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		return result;
 	}

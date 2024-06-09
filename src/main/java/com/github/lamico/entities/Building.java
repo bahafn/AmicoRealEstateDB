@@ -16,6 +16,12 @@ public class Building extends RealEstate {
 		this.floorNum = floorNum;
 	}
 
+	public Building(int prNum, String bName, int floorNum) {
+		this.setPrNum(prNum);
+		this.bName = bName;
+		this.floorNum = floorNum;
+	}
+
 	public int getLandNum() {
 		return landNum;
 	}

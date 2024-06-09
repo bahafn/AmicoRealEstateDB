@@ -111,6 +111,9 @@ public class LandController {
 		clearAllFields();
 	}
 
+	public void show() throws SQLException {
+		showAllLand();
+	}
 	private void clearAllFields() {
 		txtArea.clear();
 		txtBlock.clear();
