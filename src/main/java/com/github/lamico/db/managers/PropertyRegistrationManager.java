@@ -8,113 +8,111 @@ import java.sql.Statement;
 import com.github.lamico.db.DBConnection;
 
 public class PropertyRegistrationManager {
-	private static volatile boolean finishedRegistering = false;
-	private static volatile long prNum = -1;
-	private static Connection connection = null;
+    private static volatile long prNum = -1;
+    private static Connection connection = null;
 
-	private PropertyRegistrationManager() {
-	}
+    private PropertyRegistrationManager() {
+    }
 
-	public static synchronized void registerRealEstate(String prCondition, String city, String streetName,
-			double valuation, String areaDescription, double area, String ownerSSN) throws SQLException {
-		// Check if previous registration has finished, if not, delete the real estate
-		if (!finishedRegistering && connection != null && !connection.isClosed()) {
-			connection.rollback();
-			connection.close();
-		}
+    public static synchronized void startTransaction() throws SQLException {
+        if (connection != null && !connection.isClosed()) {
+            connection.rollback();
+            connection.close();
+        }
+        connection = DBConnection.getConnection();
+        connection.setAutoCommit(false);
+        prNum = -1;
+    }
 
-		// Updates to false if a property is successfully registered
-		finishedRegistering = true;
-		prNum = -1;
+    public static synchronized void registerRealEstate(String prCondition, String city, String streetName,
+            double valuation, String areaDescription, double area, String ownerSSN) throws SQLException {
+        String insertRealEstateQuery = "INSERT INTO RealEstate "
+                + "(prCondition, city, streetName, valuation, areaDescription, area, ownerSSN) "
+                + "VALUES ('" + prCondition + "', '" + city + "', '" + streetName + "', " + valuation + ", '"
+                + areaDescription + "', " + area + ", '" + ownerSSN + "')";
 
-		String insertRealEstateQuery = "INSERT INTO RealEstate "
-				+ "(prCondition, city, streetName, valuation, areaDescription, area, ownerSSN) " + "VALUES ('"
-				+ prCondition + "', '" + city + "', '" + streetName + "', " + valuation + ", '" + areaDescription
-				+ "', " + area + ", '" + ownerSSN + "')";
+        try (Statement statement = connection.createStatement()) {
+            int affectedRows = statement.executeUpdate(insertRealEstateQuery, Statement.RETURN_GENERATED_KEYS);
+            if (affectedRows == 0) {
+                throw new SQLException("Creating property failed, no rows affected.");
+            }
 
-		connection = DBConnection.getConnection();
-		connection.setAutoCommit(false);
+            ResultSet resultSet = statement.getGeneratedKeys();
+            if (resultSet.next()) {
+                prNum = resultSet.getLong(1);
+            } else {
+                throw new SQLException("Creating property failed, no ID obtained.");
+            }
+        }
+    }
 
-		try (Statement statement = connection.createStatement()) {
-			// Insert a real estate and allow it to return the new property id created
-			int affectedRows = statement.executeUpdate(insertRealEstateQuery, Statement.RETURN_GENERATED_KEYS);
-			if (affectedRows == 0) {
-				throw new SQLException("Creating property failed, no rows affected.");
-			}
+    public static synchronized void registerLand(int plotNum, int blockNum) throws SQLException {
+        String insertLandQuery = "INSERT INTO Land (prNum, plotNum, blockNum) VALUES (" + prNum + ", " + plotNum + ", "
+                + blockNum + ")";
 
-			// Get the last inserted prNum
-			ResultSet resultSet = statement.getGeneratedKeys();
-			if (resultSet.next()) {
-				finishedRegistering = false;
-				prNum = resultSet.getLong(1); // Return prNum to complete registration
-			} else {
-				throw new SQLException("Creating property failed, no ID obtained.");
-			}
-		}
-		connection.rollback();
+        try (Statement statement = connection.createStatement()) {
+            statement.executeUpdate(insertLandQuery);
+        }
+    }
 
-	}
+    public static synchronized void registerBuilding(int landNum, String bName, int yearBuilt, int floorNum)
+            throws SQLException {
+        String insertBuildingQuery = "INSERT INTO Building (prNum, landNum, bName, yearBuilt, floorNum) VALUES ("
+                + prNum + ", " + landNum + ", '" + bName + "', " + yearBuilt + ", " + floorNum + ")";
 
-	public static synchronized void registerLand(int plotNum, int blockNum) throws SQLException {
-		String insertLandQuery = "INSERT INTO Land (prNum, plotNum, blockNum) VALUES (" + prNum + ", " + plotNum + ", "
-				+ blockNum + ")";
+        try (Statement statement = connection.createStatement()) {
+            statement.executeUpdate(insertBuildingQuery);
+        }
+    }
 
-		try (Statement statement = connection.createStatement()) {
-			statement.executeUpdate(insertLandQuery);
-			connection.commit();
-			finishedRegistering = true;
-		}
-	}
+    public static synchronized void registerApartment(int buildingNum, int roomNum, int unitNum, int bedroomNum,
+            int bathroomNum, int livingroomNum, boolean hasBalcony, String kitchenType, boolean hasGarden)
+            throws SQLException {
+        String insertApartmentQuery = "INSERT INTO Apartment (prNum, buildingNum, roomNum, unitNum, bedroomNum, "
+                + "bathroomNum, livingroomNum, hasBalcony, kitchenType, hasGarden) VALUES (" + prNum + ", "
+                + buildingNum + ", " + roomNum + ", " + unitNum + ", " + bedroomNum + ", " + bathroomNum + ", "
+                + livingroomNum + ", " + (hasBalcony ? 1 : 0) + ", '" + kitchenType + "', " + (hasGarden ? 1 : 0) + ")";
 
-	public static synchronized void registerBuilding(int landNum, String bName, int yearBuilt, int floorNum)
-			throws SQLException {
-		String insertBuildingQuery = "INSERT INTO Building (prNum, landNum, bName, yearBuilt, floorNum) VALUES ("
-				+ prNum + ", " + landNum + ", '" + bName + "', " + yearBuilt + ", " + floorNum + ")";
+        try (Statement statement = connection.createStatement()) {
+            statement.executeUpdate(insertApartmentQuery);
+        }
+    }
 
-		try (Statement statement = connection.createStatement()) {
-			statement.executeUpdate(insertBuildingQuery);
-			connection.commit();
-			finishedRegistering = true;
-		}
+    public static synchronized void registerRentalApartment(double price) throws SQLException {
+        String insertRentalApartmentQuery = "INSERT INTO RentalApartment (prNum, rent) VALUES (" + prNum + ", " + price
+                + ")";
 
-	}
+        try (Statement statement = connection.createStatement()) {
+            statement.executeUpdate(insertRentalApartmentQuery);
+        }
+    }
 
-	public static synchronized void registerApartment(int buildingNum, int roomNum, int unitNum, int bedroomNum,
-			int bathroomNum, int livingroomNum, boolean hasBalcony, String kitchenType, boolean hasGarden)
-			throws SQLException {
-		String insertApartmentQuery = "INSERT INTO Apartment (prNum, buildingNum, roomNum, unitNum, bedroomNum, "
-				+ "bathroomNum, livingroomNum, hasBalcony, kitchenType, hasGarden) VALUES (" + prNum + ", "
-				+ buildingNum + ", " + roomNum + ", " + unitNum + ", " + bedroomNum + ", " + bathroomNum + ", "
-				+ livingroomNum + ", " + (hasBalcony ? 1 : 0) + ", '" + kitchenType + "', " + (hasGarden ? 1 : 0) + ")";
+    public static synchronized void registerSaleApartment(double rent) throws SQLException {
+        String insertSaleApartmentQuery = "INSERT INTO SaleApartment (prNum, price) VALUES (" + prNum + ", " + rent
+                + ")";
 
-		try (Statement statement = connection.createStatement()) {
-			statement.executeUpdate(insertApartmentQuery);
-		}
-	}
+        try (Statement statement = connection.createStatement()) {
+            statement.executeUpdate(insertSaleApartmentQuery);
+        }
+    }
 
-	public static synchronized void registerRentalApartment(double price) throws SQLException {
-		String insertRentalApartmentQuery = "INSERT INTO RentalApartment (prNum, price) VALUES (" + prNum + ", " + price
-				+ ")";
+    public static synchronized void commitTransaction() throws SQLException {
+        if (connection != null && !connection.isClosed()) {
+            connection.commit();
+            connection.close();
+        }
+        prNum = -1;
+    }
 
-		try (Statement statement = connection.createStatement()) {
-			statement.executeUpdate(insertRentalApartmentQuery);
-			connection.commit();
-			finishedRegistering = true;
-		}
-	}
+    public static synchronized void rollbackTransaction() throws SQLException {
+        if (connection != null && !connection.isClosed()) {
+            connection.rollback();
+            connection.close();
+        }
+        prNum = -1;
+    }
 
-	public static synchronized void registerSaleApartment(double rent) throws SQLException {
-		String insertSaleApartmentQuery = "INSERT INTO SaleApartment (prNum, rent) VALUES (" + prNum + ", " + rent
-				+ ")";
-
-		try (Statement statement = connection.createStatement()) {
-			statement.executeUpdate(insertSaleApartmentQuery);
-			connection.commit();
-			finishedRegistering = true;
-		}
-	}
-
-	public static long getPrNum() {
-		return prNum;
-	}
+    public static long getPrNum() {
+        return prNum;
+    }
 }

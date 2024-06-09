@@ -22,6 +22,9 @@ public class RealEstate {
 		this.ownerSSN = ownerSSN;
 	}
 
+	public RealEstate() {
+	}
+
 	public int getPrNum() {
 		return prNum;
 	}

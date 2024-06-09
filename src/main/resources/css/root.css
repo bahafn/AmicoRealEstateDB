@@ -91,6 +91,7 @@
     -fx-mark-color: black;
     -fx-border-radius: 15.0px;
     -fx-border-color: black;
+    -fx-background-insets: 0;
 }
 
 /* ListView */

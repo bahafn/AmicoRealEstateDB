@@ -26,6 +26,9 @@ public class TabManager {
 	public static final String EMPLOYEES = "employee";
 	public static final String DASHBOARD = "dashboard";
 	public static final String PROPERTY = "property";
+	public static final String APARTMENT_REGISTER = "ApartmentRegister";
+	public static final String LAND_REGISTER = "LandRegister";
+	public static final String BUILDING_REGISTER = "BuildingRegister";
 
 	private Map<String, Node> nodeMap = new HashMap<>();
 	private Map<String, FXMLLoader> loaderMap = new HashMap<>();
@@ -60,6 +63,7 @@ public class TabManager {
 		registerTab(DASHBOARD);
 		registerTab(TRANSACTIONS);
 		registerTab(CONTRACTS);
+		registerTab(APARTMENT_REGISTER);
 	}
 	
 	private void registerTab(String name) throws IOException {

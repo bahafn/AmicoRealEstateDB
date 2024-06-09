@@ -110,9 +110,28 @@ public class PropertyController {
 		double valuation = Double.parseDouble(txtValuation.getText().strip());
 		String owner = txtOwner.getText().strip();
 		try {
+			PropertyRegistrationManager.startTransaction();
 			PropertyRegistrationManager.registerRealEstate(condition, city, street, valuation, description, area,
 					owner);
+			goToNext();
 		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void goToNext() {
+		switch (from) {
+		case TabManager.APARTMENTS:
+			MainController.getTabManager().switchTo(TabManager.APARTMENT_REGISTER);
+			break;
+		case TabManager.LAND:
+			MainController.getTabManager().switchTo(TabManager.LAND_REGISTER);
+			break;
+		case TabManager.BUILDINGS:
+			MainController.getTabManager().switchTo(TabManager.BUILDING_REGISTER);
+			break;
+		default:
+			break;
 		}
 	}
 
