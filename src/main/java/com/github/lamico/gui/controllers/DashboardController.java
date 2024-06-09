@@ -14,6 +14,7 @@ import java.util.ResourceBundle;
 import com.github.lamico.db.DBConnection;
 import com.github.lamico.entities.RealEstateAreas;
 import com.github.lamico.gui.utils.AlertUtil;
+import com.github.lamico.gui.utils.NumberFormatter;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -72,6 +73,124 @@ public class DashboardController implements Initializable {
 		setUpEmployeeTable();
 		setUpPricePerAreaChart();
 		showMostPopularAreas();
+		updateStatistics();
+	}
+	
+	private void updateStatistics() {
+	    updateAvgPropertyPrice();
+	    updateTotalApartments();
+	    updateTotalBuildings();
+	    updateTotalLand();
+	    updateTotalProperties();
+	    updateTotalValuation();
+	}
+	
+	private void updateAvgPropertyPrice() {
+	    String query = "SELECT AVG(valuation) AS avg_property_price FROM RealEstate";
+
+	    try (Connection connection = DBConnection.getConnection();
+	         Statement statement = connection.createStatement();
+	         ResultSet resultSet = statement.executeQuery(query)) {
+
+	        if (resultSet.next()) {
+	            double avgPrice = resultSet.getDouble("avg_property_price");
+	            txtAvgPropertyPrice.setText(NumberFormatter.formatNumber(avgPrice));
+	        }
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        AlertUtil.showAlert(AlertType.ERROR, "Error", "Error fetching average property price: " + e.getMessage());
+	    }
+	}
+
+	// Similarly update other methods
+	private void updateTotalValuation() {
+	    String query = "SELECT SUM(valuation) AS total_valuation FROM RealEstate";
+
+	    try (Connection connection = DBConnection.getConnection();
+	         Statement statement = connection.createStatement();
+	         ResultSet resultSet = statement.executeQuery(query)) {
+
+	        if (resultSet.next()) {
+	            double totalValuation = resultSet.getDouble("total_valuation");
+	            txtTotalValue.setText(NumberFormatter.formatNumber(totalValuation));
+	        }
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        AlertUtil.showAlert(AlertType.ERROR, "Error", "Error fetching total valuation: " + e.getMessage());
+	    }
+	}
+	private void updateTotalApartments() {
+	    String query = "SELECT COUNT(*) AS total_apartments FROM Apartment";
+
+	    try (Connection connection = DBConnection.getConnection();
+	         Statement statement = connection.createStatement();
+	         ResultSet resultSet = statement.executeQuery(query)) {
+
+	        if (resultSet.next()) {
+	            int totalApartments = resultSet.getInt("total_apartments");
+	            txtTotalApartments.setText(String.valueOf(totalApartments));
+	        }
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        AlertUtil.showAlert(AlertType.ERROR, "Error", "Error fetching total apartments: " + e.getMessage());
+	    }
+	}
+
+	private void updateTotalBuildings() {
+	    String query = "SELECT COUNT(*) AS total_buildings FROM Building";
+
+	    try (Connection connection = DBConnection.getConnection();
+	         Statement statement = connection.createStatement();
+	         ResultSet resultSet = statement.executeQuery(query)) {
+
+	        if (resultSet.next()) {
+	            int totalBuildings = resultSet.getInt("total_buildings");
+	            txtTotalBuildings.setText(String.valueOf(totalBuildings));
+	        }
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        AlertUtil.showAlert(AlertType.ERROR, "Error", "Error fetching total buildings: " + e.getMessage());
+	    }
+	}
+
+	private void updateTotalLand() {
+	    String query = "SELECT COUNT(*) AS total_land FROM Land";
+
+	    try (Connection connection = DBConnection.getConnection();
+	         Statement statement = connection.createStatement();
+	         ResultSet resultSet = statement.executeQuery(query)) {
+
+	        if (resultSet.next()) {
+	            int totalLand = resultSet.getInt("total_land");
+	            txtTotalLand.setText(String.valueOf(totalLand));
+	        }
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        AlertUtil.showAlert(AlertType.ERROR, "Error", "Error fetching total land: " + e.getMessage());
+	    }
+	}
+
+	private void updateTotalProperties() {
+	    String query = "SELECT COUNT(*) AS total_properties FROM RealEstate";
+
+	    try (Connection connection = DBConnection.getConnection();
+	         Statement statement = connection.createStatement();
+	         ResultSet resultSet = statement.executeQuery(query)) {
+
+	        if (resultSet.next()) {
+	            int totalProperties = resultSet.getInt("total_properties");
+	            txtTotalProperties.setText(String.valueOf(totalProperties));
+	        }
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        AlertUtil.showAlert(AlertType.ERROR, "Error", "Error fetching total properties: " + e.getMessage());
+	    }
 	}
 
 	private void showMostPopularAreas() {
@@ -234,6 +353,7 @@ public class DashboardController implements Initializable {
 		setUpGraph();
 		setUpPricePerAreaChart();
 		showMostPopularAreas();
+		updateStatistics();
 	}
 
 	/** Takes a query containing COUNT SQL function and returns the number */
