@@ -1,10 +1,11 @@
+DROP DATABASE IF EXISTS g5_lamicodb;
 CREATE DATABASE  IF NOT EXISTS `g5_lamicodb` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `g5_lamicodb`;
 -- MySQL dump 10.13  Distrib 8.0.36, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: g5_lamicodb
 -- ------------------------------------------------------
--- Server version	8.0.34
+-- Server version	8.0.36
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -73,7 +74,6 @@ CREATE TABLE `broker` (
 
 LOCK TABLES `broker` WRITE;
 /*!40000 ALTER TABLE `broker` DISABLE KEYS */;
-INSERT INTO `broker` VALUES (20,'112233456'),(25.5,'223344567'),(18,'334455678'),(22,'445566789'),(12.5,'543210987'),(17.5,'556677890'),(10,'654321098'),(18.75,'765432109'),(22,'876543210'),(15.5,'987654321');
 /*!40000 ALTER TABLE `broker` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -154,7 +154,6 @@ CREATE TABLE `clienttbl` (
 
 LOCK TABLES `clienttbl` WRITE;
 /*!40000 ALTER TABLE `clienttbl` DISABLE KEYS */;
-INSERT INTO `clienttbl` VALUES ('Gaza Realty',500,'Bethlehem University','000112222'),('Quds Realty',1000,'UNRWA','666778888'),('Ramallah Properties',3000,'Birzeit University','777889999'),('West Bank Estates',5000,'Gaza Municipality','888990000'),('East Jerusalem Developers',1000,'Hebron University','999001111');
 /*!40000 ALTER TABLE `clienttbl` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -187,10 +186,16 @@ CREATE TABLE `contract` (
 --
 -- Dumping data for table `contract`
 --
+INSERT INTO contract (contractNo, CDate, Cstatus, ArrangmentType, price, brokerSSN, clientSSN, prNum) 
+VALUES 
+(1, '2024-06-01', 'Active', 'Sale', '50000', '123456789', '987654321', 1),
+(2, '2024-06-02', 'Inactive', 'Lease', '2000', '987654321', '123456789', 2),
+(3, '2024-06-03', 'Active', 'Rent', '1500', '123456789', '987654321', 3),
+(4, '2024-06-04', 'Active', 'Sale', '75000', '987654321', '123456789', 4),
+(5, '2024-06-05', 'Inactive', 'Lease', '3000', '123456789', '987654321', 5);
 
 LOCK TABLES `contract` WRITE;
 /*!40000 ALTER TABLE `contract` DISABLE KEYS */;
-INSERT INTO `contract` VALUES (1,'2024-06-01','Active','Sale','50000','123456789','987654321',1),(2,'2024-06-02','Inactive','Lease','2000','987654321','123456789',2),(3,'2024-06-03','Active','Rent','1500','123456789','987654321',3),(4,'2024-06-04','Active','Sale','75000','987654321','123456789',4),(5,'2024-06-05','Inactive','Lease','3000','123456789','987654321',5);
 /*!40000 ALTER TABLE `contract` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -229,7 +234,7 @@ DROP TABLE IF EXISTS `employee`;
 CREATE TABLE `employee` (
   `salary` int NOT NULL,
   `hireDate` date DEFAULT NULL,
-  `ePosition` varchar(64) NOT NULL,
+  `ePosition` varchar(16) NOT NULL,
   `department` varchar(16) NOT NULL,
   `ssn` char(9) NOT NULL,
   PRIMARY KEY (`ssn`),
@@ -243,7 +248,6 @@ CREATE TABLE `employee` (
 
 LOCK TABLES `employee` WRITE;
 /*!40000 ALTER TABLE `employee` DISABLE KEYS */;
-INSERT INTO `employee` VALUES (2000,'2015-06-01','Real Estate Agent','Sales','111223333'),(2500,'2018-09-15','Project Manager','Operations','222334444'),(3000,'2012-03-10','Financial Analyst','Finance','333445555'),(1800,'2019-01-20','HR Specialist','Human Resources','444556666'),(2300,'2019-06-22','Real Estate Broker','Sales','543210987'),(2200,'2020-11-25','Marketing Coordinator','Marketing','555667777'),(2200,'2018-03-18','Junior Broker','Sales','654321098'),(2400,'2017-11-05','Real Estate Broker','Sales','765432109'),(2600,'2016-08-12','Senior Broker','Sales','876543210'),(2500,'2014-04-01','Real Estate Broker','Sales','987654321');
 /*!40000 ALTER TABLE `employee` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -268,7 +272,6 @@ CREATE TABLE `independentbroker` (
 
 LOCK TABLES `independentbroker` WRITE;
 /*!40000 ALTER TABLE `independentbroker` DISABLE KEYS */;
-INSERT INTO `independentbroker` VALUES (5,'112233456'),(8,'223344567'),(6,'334455678'),(5,'445566789'),(6,'556677890');
 /*!40000 ALTER TABLE `independentbroker` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -308,9 +311,9 @@ DROP TABLE IF EXISTS `person`;
 CREATE TABLE `person` (
   `ssn` char(9) NOT NULL,
   `pName` varchar(32) DEFAULT NULL,
-  `address` varchar(64) DEFAULT NULL,
+  `address` varchar(32) DEFAULT NULL,
   `dateOfBirth` date DEFAULT NULL,
-  `bankInfo` varchar(128) NOT NULL,
+  `bankInfo` varchar(32) NOT NULL,
   PRIMARY KEY (`ssn`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -321,7 +324,7 @@ CREATE TABLE `person` (
 
 LOCK TABLES `person` WRITE;
 /*!40000 ALTER TABLE `person` DISABLE KEYS */;
-INSERT INTO `person` VALUES ('000112222','Khaled Mansour','76 Al-Sahel St, Bethlehem, Palestine','1987-03-30','Islamic National Bank, Acc: 77889900'),('010123456','Khalil Al-Natsheh','Al-Walaja St, Bethlehem','1988-04-12','Bank of Palestine'),('011234567','Sami Al-Hajj','Al-Quds St, Jerusalem','1972-06-20','Palestine Islamic Bank'),('012345678','Nadia Al-Khaldi','Al-Manara St, Ramallah','1990-08-22','Arab Bank'),('013456789','Mohammed Al-Najjar','Al-Bireh St, Ramallah','1985-03-15','Bank of Palestine'),('014567890','Rania Al-Araj','Al-Quds St, Jerusalem','1978-11-18','Palestine Islamic Bank'),('015678901','Omar Al-Hajj','Al-Walaja St, Bethlehem','1992-01-15','Arab Bank'),('016789012','Amina Al-Masri','Al-Khansa St, Hebron','1980-05-25','Bank of Palestine'),('017890123','Ali Al-Qasem','Al-Quds St, Jerusalem','1975-02-12','Bank of Palestine'),('018901234','Jihad Al-Hourani','Al-Manara St, Ramallah','1982-09-25','Bank of Palestine'),('019012345','Rasha Al-Khalil','Al-Bireh St, Ramallah','1995-01-01','Arab Bank'),('020123456','Khalil Al-Natsheh','Al-Walaja St, Bethlehem','1988-04-10','Bank of Palestine'),('021234567','Sami Al-Hajj','Al-Quds St, Jerusalem','1972-09-25','Palestine Islamic Bank'),('022345678','Nadia Al-Khaldi','Al-Manara St, Ramallah','1990-06-25','Palestine Islamic Bank'),('023456789','Mohammed Al-Najjar','Al-Bireh St, Ramallah','1985-03-01','Arab Bank'),('024567890','Rania Al-Araj','Al-Quds St, Jerusalem','1978-11-12','Bank of Palestine'),('025678901','Omar Al-Hajj','Al-Walaja St, Bethlehem','1992-01-15','Arab Bank'),('026789012','Amina Al-Masri','Al-Khansa St, Hebron','1980-05-20','Bank of Palestine'),('027890123','Ali Al-Qasem','Al-Quds St, Jerusalem','1975-02-15','Bank of Palestine'),('028901234','Jihad Al-Hourani','Al-Manara St, Ramallah','1982-09-25','Bank of Palestine'),('029012345','Rasha Al-Khalil','Al-Bireh St, Ramallah','1995-01-01','Arab Bank'),('111223333','Ahmed Al-Qasem','123 Al-Manara St, Ramallah','1985-04-12','Bank of Palestine, Acc: 12345678'),('111234567','Sami Al-Hajj','Al-Quds St, Jerusalem','1972-09-28','Bank of Palestine'),('112233456','Salim Hassan','10 Al-Muqataa St, Ramallah, Palestine','1975-01-12','Bank of Palestine, Acc: 44556677'),('123456789','Ahmed Al-Khateeb','Al-Masayef St, Ramallah','1990-01-01','Arab Bank'),('219853985','Omar Al-Hajj','Al-Walaja St, Bethlehem','1992-01-15','Arab Bank'),('222334444','Layla Saleh','456 Al-Bireh St, Ramallah','1990-07-23','Arab Bank, Acc: 87654321'),('222345678','Nadia Al-Khaldi','Al-Manara St, Ramallah','1990-06-25','Palestine Islamic Bank'),('223344567','Nadia Tamimi','67 Al-Tira St, Ramallah, Palestine','1984-04-17','Arab Bank, Acc: 55667788'),('234567890','Fatima Al-Araj','Al-Bireh St, Ramallah','1985-06-15','Bank of Palestine'),('333445555','Huda Nasser','789 Al-Masyoun St, Ramallah','1978-09-15','Quds Bank, Acc: 11223344'),('333456789','Mohammed Al-Najjar','Al-Bireh St, Ramallah','1985-03-01','Arab Bank'),('334455678','Fadi Mustafa','24 Al-Masyoun St, Ramallah, Palestine','1980-09-20','Quds Bank, Acc: 99887766'),('345678901','Mohammed Al-Najjar','Al-Manara St, Ramallah','1970-03-20','Palestine Islamic Bank'),('426985632','Rania Al-Araj','Al-Quds St, Jerusalem','1978-11-12','Bank of Palestine'),('444556666','Omar Khalil','321 Al-Irsal St, Ramallah','1983-11-30','Cairo Amman Bank, Acc: 44332211'),('444567890','Rania Al-Araj','Al-Quds St, Jerusalem','1978-11-12','Bank of Palestine'),('445566789','Lina Rashed','89 Al-Manara St, Ramallah, Palestine','1990-03-03','Cairo Amman Bank, Acc: 22334455'),('456789012','Rania Al-Khaldi','Al-Quds St, Jerusalem','1995-09-12','Arab Bank'),('543210987','Lina Khalil','91 Al-Ma’arad St, Hebron, Palestine','1992-11-21','Bank of Jordan, Acc: 77889900'),('555667777','Samira Abu-Zayd','654 Al-Tira St, Ramallah','1992-01-05','Bank of Jordan, Acc: 55667788'),('555678901','Omar Al-Hajj','Al-Walaja St, Bethlehem','1992-01-15','Arab Bank'),('556677890','Yasir Jaber','12 Al-Irsal St, Ramallah, Palestine','1987-07-23','Bank of Jordan, Acc: 77889900'),('567890123','Omar Al-Hajj','Al-Walaja St, Bethlehem','1980-11-25','Bank of Palestine'),('654321098','Rami Jaber','78 Al-Manara St, Ramallah, Palestine','1990-12-05','Cairo Amman Bank, Acc: 22334455'),('654321985','Nadia Al-Khaldi','Al-Manara St, Ramallah','1990-06-25','Palestine Islamic Bank'),('654398753','Ali Al-Qasem','Al-Quds St, Jerusalem','1975-02-15','Bank of Palestine'),('666778888','Mahmoud Abbas','23 Al-Muntazah St, Gaza, Palestine','1975-02-28','Palestine Investment Bank, Acc: 66778899'),('666789012','Amina Al-Masri','Al-Khansa St, Hebron','1980-05-20','Bank of Palestine'),('678901234','Amina Al-Masri','Al-Khansa St, Hebron','1992-05-18','Palestine Islamic Bank'),('753192654','Mohammed Al-Najjar','Al-Bireh St, Ramallah','1985-03-01','Arab Bank'),('753984210','Khalil Al-Natsheh','Al-Walaja St, Bethlehem','1988-04-10','Bank of Palestine'),('765432109','Hassan Sheikh','56 Al-Masyoun St, Ramallah, Palestine','1979-03-14','Quds Bank, Acc: 99887766'),('777889999','Aisha Younis','89 Al-Shuhada St, Nablus, Palestine','1988-05-17','Jordan Ahli Bank, Acc: 99887766'),('777890123','Ali Al-Qasem','Al-Quds St, Jerusalem','1975-02-15','Bank of Palestine'),('789012345','Ali Al-Qasem','Al-Quds St, Jerusalem','1975-02-08','Arab Bank'),('876543210','Amal Darwish','34 Al-Bireh St, Ramallah, Palestine','1985-07-22','Arab Bank, Acc: 55667788'),('888901234','Jihad Al-Hourani','Al-Manara St, Ramallah','1982-09-25','Bank of Palestine'),('888990000','Yousef Haddad','12 Al-Rimal St, Gaza, Palestine','1982-08-09','Arab Islamic Bank, Acc: 11224455'),('890123456','Jihad Al-Hourani','Al-Manara St, Ramallah','1982-08-22','Bank of Palestine'),('901234567','Rasha Al-Khalil','Al-Bireh St, Ramallah','1997-01-15','Palestine Islamic Bank'),('912345678','Khalil Al-Natsheh','Al-Walaja St, Bethlehem','1988-04-10','Arab Bank'),('982135479','Sami Al-Hajj','Al-Quds St, Jerusalem','1972-09-25','Palestine Islamic Bank'),('985632159','Amina Al-Masri','Al-Khansa St, Hebron','1980-05-20','Bank of Palestine'),('987654321','Nour Al-Hassan','17 Al-Irsal St, Ramallah, Palestine','1980-10-15','Bank of Palestine, Acc: 11223344'),('999001111','Fatima Taha','45 Al-Ma’arad St, Hebron, Palestine','1991-11-21','Safad Bank, Acc: 33445566'),('999012345','Rasha Al-Khalil','Al-Bireh St, Ramallah','1995-01-01','Arab Bank');
+INSERT INTO `person` VALUES ('010123456','Khalil Al-Natsheh','Al-Walaja St, Bethlehem','1988-04-12','Bank of Palestine'),('011234567','Sami Al-Hajj','Al-Quds St, Jerusalem','1972-06-20','Palestine Islamic Bank'),('012345678','Nadia Al-Khaldi','Al-Manara St, Ramallah','1990-08-22','Arab Bank'),('013456789','Mohammed Al-Najjar','Al-Bireh St, Ramallah','1985-03-15','Bank of Palestine'),('014567890','Rania Al-Araj','Al-Quds St, Jerusalem','1978-11-18','Palestine Islamic Bank'),('015678901','Omar Al-Hajj','Al-Walaja St, Bethlehem','1992-01-15','Arab Bank'),('016789012','Amina Al-Masri','Al-Khansa St, Hebron','1980-05-25','Bank of Palestine'),('017890123','Ali Al-Qasem','Al-Quds St, Jerusalem','1975-02-12','Bank of Palestine'),('018901234','Jihad Al-Hourani','Al-Manara St, Ramallah','1982-09-25','Bank of Palestine'),('019012345','Rasha Al-Khalil','Al-Bireh St, Ramallah','1995-01-01','Arab Bank'),('020123456','Khalil Al-Natsheh','Al-Walaja St, Bethlehem','1988-04-10','Bank of Palestine'),('021234567','Sami Al-Hajj','Al-Quds St, Jerusalem','1972-09-25','Palestine Islamic Bank'),('022345678','Nadia Al-Khaldi','Al-Manara St, Ramallah','1990-06-25','Palestine Islamic Bank'),('023456789','Mohammed Al-Najjar','Al-Bireh St, Ramallah','1985-03-01','Arab Bank'),('024567890','Rania Al-Araj','Al-Quds St, Jerusalem','1978-11-12','Bank of Palestine'),('025678901','Omar Al-Hajj','Al-Walaja St, Bethlehem','1992-01-15','Arab Bank'),('026789012','Amina Al-Masri','Al-Khansa St, Hebron','1980-05-20','Bank of Palestine'),('027890123','Ali Al-Qasem','Al-Quds St, Jerusalem','1975-02-15','Bank of Palestine'),('028901234','Jihad Al-Hourani','Al-Manara St, Ramallah','1982-09-25','Bank of Palestine'),('029012345','Rasha Al-Khalil','Al-Bireh St, Ramallah','1995-01-01','Arab Bank'),('111234567','Sami Al-Hajj','Al-Quds St, Jerusalem','1972-09-28','Bank of Palestine'),('123456789','Ahmed Al-Khateeb','Al-Masayef St, Ramallah','1990-01-01','Arab Bank'),('219853985','Omar Al-Hajj','Al-Walaja St, Bethlehem','1992-01-15','Arab Bank'),('222345678','Nadia Al-Khaldi','Al-Manara St, Ramallah','1990-06-25','Palestine Islamic Bank'),('234567890','Fatima Al-Araj','Al-Bireh St, Ramallah','1985-06-15','Bank of Palestine'),('333456789','Mohammed Al-Najjar','Al-Bireh St, Ramallah','1985-03-01','Arab Bank'),('345678901','Mohammed Al-Najjar','Al-Manara St, Ramallah','1970-03-20','Palestine Islamic Bank'),('426985632','Rania Al-Araj','Al-Quds St, Jerusalem','1978-11-12','Bank of Palestine'),('444567890','Rania Al-Araj','Al-Quds St, Jerusalem','1978-11-12','Bank of Palestine'),('456789012','Rania Al-Khaldi','Al-Quds St, Jerusalem','1995-09-12','Arab Bank'),('555678901','Omar Al-Hajj','Al-Walaja St, Bethlehem','1992-01-15','Arab Bank'),('567890123','Omar Al-Hajj','Al-Walaja St, Bethlehem','1980-11-25','Bank of Palestine'),('654321985','Nadia Al-Khaldi','Al-Manara St, Ramallah','1990-06-25','Palestine Islamic Bank'),('654398753','Ali Al-Qasem','Al-Quds St, Jerusalem','1975-02-15','Bank of Palestine'),('666789012','Amina Al-Masri','Al-Khansa St, Hebron','1980-05-20','Bank of Palestine'),('678901234','Amina Al-Masri','Al-Khansa St, Hebron','1992-05-18','Palestine Islamic Bank'),('753192654','Mohammed Al-Najjar','Al-Bireh St, Ramallah','1985-03-01','Arab Bank'),('753984210','Khalil Al-Natsheh','Al-Walaja St, Bethlehem','1988-04-10','Bank of Palestine'),('777890123','Ali Al-Qasem','Al-Quds St, Jerusalem','1975-02-15','Bank of Palestine'),('789012345','Ali Al-Qasem','Al-Quds St, Jerusalem','1975-02-08','Arab Bank'),('888901234','Jihad Al-Hourani','Al-Manara St, Ramallah','1982-09-25','Bank of Palestine'),('890123456','Jihad Al-Hourani','Al-Manara St, Ramallah','1982-08-22','Bank of Palestine'),('901234567','Rasha Al-Khalil','Al-Bireh St, Ramallah','1997-01-15','Palestine Islamic Bank'),('912345678','Khalil Al-Natsheh','Al-Walaja St, Bethlehem','1988-04-10','Arab Bank'),('982135479','Sami Al-Hajj','Al-Quds St, Jerusalem','1972-09-25','Palestine Islamic Bank'),('985632159','Amina Al-Masri','Al-Khansa St, Hebron','1980-05-20','Bank of Palestine'),('999012345','Rasha Al-Khalil','Al-Bireh St, Ramallah','1995-01-01','Arab Bank');
 /*!40000 ALTER TABLE `person` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -441,7 +444,7 @@ DROP TABLE IF EXISTS `transaction`;
 CREATE TABLE `transaction` (
   `ID` varchar(32) NOT NULL,
   `paymentDate` date DEFAULT NULL,
-  `amount` decimal(12,2) DEFAULT NULL,
+  `amount` double DEFAULT NULL,
   `recipient` varchar(32) DEFAULT NULL,
   `sender` varchar(32) DEFAULT NULL,
   `contractNo` int DEFAULT NULL,
@@ -454,10 +457,47 @@ CREATE TABLE `transaction` (
 --
 -- Dumping data for table `transaction`
 --
+INSERT INTO `transaction` (`ID`, `paymentDate`, `amount`, `sender`, `recipient`, `contractNo`) VALUES 
+('TXN001', '2024-06-01', 5000.00, 'ACC123', 'ACC456', 1),
+('TXN002', '2024-06-02', 2000.00, 'ACC789', 'ACC012', 2),
+('TXN003', '2024-06-03', 1500.00, 'ACC345', 'ACC678', 3),
+('TXN004', '2024-06-04', 7500.00, 'ACC901', 'ACC234', 4),
+('TXN005', '2024-06-05', 3000.00, 'ACC567', 'ACC890', 5),
+('TXN006', '2024-06-06', 4200.00, 'ACC222', 'ACC333', 6),
+('TXN007', '2024-06-07', 3300.00, 'ACC444', 'ACC555', 7),
+('TXN008', '2024-06-08', 2900.00, 'ACC666', 'ACC777', 8),
+('TXN009', '2024-06-09', 5100.00, 'ACC888', 'ACC999', 9),
+('TXN010', '2024-06-10', 2200.00, 'ACC000', 'ACC111', 10),
+('TXN011', '2024-06-11', 4100.00, 'ACC222', 'ACC333', 11),
+('TXN012', '2024-06-12', 1700.00, 'ACC444', 'ACC555', 12),
+('TXN013', '2024-06-13', 5300.00, 'ACC666', 'ACC777', 13),
+('TXN014', '2024-06-14', 6100.00, 'ACC888', 'ACC999', 14),
+('TXN015', '2024-06-15', 1900.00, 'ACC000', 'ACC111', 15),
+('TXN016', '2024-06-16', 2700.00, 'ACC222', 'ACC333', 16),
+('TXN017', '2024-06-17', 4900.00, 'ACC444', 'ACC555', 17),
+('TXN018', '2024-06-18', 3300.00, 'ACC666', 'ACC777', 18),
+('TXN019', '2024-06-19', 5200.00, 'ACC888', 'ACC999', 19),
+('TXN020', '2024-06-20', 6100.00, 'ACC000', 'ACC111', 20),
+('TXN021', '2024-06-21', 3400.00, 'ACC222', 'ACC333', 21),
+('TXN022', '2024-06-22', 2900.00, 'ACC444', 'ACC555', 22),
+('TXN023', '2024-06-23', 4100.00, 'ACC666', 'ACC777', 23),
+('TXN024', '2024-06-24', 5700.00, 'ACC888', 'ACC999', 24),
+('TXN025', '2024-06-25', 6500.00, 'ACC000', 'ACC111', 25),
+('TXN026', '2024-06-26', 3200.00, 'ACC222', 'ACC333', 26),
+('TXN027', '2024-06-27', 2800.00, 'ACC444', 'ACC555', 27),
+('TXN028', '2024-06-28', 4300.00, 'ACC666', 'ACC777', 28),
+('TXN029', '2024-06-29', 4900.00, 'ACC888', 'ACC999', 29),
+('TXN030', '2024-06-30', 6600.00, 'ACC000', 'ACC111', 30),
+('TXN031', '2024-07-01', 3100.00, 'ACC222', 'ACC333', 31),
+('TXN032', '2024-07-02', 2700.00, 'ACC444', 'ACC555', 32),
+('TXN033', '2024-07-03', 4300.00, 'ACC666', 'ACC777', 33),
+('TXN034', '2024-07-04', 5500.00, 'ACC888', 'ACC999', 34),
+('TXN035', '2024-07-05', 6200.00, 'ACC000', 'ACC111', 35),
+('TXN036', '2024-07-06', 3000.00, 'ACC222', 'ACC333', 36);
+
 
 LOCK TABLES `transaction` WRITE;
 /*!40000 ALTER TABLE `transaction` DISABLE KEYS */;
-INSERT INTO `transaction` VALUES ('TXN001','2024-06-01',5000.00,'ACC456','ACC123',1),('TXN002','2024-06-02',2000.00,'ACC012','ACC789',2),('TXN003','2024-06-03',1500.00,'ACC678','ACC345',3),('TXN004','2024-06-04',7500.00,'ACC234','ACC901',4),('TXN005','2024-06-05',3000.00,'ACC890','ACC567',5);
 /*!40000 ALTER TABLE `transaction` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -470,4 +510,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-06-09 16:50:49
+-- Dump completed on 2024-06-08 18:34:28
