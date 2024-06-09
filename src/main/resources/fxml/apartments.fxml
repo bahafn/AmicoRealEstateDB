@@ -2,25 +2,29 @@
 
 <?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
-
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
 <ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.lamico.gui.controllers.ApartmentsController">
    <content>
-      <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="631.0" prefWidth="1210.0">
+      <AnchorPane fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="631.0" prefWidth="1210.0" stylesheets="@../css/normal_button.css">
          <children>
-            <Button fx:id="btRegisterNew" mnemonicParsing="false" onAction="#registerNewProperty" stylesheets="@../css/normal_button.css" text="Register New Apartment" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
-            <Accordion fx:id="acAccordion" layoutY="31.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="500.0" minWidth="800.0" prefHeight="500.0" prefWidth="1114.0" stylesheets="@../css/accordion.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <Button fx:id="btRegisterNew" layoutX="14.0" layoutY="589.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#registerNewProperty" opacity="0.83" text="Register New Apartment" AnchorPane.bottomAnchor="15.0" />
+            <Accordion fx:id="acAccordion" layoutY="31.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="500.0" minWidth="800.0" opacity="0.8" prefHeight="500.0" prefWidth="1114.0" stylesheets="@../css/accordion.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <panes>
-                <TitledPane animated="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="300.0" prefWidth="1118.0" text="Rental Apartments">
+                <TitledPane animated="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="300.0" prefWidth="1118.0" style="-fx-background-color: #ff6767;" text="Rental Apartments">
                   <content>
                     <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <TableView fx:id="tbvRentalTable" editable="true" layoutX="20.0" layoutY="18.4" maxHeight="1.7976931348623157E308" onMouseClicked="#handleRentalRowSelection" prefHeight="429.0" prefWidth="833.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <TableView fx:id="tbvRentalTable" editable="true" layoutX="20.0" layoutY="18.4" maxHeight="1.7976931348623157E308" onMouseClicked="#handleRentalRowSelection" opacity="0.9" prefHeight="429.0" prefWidth="833.0" style="-fx-opacity: 0.9;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                                 <columns>
                                   <TableColumn fx:id="tvPrNumRent" editable="false" prefWidth="75.0" text="Property" />
                                   <TableColumn fx:id="tvBuildingRent" editable="false" prefWidth="63.20001220703125" text="Building" />
@@ -38,15 +42,93 @@
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                  </columnResizePolicy>
                               </TableView>
+                              <VBox layoutX="919.0" layoutY="10.0" prefWidth="253.0" spacing="3.0">
+                                 <children>
+                                    <HBox>
+                                       <children>
+                                          <Label prefHeight="27.0" prefWidth="100.0" text="Unit" />
+                                          <TextField fx:id="txtUnitRent" />
+                                       </children>
+                                    </HBox>
+                                    <HBox>
+                                       <children>
+                                          <Label prefHeight="27.0" prefWidth="100.0" text="Rent" />
+                                          <TextField fx:id="txtRent" />
+                                       </children>
+                                    </HBox>
+                                    <HBox>
+                                       <children>
+                                          <Label prefHeight="27.0" prefWidth="100.0" text="Total Rooms" />
+                                          <TextField fx:id="txtRoomsRent" />
+                                       </children>
+                                    </HBox>
+                                    <HBox>
+                                       <children>
+                                          <Label prefHeight="27.0" prefWidth="100.0" text="Bedrooms" />
+                                          <TextField fx:id="txtBedRent" />
+                                       </children>
+                                    </HBox>
+                                    <HBox>
+                                       <children>
+                                          <Label prefHeight="27.0" prefWidth="100.0" text="Bathrooms" />
+                                          <TextField fx:id="txtBathRent" />
+                                       </children>
+                                    </HBox>
+                                    <HBox>
+                                       <children>
+                                          <Label prefHeight="27.0" prefWidth="100.0" text="Living Rooms" />
+                                          <TextField fx:id="txtLivingRent" />
+                                       </children>
+                                    </HBox>
+                                    <HBox>
+                                       <children>
+                                          <Label prefHeight="27.0" prefWidth="100.0" text="Area" />
+                                          <TextField fx:id="txtAreaRent" />
+                                       </children>
+                                    </HBox>
+                                    <HBox>
+                                       <children>
+                                          <Label prefHeight="27.0" prefWidth="100.0" text="City" />
+                                          <TextField fx:id="txtCityRent" />
+                                       </children>
+                                    </HBox>
+                                    <HBox>
+                                       <children>
+                                          <Label prefHeight="27.0" prefWidth="100.0" text="Street" />
+                                          <TextField fx:id="txtStreetRent" />
+                                       </children>
+                                    </HBox>
+                                    <HBox>
+                                       <children>
+                                          <Label prefHeight="27.0" prefWidth="100.0" text="Condition" />
+                                          <TextField fx:id="txtConditionRent" />
+                                       </children>
+                                    </HBox>
+                                    <HBox>
+                                       <children>
+                                          <Label prefHeight="27.0" prefWidth="100.0" text="Owner" />
+                                          <TextField fx:id="txtOwnerRent" />
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER" spacing="30.0" VBox.vgrow="NEVER">
+                                       <children>
+                                          <RadioButton fx:id="rbBalconyRent" mnemonicParsing="false" text="Balcony" />
+                                          <RadioButton fx:id="rbGardenRent" mnemonicParsing="false" text="Garden" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                              <Button fx:id="btUpdateRent" layoutX="919.0" layoutY="382.0" mnemonicParsing="false" onAction="#updateRent" text="Update" />
+                              <Button fx:id="btDeleteRent" layoutX="1098.0" layoutY="382.0" mnemonicParsing="false" onAction="#deleteRent" text="Delete" />
                            </children>
                         </AnchorPane>
                   </content>
                 </TitledPane>
-                <TitledPane animated="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Sale Apartments">
+                <TitledPane animated="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: #ff0000;" text="Sale Apartments">
                   <content>
                     <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <TableView fx:id="tbvSaleTable" editable="true" layoutX="18.0" layoutY="28.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#handleSaleRowSelection" prefHeight="390.0" prefWidth="837.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <TableView fx:id="tbvSaleTable" editable="true" layoutX="18.0" layoutY="28.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#handleSaleRowSelection" opacity="0.9" prefHeight="390.0" prefWidth="837.0" style="-fx-opacity: 0.9;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <columns>
                                     <TableColumn fx:id="tvPrNumSale" editable="false" prefWidth="75.0" text="Property" />
                                     <TableColumn fx:id="tvBuildingSale" editable="false" prefWidth="63.20001220703125" text="Building" />
@@ -64,6 +146,84 @@
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                  </columnResizePolicy>
                               </TableView>
+                              <VBox layoutX="919.0" layoutY="10.0" spacing="3.0">
+                                 <children>
+                                    <HBox>
+                                       <children>
+                                          <Label prefHeight="27.0" prefWidth="100.0" text="Unit" />
+                                          <TextField fx:id="txtUnitSale" />
+                                       </children>
+                                    </HBox>
+                                    <HBox>
+                                       <children>
+                                          <Label prefHeight="27.0" prefWidth="100.0" text="Price" />
+                                          <TextField fx:id="txtPrice" />
+                                       </children>
+                                    </HBox>
+                                    <HBox>
+                                       <children>
+                                          <Label prefHeight="27.0" prefWidth="100.0" text="Total Rooms" />
+                                          <TextField fx:id="txtRoomsSale" />
+                                       </children>
+                                    </HBox>
+                                    <HBox>
+                                       <children>
+                                          <Label prefHeight="27.0" prefWidth="100.0" text="Bedrooms" />
+                                          <TextField fx:id="txtBedSale" />
+                                       </children>
+                                    </HBox>
+                                    <HBox>
+                                       <children>
+                                          <Label prefHeight="27.0" prefWidth="100.0" text="Bathrooms" />
+                                          <TextField fx:id="txtBathSale" />
+                                       </children>
+                                    </HBox>
+                                    <HBox>
+                                       <children>
+                                          <Label prefHeight="27.0" prefWidth="100.0" text="Living Rooms" />
+                                          <TextField fx:id="txtLivingSale" />
+                                       </children>
+                                    </HBox>
+                                    <HBox>
+                                       <children>
+                                          <Label prefHeight="27.0" prefWidth="100.0" text="Area" />
+                                          <TextField fx:id="txtAreaSale" />
+                                       </children>
+                                    </HBox>
+                                    <HBox>
+                                       <children>
+                                          <Label prefHeight="27.0" prefWidth="100.0" text="City" />
+                                          <TextField fx:id="txtCitySale" />
+                                       </children>
+                                    </HBox>
+                                    <HBox>
+                                       <children>
+                                          <Label prefHeight="27.0" prefWidth="100.0" text="Street" />
+                                          <TextField fx:id="txtStreetSale" />
+                                       </children>
+                                    </HBox>
+                                    <HBox>
+                                       <children>
+                                          <Label prefHeight="27.0" prefWidth="100.0" text="Condition" />
+                                          <TextField fx:id="txtConditionSale" />
+                                       </children>
+                                    </HBox>
+                                    <HBox>
+                                       <children>
+                                          <Label prefHeight="27.0" prefWidth="100.0" text="Owner" />
+                                          <TextField fx:id="txtOwnerSale" />
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER" spacing="30.0" VBox.vgrow="NEVER">
+                                       <children>
+                                          <RadioButton fx:id="rbBalconySale" mnemonicParsing="false" text="Balcony" />
+                                          <RadioButton fx:id="rbGardenSale" mnemonicParsing="false" text="Garden" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                              <Button fx:id="btUpdateSale" layoutX="919.0" layoutY="382.0" mnemonicParsing="false" onAction="#updateSale" text="Update" />
+                              <Button fx:id="btDeleteSale" layoutX="1114.0" layoutY="382.0" mnemonicParsing="false" onAction="#deleteSale" text="Delete" />
                            </children>
                         </AnchorPane>
                   </content>
