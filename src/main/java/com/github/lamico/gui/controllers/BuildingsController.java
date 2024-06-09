@@ -25,6 +25,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
+/**
+ * Controller class for the Buildings GUI.
+ */
 public class BuildingsController {
 	private TimedError timedError = new TimedError();
 
@@ -109,11 +112,22 @@ public class BuildingsController {
 	@FXML
 	private TextField txtYear;
 
+	/**
+	 * Refreshes the table view with all buildings.
+	 * 
+	 * @param event The action event.
+	 * @throws SQLException If a database error occurs.
+	 */
 	@FXML
 	void refresh(ActionEvent event) throws SQLException {
 		show();
 	}
 
+	/**
+	 * Updates a building in the database.
+	 * 
+	 * @param event The action event.
+	 */
 	@FXML
 	void update(ActionEvent event) {
 		Building selectedBuilding = tbvTable.getSelectionModel().getSelectedItem();
@@ -162,6 +176,9 @@ public class BuildingsController {
 		clearAllFields();
 	}
 
+	/**
+	 * Clears all text fields.
+	 */
 	private void clearAllFields() {
 		txtArea.clear();
 		txtCity.clear();
@@ -173,9 +190,13 @@ public class BuildingsController {
 		txtYear.clear();
 		txtFloors.clear();
 		txtName.clear();
-
 	}
 
+	/**
+	 * Deletes a building from the database.
+	 * 
+	 * @param event The action event.
+	 */
 	@FXML
 	void delete(ActionEvent event) {
 		Building selectedBuilding = tbvTable.getSelectionModel().getSelectedItem();
@@ -197,6 +218,11 @@ public class BuildingsController {
 		clearAllFields();
 	}
 
+	/**
+	 * Handles row selection in the table view.
+	 * 
+	 * @param event The mouse event.
+	 */
 	@FXML
 	void handleRowSelection(MouseEvent event) {
 		Building selectedBuilding = tbvTable.getSelectionModel().getSelectedItem();
@@ -215,15 +241,30 @@ public class BuildingsController {
 		}
 	}
 
+	/**
+	 * Opens the register screen for a new property.
+	 * 
+	 * @param event The action event.
+	 */
 	@FXML
 	void registerNewProperty(ActionEvent event) {
 		getPropertyController().showRegisterScreen(TabManager.BUILDINGS);
 	}
 
+	/**
+	 * Gets the property controller.
+	 * 
+	 * @return The property controller.
+	 */
 	public PropertyController getPropertyController() {
 		return (PropertyController) MainController.getTabManager().getController(TabManager.PROPERTY);
 	}
 
+	/**
+	 * Initializes the controller.
+	 * 
+	 * @throws SQLException If a database error occurs.
+	 */
 	@FXML
 	void initialize() throws SQLException {
 		root.setBackground(ResourceManager.getBackground("buildings.jpg"));
@@ -231,6 +272,11 @@ public class BuildingsController {
 		restrictFields();
 	}
 
+	/**
+	 * Shows all buildings in the table view.
+	 * 
+	 * @throws SQLException If a database error occurs.
+	 */
 	private void showAllBuildings() throws SQLException {
 		tbvTable.setItems(getAllBuildings());
 		tvArea.setCellValueFactory(new PropertyValueFactory<>("area"));
@@ -246,6 +292,9 @@ public class BuildingsController {
 		tvCondition.setCellValueFactory(new PropertyValueFactory<>("prCondition"));
 	}
 
+	/**
+	 * Restricts the input fields to specific formats.
+	 */
 	private void restrictFields() {
 		txtArea.setTextFormatter(TextFormatterTypes.getDecimalTextFormatter(12, 2));
 		txtValuation.setTextFormatter(TextFormatterTypes.getDecimalTextFormatter(12, 2));
@@ -263,6 +312,12 @@ public class BuildingsController {
 		txtName.setTextFormatter(TextFormatterTypes.getAlphaWordCharsFormatter(40));
 	}
 
+	/**
+	 * Gets all buildings from the database.
+	 * 
+	 * @return A list of all buildings.
+	 * @throws SQLException If a database error occurs.
+	 */
 	private ObservableList<Building> getAllBuildings() throws SQLException {
 		ObservableList<Building> buildings = FXCollections.observableArrayList();
 		try (Connection connection = DBConnection.getConnection();
