@@ -20,7 +20,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 
-<AnchorPane fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="739.0" prefWidth="1113.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.lamico.gui.controllers.DashboardController">
+<AnchorPane fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="739.0" prefWidth="1113.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.lamico.gui.controllers.DashboardController">
    <children>
       <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -54,10 +54,10 @@
                         </StackPane>
                         <GridPane prefHeight="81.0" prefWidth="497.0">
                           <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="179.20001220703125" minWidth="10.0" prefWidth="113.60000610351562" />
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="203.19998168945312" minWidth="10.0" prefWidth="124.80003967285157" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="145.59996032714844" minWidth="10.0" prefWidth="145.59996032714844" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="179.20001220703125" minWidth="10.0" prefWidth="124.79996337890626" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="203.19998168945312" minWidth="10.0" prefWidth="60.200036621093744" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="151.6" minWidth="10.0" prefWidth="151.6" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="81.20001220703125" minWidth="10.0" prefWidth="66.0" />
                           </columnConstraints>
                           <rowConstraints>
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -65,7 +65,7 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="171.0" text="Total Properties:" textFill="#9c0707" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="103.0" text="Total Properties:" textFill="#9c0707" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
                               <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="171.0" text="Valued At:" textFill="#9c0707" GridPane.rowIndex="1" />
                               <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="171.0" text="Average Price:" textFill="#9c0707" GridPane.rowIndex="2" />
                               <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="171.0" text="Total Land:" textFill="#9c0707" GridPane.columnIndex="2" />
@@ -108,9 +108,9 @@
                         </TableView>
                      </children>
                   </HBox>
-                  <ScrollPane maxHeight="700.0">
+                  <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxHeight="700.0" maxWidth="1.7976931348623157E308" style="-fx-background-color: white;" VBox.vgrow="ALWAYS">
                      <content>
-                        <VBox alignment="CENTER">
+                        <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="1170.0" prefWidth="740.0" style="-fx-background-color: white;">
                            <children>
                               <BarChart fx:id="bcOwnerAges" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="342.0" prefWidth="715.0" title="Owner age distribution" VBox.vgrow="ALWAYS">
                                 <xAxis>

@@ -69,11 +69,9 @@ public class DashboardController implements Initializable {
 		setUpGraph();
 
 		// Set information in tables
-		setUpTableColumns();
-		setUpEmployeeTable();
-		setUpPricePerAreaChart();
-		showMostPopularAreas();
 		updateStatistics();
+		bcPricePerArea.setLegendVisible(false);
+		lcBuildingPriceOverTheYears.setLegendVisible(false);
 	}
 
 	private void updateStatistics() {
@@ -84,9 +82,15 @@ public class DashboardController implements Initializable {
 		updateTotalProperties();
 		updateTotalValuation();
 		updateBuildingPriceOverTheYears();
+		setUpTableColumns();
+		setUpEmployeeTable();
+		setUpPricePerAreaChart();
+		showMostPopularAreas();
 	}
 
 	private void updateBuildingPriceOverTheYears() {
+		lcBuildingPriceOverTheYears.getXAxis().setLabel("Year");
+		lcBuildingPriceOverTheYears.getYAxis().setLabel("Average Price");
 		String query = "SELECT yearBuilt, AVG(valuation) AS avg_valuation " + "FROM Building b "
 				+ "INNER JOIN RealEstate re ON b.prNum = re.prNum " + "GROUP BY yearBuilt " + "ORDER BY yearBuilt";
 
@@ -104,7 +108,6 @@ public class DashboardController implements Initializable {
 
 			lcBuildingPriceOverTheYears.getData().clear();
 			lcBuildingPriceOverTheYears.getData().add(series);
-			series.setName("Average Building Price Over the Years");
 
 		} catch (SQLException e) {
 			e.printStackTrace();
