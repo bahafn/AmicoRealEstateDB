@@ -300,7 +300,7 @@ public class ClientController implements Initializable {
 
     private void restrictTextFields() {
         txtAddress.setTextFormatter(TextFormatterTypes.getAlphanumericWordCharsAndCommasFormatter(0));
-        txtBank.setTextFormatter(TextFormatterTypes.getAlphaWordCharsFormatter(0));
+        txtBank.setTextFormatter(TextFormatterTypes.getMaxLengthFormatter(128));
         txtName.setTextFormatter(TextFormatterTypes.getAlphaWordCharsFormatter(0));
         txtSSN.setTextFormatter(TextFormatterTypes.getIntFormatter(9));
         txtSponsor.setTextFormatter(TextFormatterTypes.getAlphaWordCharsFormatter(32));

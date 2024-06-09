@@ -399,12 +399,12 @@ public class BrokerController implements Initializable {
 
     private void restrictTextFields() {
         txtAddress.setTextFormatter(TextFormatterTypes.getAlphanumericWordCharsAndCommasFormatter(0));
-        txtBank.setTextFormatter(TextFormatterTypes.getAlphaWordCharsFormatter(0));
+        txtBank.setTextFormatter(TextFormatterTypes.getMaxLengthFormatter(128));
         txtName.setTextFormatter(TextFormatterTypes.getAlphaWordCharsFormatter(0));
         txtSSN.setTextFormatter(TextFormatterTypes.getIntFormatter(9));
         txtSalary.setTextFormatter(TextFormatterTypes.getIntFormatter(10));
         txtDepartment.setTextFormatter(TextFormatterTypes.getAlphanumericWordCharsAndCommasFormatter(16));
-        txtPosition.setTextFormatter(TextFormatterTypes.getMaxLengthFormatter(16));
+        txtPosition.setTextFormatter(TextFormatterTypes.getMaxLengthFormatter(64));
         txtShare.setTextFormatter(TextFormatterTypes.getDoubleTextFormatter(0));
         txtCommission.setTextFormatter(TextFormatterTypes.getIntFormatter(10));
 
