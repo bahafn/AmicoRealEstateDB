@@ -81,7 +81,7 @@ public class PropertyController {
 		if (person == null)
 			return;
 
-		txtOwner.setText(person.getSsn() + "");
+		txtOwner.setText(person.getSsn());
 	}
 
 	@FXML

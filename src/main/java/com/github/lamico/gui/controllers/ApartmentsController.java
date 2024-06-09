@@ -219,6 +219,7 @@ public class ApartmentsController {
 				e.printStackTrace();
 			}
 		}
+		clearAllFields();
 	}
 
 	@FXML
@@ -243,6 +244,7 @@ public class ApartmentsController {
 				e.printStackTrace();
 			}
 		}
+		clearAllFields();
 	}
 
 	private void executeQuery(String query) throws SQLException {
@@ -275,6 +277,41 @@ public class ApartmentsController {
 				e.printStackTrace();
 			}
 		}
+		clearAllFields();
+	}
+
+	private void clearAllFields() {
+		txtAreaRent.clear();
+		txtBedRent.clear();
+		txtBathRent.clear();
+		txtCityRent.clear();
+		txtConditionRent.clear();
+		txtLivingRent.clear();
+		txtOwnerRent.clear();
+		txtPrice.clear();
+		txtRent.clear();
+		txtRoomsRent.clear();
+		txtStreetRent.clear();
+		txtUnitRent.clear();
+		rbBalconyRent.setSelected(false);
+		rbGardenRent.setSelected(false);
+		
+		
+		txtBedSale.clear();
+		txtBathSale.clear();
+		txtBedSale.clear();
+		txtBathSale.clear();
+		txtLivingSale.clear();
+		txtAreaSale.clear();
+		txtCitySale.clear();
+		txtConditionSale.clear();
+		txtOwnerSale.clear();
+		txtPrice.clear();
+		txtRoomsSale.clear();
+		txtStreetSale.clear();
+		txtUnitSale.clear();
+		rbBalconySale.setSelected(false);
+		rbGardenSale.setSelected(false);
 	}
 
 	@FXML
@@ -298,6 +335,7 @@ public class ApartmentsController {
 				e.printStackTrace();
 			}
 		}
+		clearAllFields();
 	}
 
 	@FXML
