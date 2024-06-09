@@ -1,3 +1,4 @@
+DROP DATABASE IF EXISTS g5_lamicodb;
 CREATE DATABASE  IF NOT EXISTS `g5_lamicodb` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `g5_lamicodb`;
 -- MySQL dump 10.13  Distrib 8.0.36, for Win64 (x86_64)
@@ -185,6 +186,13 @@ CREATE TABLE `contract` (
 --
 -- Dumping data for table `contract`
 --
+INSERT INTO contract (contractNo, CDate, Cstatus, ArrangmentType, price, brokerSSN, clientSSN, prNum) 
+VALUES 
+(1, '2024-06-01', 'Active', 'Sale', '50000', '123456789', '987654321', 1),
+(2, '2024-06-02', 'Inactive', 'Lease', '2000', '987654321', '123456789', 2),
+(3, '2024-06-03', 'Active', 'Rent', '1500', '123456789', '987654321', 3),
+(4, '2024-06-04', 'Active', 'Sale', '75000', '987654321', '123456789', 4),
+(5, '2024-06-05', 'Inactive', 'Lease', '3000', '123456789', '987654321', 5);
 
 LOCK TABLES `contract` WRITE;
 /*!40000 ALTER TABLE `contract` DISABLE KEYS */;
@@ -202,7 +210,7 @@ CREATE TABLE `email` (
   `address` varchar(64) NOT NULL,
   `ssn` char(9) NOT NULL,
   PRIMARY KEY (`ssn`,`address`),
-  CONSTRAINT `email_ibfk_1` FOREIGN KEY (`ssn`) REFERENCES `person` (`ssn`) ON DELETE CASCADE
+  CONSTRAINT `email_ibfk_1` FOREIGN KEY (`ssn`) REFERENCES `person` (`ssn`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -331,7 +339,7 @@ CREATE TABLE `phone` (
   `phoneNumber` char(10) NOT NULL,
   `ssn` char(9) NOT NULL,
   PRIMARY KEY (`ssn`,`phoneNumber`),
-  CONSTRAINT `phone_ibfk_1` FOREIGN KEY (`ssn`) REFERENCES `person` (`ssn`) ON DELETE CASCADE
+  CONSTRAINT `phone_ibfk_1` FOREIGN KEY (`ssn`) REFERENCES `person` (`ssn`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -449,7 +457,12 @@ CREATE TABLE `transaction` (
 --
 -- Dumping data for table `transaction`
 --
-
+INSERT INTO `transaction` (`ID`, `paymentDate`, `amount`, `sender`, `recipient`, `contractNo`) VALUES 
+('TXN001', '2024-06-01', 5000.00, 'ACC123', 'ACC456', 1),
+('TXN002', '2024-06-02', 2000.00, 'ACC789', 'ACC012', 2),
+('TXN003', '2024-06-03', 1500.00, 'ACC345', 'ACC678', 3),
+('TXN004', '2024-06-04', 7500.00, 'ACC901', 'ACC234', 4),
+('TXN005', '2024-06-05', 3000.00, 'ACC567', 'ACC890', 5);
 LOCK TABLES `transaction` WRITE;
 /*!40000 ALTER TABLE `transaction` DISABLE KEYS */;
 /*!40000 ALTER TABLE `transaction` ENABLE KEYS */;
@@ -464,4 +477,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-06-09 11:38:27
+-- Dump completed on 2024-06-08 18:34:28
