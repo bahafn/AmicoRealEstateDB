@@ -58,7 +58,7 @@
                      <tooltip>
                         <Tooltip text="Deletes selected owner." />
                      </tooltip></Button>
-                  <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="98.0" stylesheets="@../css/demo.css" text="Reports" translateX="5.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                  <Button mnemonicParsing="false" onAction="#refresh" prefHeight="26.0" prefWidth="98.0" stylesheets="@../css/demo.css" text="Refresh" translateX="5.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <tooltip>
                         <Tooltip text="Show reports." />
                      </tooltip></Button>

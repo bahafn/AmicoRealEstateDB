@@ -39,7 +39,7 @@ public class EmployeeController implements Initializable {
             tcDepartment, tcPosition;
 
     @FXML
-    private TextField txtAddress, txtBank, txtName, txtSSN, txtPhone, txtEmail, txtSalary, txtPosition, txtDepartment;
+    private TextField txtAddress, txtBank, txtName, txtSSN, txtSalary, txtPosition, txtDepartment;
 
     @FXML
     private DatePicker txtDate, txtHireDate;
@@ -316,6 +316,21 @@ public class EmployeeController implements Initializable {
 
         cbPhone.getEditor().setTextFormatter(TextFormatterTypes.getIntFormatter(10));
         cbEmail.getEditor().setTextFormatter(TextFormatterTypes.getEmailTextFormatter(64));
+    }
+
+    public void refresh() {
+        clearTextFields();
+        showEmployees();
+    }
+
+    private void clearTextFields() {
+        txtAddress.clear();
+        txtBank.clear();
+        txtName.clear();
+        txtSSN.clear();
+        txtSalary.clear();
+        txtPosition.clear();
+        txtDepartment.clear();
     }
 
     private void showEmployees() {
