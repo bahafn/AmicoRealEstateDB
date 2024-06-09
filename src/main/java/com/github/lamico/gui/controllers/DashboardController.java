@@ -8,7 +8,6 @@ import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.ResourceBundle;
 
 import com.github.lamico.db.DBConnection;
@@ -426,7 +425,8 @@ public class DashboardController implements Initializable {
 		String query = "SELECT YEAR(dateOfBirth), COUNT(*) " + "FROM person p "
 				+ "WHERE p.ssn not in (select ssn from employee) " + "and p.ssn not in (select ssn from clientTbl) "
 				+ "and p.ssn not in (select ssn from broker) " + "and dateOfBirth is not null "
-				+ "GROUP BY YEAR(dateOfBirth)";
+				+ "GROUP BY YEAR(dateOfBirth) "
+				+ "ORDER BY YEAR(dateOfBirth) DESC";
 		try (Connection connection = DBConnection.getConnection();
 				Statement statement = connection.createStatement();
 				ResultSet queryResult = statement.executeQuery(query)) {
@@ -438,9 +438,6 @@ public class DashboardController implements Initializable {
 		} catch (SQLException sql_e) {
 			AlertUtil.showAlert(AlertType.ERROR, "Error reading database", sql_e.getMessage());
 		}
-
-		// Sort ages
-		Collections.sort(ages);
 
 		XYChart.Series<String, Integer> series = new XYChart.Series<>();
 		series.setName("Count");
