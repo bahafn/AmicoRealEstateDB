@@ -406,8 +406,8 @@ public class ApartmentsController {
 
 	@FXML
 	void initialize() throws SQLException {
-		// showSale();
-		// showRent();
+		showSale();
+		showRent();
 		acAccordion.setExpandedPane(acAccordion.getPanes().get(0));
 		restrictTextFields();
 		root.setBackground(ResourceManager.getBackground("flat.jpg"));
