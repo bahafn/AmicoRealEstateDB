@@ -16,6 +16,9 @@ import javafx.scene.layout.BorderPane;
 
 import java.sql.SQLException;
 
+/**
+ * Controller for the land registration GUI.
+ */
 public class LandRegisterController {
 	private TimedError timedError = new TimedError();
 
@@ -34,6 +37,11 @@ public class LandRegisterController {
 	@FXML
 	private TextField txtPlot;
 
+	/**
+	 * Handles the register button click event.
+	 * 
+	 * @param event the event triggered by the button click
+	 */
 	@FXML
 	void register(ActionEvent event) {
 		int blockNum = ParseUtils.parseIntOrDefault(txtBlock.getText());
@@ -44,7 +52,7 @@ public class LandRegisterController {
 			timedError.displayErrorMessage(lbError, "Empty Fields", 2);
 			return;
 		}
-		
+
 		try {
 			PropertyRegistrationManager.registerLand(plotNum, blockNum);
 
@@ -63,12 +71,18 @@ public class LandRegisterController {
 		}
 	}
 
+	/**
+	 * Initializes the GUI components.
+	 */
 	@FXML
 	void initialize() {
 		root.setBackground(ResourceManager.getBackground("land.png"));
 		restrictFields();
 	}
 
+	/**
+	 * Restricts the input fields to only accept integers.
+	 */
 	private void restrictFields() {
 		txtBlock.setTextFormatter(TextFormatterTypes.getIntFormatter(10));
 		txtPlot.setTextFormatter(TextFormatterTypes.getIntFormatter(10));

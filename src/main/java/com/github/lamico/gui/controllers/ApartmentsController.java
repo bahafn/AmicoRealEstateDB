@@ -208,11 +208,22 @@ public class ApartmentsController {
 	@FXML
 	private TextField txtUnitSale;
 
+	/**
+	 * Refreshes the table view.
+	 * 
+	 * @param event The action event that triggered this method.
+	 * @throws SQLException If a database error occurs.
+	 */
 	@FXML
 	void refresh(ActionEvent event) throws SQLException {
 		show();
 	}
 
+	/**
+	 * Deletes a rental apartment from the database.
+	 * 
+	 * @param event The action event that triggered this method.
+	 */
 	@FXML
 	void deleteRent(ActionEvent event) {
 		RentalApartment selectedApartment = tbvRentalTable.getSelectionModel().getSelectedItem();
@@ -240,6 +251,11 @@ public class ApartmentsController {
 		clearAllFields();
 	}
 
+	/**
+	 * Deletes a sale apartment from the database.
+	 * 
+	 * @param event The action event that triggered this method.
+	 */
 	@FXML
 	void deleteSale(ActionEvent event) {
 		SaleApartment selectedApartment = tbvSaleTable.getSelectionModel().getSelectedItem();
@@ -262,21 +278,31 @@ public class ApartmentsController {
 				timedError.displayErrorMessage(lbErrorSale, "Failed to delete", 2);
 				e.printStackTrace();
 			}
-		}else {
+		} else {
 			timedError.displayErrorMessage(lbErrorSale, "Select a Row First", 2);
 		}
 		clearAllFields();
 	}
 
+	/**
+	 * Executes a SQL query.
+	 * 
+	 * @param query The SQL query to execute.
+	 * @throws SQLException If a database error occurs.
+	 */
 	private void executeQuery(String query) throws SQLException {
 		Connection connection = DBConnection.getConnection();
-
 		try (Statement statement = connection.createStatement()) {
 			statement.executeUpdate(query);
 		}
 		connection.close();
 	}
 
+	/**
+	 * Updates a rental apartment in the database.
+	 * 
+	 * @param event The action event that triggered this method.
+	 */
 	@FXML
 	void updateRent(ActionEvent event) {
 		RentalApartment selectedApartment = tbvRentalTable.getSelectionModel().getSelectedItem();
@@ -315,12 +341,15 @@ public class ApartmentsController {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-		}else {
+		} else {
 			timedError.displayErrorMessage(lbErrorRent, "Select a Row First", 2);
 		}
 		clearAllFields();
 	}
 
+	/**
+	 * Clears all fields in the UI.
+	 */
 	private void clearAllFields() {
 		txtAreaRent.clear();
 		txtBedRent.clear();
@@ -354,6 +383,11 @@ public class ApartmentsController {
 		rbGardenSale.setSelected(false);
 	}
 
+	/**
+	 * Updates a sale apartment in the database.
+	 * 
+	 * @param event The action event that triggered this method.
+	 */
 	@FXML
 	void updateSale(ActionEvent event) {
 		SaleApartment selectedApartment = tbvSaleTable.getSelectionModel().getSelectedItem();
@@ -392,12 +426,17 @@ public class ApartmentsController {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-		}else {
+		} else {
 			timedError.displayErrorMessage(lbErrorSale, "Select a Row First", 2);
 		}
 		clearAllFields();
 	}
 
+	/**
+	 * Handles the selection of a rental row in the table.
+	 * 
+	 * @param event the mouse event that triggered this method
+	 */
 	@FXML
 	void handleRentalRowSelection(MouseEvent event) {
 		RentalApartment selectedApartment = tbvRentalTable.getSelectionModel().getSelectedItem();
@@ -432,6 +471,11 @@ public class ApartmentsController {
 		}
 	}
 
+	/**
+	 * Handles the selection of a sale row in the table.
+	 * 
+	 * @param event the mouse event that triggered this method
+	 */
 	@FXML
 	void handleSaleRowSelection(MouseEvent event) {
 		SaleApartment selectedApartment = tbvSaleTable.getSelectionModel().getSelectedItem();
@@ -466,6 +510,11 @@ public class ApartmentsController {
 		}
 	}
 
+	/**
+	 * Initializes the controller.
+	 * 
+	 * @throws SQLException if a database error occurs
+	 */
 	@FXML
 	void initialize() throws SQLException {
 		show();
@@ -474,6 +523,9 @@ public class ApartmentsController {
 		root.setBackground(ResourceManager.getBackground("flat.jpg"));
 	}
 
+	/**
+	 * Restricts the text fields to only allow certain characters and formats.
+	 */
 	private void restrictTextFields() {
 		txtAreaRent.setTextFormatter(TextFormatterTypes.getDecimalTextFormatter(12, 2));
 		txtAreaSale.setTextFormatter(TextFormatterTypes.getDecimalTextFormatter(12, 2));
@@ -500,6 +552,11 @@ public class ApartmentsController {
 		txtRent.setTextFormatter(TextFormatterTypes.getDecimalTextFormatter(8, 2));
 	}
 
+	/**
+	 * Shows the rental apartments in the table.
+	 * 
+	 * @throws SQLException if a database error occurs
+	 */
 	private void showRent() throws SQLException {
 		tbvRentalTable.setItems(getRentalApartments());
 		tvPrNumRent.setCellValueFactory(new PropertyValueFactory<>("prNum"));
@@ -515,11 +572,21 @@ public class ApartmentsController {
 		tvRent.setCellValueFactory(new PropertyValueFactory<>("rent"));
 	}
 
+	/**
+	 * Shows the sale apartments in the table.
+	 * 
+	 * @throws SQLException if a database error occurs
+	 */
 	public void show() throws SQLException {
 		showSale();
 		showRent();
 	}
 
+	/**
+	 * Shows the sale apartments in the table.
+	 * 
+	 * @throws SQLException if a database error occurs
+	 */
 	private void showSale() throws SQLException {
 		tbvSaleTable.setItems(getSaleApartments());
 		tvPrNumSale.setCellValueFactory(new PropertyValueFactory<>("prNum"));
@@ -535,15 +602,31 @@ public class ApartmentsController {
 		tvPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
 	}
 
+	/**
+	 * Registers a new property.
+	 * 
+	 * @param event the action event that triggered this method
+	 */
 	@FXML
 	void registerNewProperty(ActionEvent event) {
 		getPropertyController().showRegisterScreen(TabManager.APARTMENTS);
 	}
 
+	/**
+	 * Gets the property controller.
+	 * 
+	 * @return the property controller
+	 */
 	public PropertyController getPropertyController() {
 		return (PropertyController) MainController.getTabManager().getController(TabManager.PROPERTY);
 	}
 
+	/**
+	 * Gets the rental apartments from the database.
+	 * 
+	 * @return the list of rental apartments
+	 * @throws SQLException if a database error occurs
+	 */
 	public ObservableList<RentalApartment> getRentalApartments() throws SQLException {
 		ObservableList<RentalApartment> apartments = FXCollections.observableArrayList();
 		Connection connection = DBConnection.getConnection();
@@ -562,6 +645,12 @@ public class ApartmentsController {
 		return apartments;
 	}
 
+	/**
+	 * Gets the sale apartments from the database.
+	 * 
+	 * @return the list of sale apartments
+	 * @throws SQLException if a database error occurs
+	 */
 	public ObservableList<SaleApartment> getSaleApartments() throws SQLException {
 		ObservableList<SaleApartment> apartments = FXCollections.observableArrayList();
 		Connection connection = DBConnection.getConnection();
