@@ -351,12 +351,14 @@ public class BrokerController implements Initializable {
             tvBroker.getColumns().add(tcHireDate);
             tvBroker.getColumns().add(tcSalary);
             tvBroker.getColumns().add(tcDepartment);
+            tvBroker.getColumns().remove(tcCommission);
         } else {
             mainVBox.getChildren().remove(vbEmployeeInfo);
             tvBroker.getColumns().remove(tcPosition);
             tvBroker.getColumns().remove(tcHireDate);
             tvBroker.getColumns().remove(tcSalary);
             tvBroker.getColumns().remove(tcDepartment);
+            tvBroker.getColumns().add(tcCommission);
             mainVBox.getChildren().add(pCommission);
         }
 
