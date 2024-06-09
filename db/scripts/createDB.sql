@@ -234,7 +234,7 @@ DROP TABLE IF EXISTS `employee`;
 CREATE TABLE `employee` (
   `salary` int NOT NULL,
   `hireDate` date DEFAULT NULL,
-  `ePosition` varchar(16) NOT NULL,
+  `ePosition` varchar(64) NOT NULL,
   `department` varchar(16) NOT NULL,
   `ssn` char(9) NOT NULL,
   PRIMARY KEY (`ssn`),
@@ -311,9 +311,9 @@ DROP TABLE IF EXISTS `person`;
 CREATE TABLE `person` (
   `ssn` char(9) NOT NULL,
   `pName` varchar(32) DEFAULT NULL,
-  `address` varchar(32) DEFAULT NULL,
+  `address` varchar(64) DEFAULT NULL,
   `dateOfBirth` date DEFAULT NULL,
-  `bankInfo` varchar(32) NOT NULL,
+  `bankInfo` varchar(128) NOT NULL,
   PRIMARY KEY (`ssn`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
