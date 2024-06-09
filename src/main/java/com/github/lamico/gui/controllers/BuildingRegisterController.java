@@ -3,7 +3,9 @@ package com.github.lamico.gui.controllers;
 import com.github.lamico.db.DBConnection;
 import com.github.lamico.db.managers.PropertyRegistrationManager;
 import com.github.lamico.entities.Land;
+import com.github.lamico.gui.utils.ParseUtils;
 import com.github.lamico.gui.utils.TextFormatterTypes;
+import com.github.lamico.gui.utils.TimedError;
 import com.github.lamico.managers.ResourceManager;
 import com.github.lamico.managers.TabManager;
 
@@ -12,6 +14,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -26,9 +29,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class BuildingRegisterController {
+	private TimedError timedError = new TimedError();
 
 	@FXML
 	private Button btRegister;
+
+	@FXML
+	private Label lbError;
 
 	@FXML
 	private RadioButton rbShowLand;
@@ -114,9 +121,14 @@ public class BuildingRegisterController {
 	@FXML
 	void register(ActionEvent event) {
 		String buildingName = txtName.getText().strip();
-		int floorNum = Integer.parseInt(txtFloor.getText().strip());
-		int landNum = Integer.parseInt(txtLand.getText().strip());
-		int yearBuilt = Integer.parseInt(txtYear.getText().strip());
+		int floorNum = ParseUtils.parseIntOrDefault(txtFloor.getText());
+		int landNum = ParseUtils.parseIntOrDefault(txtLand.getText());
+		int yearBuilt = ParseUtils.parseIntOrDefault(txtYear.getText());
+
+		if (buildingName.isBlank() || floorNum == 0 || landNum == 0 || yearBuilt == 0) {
+			timedError.displayErrorMessage(lbError, "Empty Fields", 2);
+			return;
+		}
 		try {
 			PropertyRegistrationManager.registerBuilding(landNum, buildingName, yearBuilt, floorNum);
 

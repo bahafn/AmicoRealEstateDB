@@ -8,6 +8,7 @@ import java.sql.Statement;
 import com.github.lamico.db.DBConnection;
 import com.github.lamico.entities.Building;
 import com.github.lamico.gui.utils.TextFormatterTypes;
+import com.github.lamico.gui.utils.TimedError;
 import com.github.lamico.managers.ResourceManager;
 import com.github.lamico.managers.TabManager;
 
@@ -16,6 +17,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -24,9 +26,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
 public class BuildingsController {
+	private TimedError timedError = new TimedError();
 
 	@FXML
 	private Button btDelete;
+
+	@FXML
+	private Label lbError;
 
 	@FXML
 	private Button btRegisterNew;
@@ -102,12 +108,11 @@ public class BuildingsController {
 
 	@FXML
 	private TextField txtYear;
-	
-	@FXML
-    void refresh(ActionEvent event) throws SQLException {
-		show();
-    }
 
+	@FXML
+	void refresh(ActionEvent event) throws SQLException {
+		show();
+	}
 
 	@FXML
 	void update(ActionEvent event) {
@@ -115,19 +120,44 @@ public class BuildingsController {
 		if (selectedBuilding != null) {
 			try (Connection connection = DBConnection.getConnection();
 					Statement statement = connection.createStatement()) {
-				String query = "UPDATE Building SET bName = '" + txtName.getText() + "', yearBuilt = "
-						+ txtYear.getText() + ", floorNum = " + txtFloors.getText() + " WHERE prNum = "
-						+ selectedBuilding.getPrNum();
+				String bName = txtName.getText();
+				String yearBuilt = txtYear.getText();
+				String floorNum = txtFloors.getText();
+				String prNum = String.valueOf(selectedBuilding.getPrNum());
+				String condition = txtCondition.getText();
+				String areaDescription = txtDescription.getText();
+				String area = txtArea.getText();
+				String valuation = txtValuation.getText();
+				String ownerSSN = txtOwner.getText();
+				String city = txtCity.getText();
+
+				if (bName.isBlank() || yearBuilt.isBlank() || floorNum.isBlank() || condition.isBlank()
+						|| areaDescription.isBlank() || area.isBlank() || valuation.isBlank() || ownerSSN.isBlank()
+						|| city.isBlank()) {
+					timedError.displayErrorMessage(lbError, "Empty Fields", 2);
+					return;
+				}
+
+				if (ownerSSN.length() < 9) {
+					timedError.displayErrorMessage(lbError, "Invalid SSN", 2);
+					return;
+				}
+
+				String query = "UPDATE Building SET bName = '" + bName + "', yearBuilt = " + yearBuilt + ", floorNum = "
+						+ floorNum + " WHERE prNum = " + prNum;
 				statement.executeUpdate(query);
-				query = "UPDATE RealEstate SET prCondition = '" + txtCondition.getText() + "', areaDescription = '"
-						+ txtDescription.getText() + "', area = " + txtArea.getText() + ", valuation = "
-						+ txtValuation.getText() + ", ownerSSN = '" + txtOwner.getText() + "', city = '"
-						+ txtCity.getText() + "' WHERE prNum = " + selectedBuilding.getPrNum();
+
+				query = "UPDATE RealEstate SET prCondition = '" + condition + "', areaDescription = '" + areaDescription
+						+ "', area = " + area + ", valuation = " + valuation + ", ownerSSN = '" + ownerSSN
+						+ "', city = '" + city + "' WHERE prNum = " + prNum;
 				statement.executeUpdate(query);
+
 				showAllBuildings();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
+		} else {
+			timedError.displayErrorMessage(lbError, "Select a Row First", 2);
 		}
 		clearAllFields();
 	}
@@ -143,7 +173,7 @@ public class BuildingsController {
 		txtYear.clear();
 		txtFloors.clear();
 		txtName.clear();
-		
+
 	}
 
 	@FXML
@@ -158,8 +188,11 @@ public class BuildingsController {
 				statement.executeUpdate(query);
 				showAllBuildings();
 			} catch (SQLException e) {
+				timedError.displayErrorMessage(lbError, "Failed to delete", 2);
 				e.printStackTrace();
 			}
+		} else {
+			timedError.displayErrorMessage(lbError, "Select a Row First", 2);
 		}
 		clearAllFields();
 	}

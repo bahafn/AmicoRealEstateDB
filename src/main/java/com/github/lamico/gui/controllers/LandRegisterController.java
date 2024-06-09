@@ -1,19 +1,26 @@
 package com.github.lamico.gui.controllers;
 
 import com.github.lamico.db.managers.PropertyRegistrationManager;
+import com.github.lamico.gui.utils.ParseUtils;
 import com.github.lamico.gui.utils.TextFormatterTypes;
+import com.github.lamico.gui.utils.TimedError;
 import com.github.lamico.managers.ResourceManager;
 import com.github.lamico.managers.TabManager;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 
 import java.sql.SQLException;
 
 public class LandRegisterController {
+	private TimedError timedError = new TimedError();
+
+	@FXML
+	private Label lbError;
 
 	@FXML
 	private Button btRegister;
@@ -29,8 +36,15 @@ public class LandRegisterController {
 
 	@FXML
 	void register(ActionEvent event) {
-		int blockNum = Integer.parseInt(txtBlock.getText().strip());
-		int plotNum = Integer.parseInt(txtPlot.getText().strip());
+		int blockNum = ParseUtils.parseIntOrDefault(txtBlock.getText());
+		int plotNum = ParseUtils.parseIntOrDefault(txtPlot.getText());
+		;
+
+		if (blockNum < 0 || plotNum < 0) {
+			timedError.displayErrorMessage(lbError, "Empty Fields", 2);
+			return;
+		}
+		
 		try {
 			PropertyRegistrationManager.registerLand(plotNum, blockNum);
 
@@ -39,6 +53,7 @@ public class LandRegisterController {
 			((LandController) MainController.getTabManager().getController(TabManager.LAND)).show();
 			MainController.getTabManager().switchTo(TabManager.LAND);
 		} catch (SQLException e) {
+			timedError.displayErrorMessage(lbError, "Failed to register", 2);
 			e.printStackTrace();
 			try {
 				PropertyRegistrationManager.rollbackTransaction();

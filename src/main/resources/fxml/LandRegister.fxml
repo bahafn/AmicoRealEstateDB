@@ -13,7 +13,6 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-
 <BorderPane fx:id="root" prefHeight="435.0" prefWidth="107.0" stylesheets="@../css/normal_button.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.lamico.gui.controllers.LandRegisterController">
    <center>
       <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="435.0" prefWidth="753.0">
@@ -36,6 +35,11 @@
                         </Label>
                         <TextField fx:id="txtBlock" maxWidth="1.7976931348623157E308" />
                         <HBox alignment="CENTER_LEFT" spacing="2.0" />
+                        <Label fx:id="lbError" alignment="CENTER" prefHeight="28.0" prefWidth="243.0" stylesheets="@../css/text_image.css">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
                      </children>
                   </VBox>
                   <Label alignment="CENTER" layoutX="66.0" layoutY="2.0" prefHeight="27.0" prefWidth="180.0" style="-fx-font-size: 18;" text="Register Land" textFill="WHITE">

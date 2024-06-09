@@ -11,6 +11,7 @@ import com.github.lamico.db.DBConnection;
 import com.github.lamico.db.managers.PropertyRegistrationManager;
 import com.github.lamico.entities.Person;
 import com.github.lamico.gui.utils.TextFormatterTypes;
+import com.github.lamico.gui.utils.TimedError;
 import com.github.lamico.managers.ResourceManager;
 import com.github.lamico.managers.TabManager;
 import javafx.collections.FXCollections;
@@ -18,6 +19,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -29,6 +31,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 
 public class PropertyController {
+	private TimedError timedError = new TimedError();
 	Map<String, Background> backgroundMap = new HashMap<>();
 
 	@FXML
@@ -39,6 +42,9 @@ public class PropertyController {
 
 	@FXML
 	private RadioButton rbShowOwners;
+
+	@FXML
+	private Label lbError;
 
 	@FXML
 	private TableView<Person> tbvTable;
@@ -109,12 +115,23 @@ public class PropertyController {
 		double area = Double.parseDouble(txtArea.getText().strip());
 		double valuation = Double.parseDouble(txtValuation.getText().strip());
 		String owner = txtOwner.getText().strip();
+
+		if (description.isBlank() || city.isBlank() || condition.isBlank() || street.isBlank() || owner.isBlank()
+				|| area == 0 || valuation == 0) {
+			timedError.displayErrorMessage(lbError, "Empty Fields", 2);
+			return;
+		}
+		if(owner.length() < 9) {
+			timedError.displayErrorMessage(lbError, "Invalid SSN", 2);
+			return;
+		}
 		try {
 			PropertyRegistrationManager.startTransaction();
 			PropertyRegistrationManager.registerRealEstate(condition, city, street, valuation, description, area,
 					owner);
 			goToNext();
 		} catch (SQLException e) {
+			timedError.displayErrorMessage(lbError, "Failed to Register", 2);
 			e.printStackTrace();
 		}
 	}
@@ -140,7 +157,7 @@ public class PropertyController {
 		backgroundMap.put(TabManager.BUILDINGS, ResourceManager.getBackground("buildings.jpg"));
 		backgroundMap.put(TabManager.APARTMENTS, ResourceManager.getBackground("flat.jpg"));
 		backgroundMap.put(TabManager.LAND, ResourceManager.getBackground("land.png"));
-		
+
 		restrictFields();
 	}
 
@@ -201,8 +218,9 @@ public class PropertyController {
 				result.add(new Person(queryResult.getString("ssn"), queryResult.getString("pName"),
 						queryResult.getString("emails")));
 			}
-		} catch (SQLException sqle) {
-			sqle.printStackTrace();
+		} catch (SQLException e) {
+			timedError.displayErrorMessage(lbError, "Failed to get owners", 2);
+			e.printStackTrace();
 		}
 		return result;
 	}

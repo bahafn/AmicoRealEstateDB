@@ -11,7 +11,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" opacity="0.9" prefHeight="416.0" prefWidth="1138.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.lamico.gui.controllers.BuildingsController">
+<AnchorPane fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" opacity="0.9" prefHeight="509.0" prefWidth="1156.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.lamico.gui.controllers.BuildingsController">
    <children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#a60136" height="366.0" layoutX="842.0" layoutY="21.0" opacity="0.92" stroke="BLACK" strokeType="INSIDE" width="313.0" />
       <Button fx:id="btRegisterNew" layoutX="14.0" layoutY="400.0" mnemonicParsing="false" onAction="#registerNewProperty" stylesheets="@../css/normal_button.css" text="Register New Property" AnchorPane.bottomAnchor="15.199999999999989" />
@@ -130,5 +130,10 @@
       <Button fx:id="btUpdate" layoutX="871.0" layoutY="342.0" mnemonicParsing="false" onAction="#update" prefWidth="70.0" stylesheets="@../css/normal_button.css" text="Update" />
       <Button fx:id="btDelete" layoutX="1054.0" layoutY="342.0" mnemonicParsing="false" onAction="#delete" prefWidth="70.0" stylesheets="@../css/normal_button.css" text="Delete" />
       <Button layoutX="963.0" layoutY="342.0" mnemonicParsing="false" onAction="#refresh" prefWidth="70.0" stylesheets="@../css/normal_button.css" text="Refresh" />
+      <Label fx:id="lbError" alignment="CENTER" layoutX="876.0" layoutY="387.0" prefHeight="28.0" prefWidth="243.0" stylesheets="@../css/text_image.css" textFill="RED">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

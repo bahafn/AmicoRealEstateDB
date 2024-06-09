@@ -8,7 +8,9 @@ import java.sql.Statement;
 import com.github.lamico.db.DBConnection;
 import com.github.lamico.db.managers.PropertyRegistrationManager;
 import com.github.lamico.entities.Building;
+import com.github.lamico.gui.utils.ParseUtils;
 import com.github.lamico.gui.utils.TextFormatterTypes;
+import com.github.lamico.gui.utils.TimedError;
 import com.github.lamico.managers.ResourceManager;
 import com.github.lamico.managers.TabManager;
 
@@ -28,9 +30,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 
 public class ApartmentRegisterController {
+	private TimedError timedError = new TimedError();
 
 	@FXML
 	private ToggleGroup apartmentTypeGroup;
+
+	@FXML
+	private Label lbError;
 
 	@FXML
 	private Button btRegister;
@@ -112,16 +118,28 @@ public class ApartmentRegisterController {
 
 	@FXML
 	void register(ActionEvent event) {
-		double amount = Double.parseDouble(txtAmount.getText().strip());
-		int unitNumber = Integer.parseInt(txtUnitNumber.getText().strip());
-		int total = Integer.parseInt(txtTotal.getText().strip());
+		double amount = ParseUtils.parseDoubleOrDefault(txtAmount.getText());
+		int unitNumber = ParseUtils.parseIntOrDefault(txtUnitNumber.getText());
+		int total = ParseUtils.parseIntOrDefault(txtTotal.getText());
 		String kitchen = txtKitchen.getText().strip();
-		int livingRooms = Integer.parseInt(txtLivingRooms.getText().strip());
-		int bathrooms = Integer.parseInt(txtBathrooms.getText().strip());
-		int bedrooms = Integer.parseInt(txtBedrooms.getText().strip());
-		int building = Integer.parseInt(txtBuilding.getText().strip());
+		int livingRooms = ParseUtils.parseIntOrDefault(txtLivingRooms.getText());
+		int bathrooms = ParseUtils.parseIntOrDefault(txtBathrooms.getText());
+		int bedrooms = ParseUtils.parseIntOrDefault(txtBedrooms.getText());
+		int building = ParseUtils.parseIntOrDefault(txtBuilding.getText());
 		boolean hasBalcony = rbBalcony.isSelected();
 		boolean hasGarden = rbGarden.isSelected();
+
+		if (amount == 0 || unitNumber == 0 || total == 0 || building == 0 || livingRooms == 0 || bathrooms == 0
+				|| bedrooms == 0 || kitchen.isBlank()) {
+			timedError.displayErrorMessage(lbError, "Empty Fields", 2);
+			return;
+		}
+
+		int sum = livingRooms + bathrooms + bedrooms;
+		if (total < sum) {
+			timedError.displayErrorMessage(lbError, "Invalid Room Total", 2);
+			return;
+		}
 
 		try {
 			PropertyRegistrationManager.registerApartment(building, total, unitNumber, bedrooms, bathrooms, livingRooms,

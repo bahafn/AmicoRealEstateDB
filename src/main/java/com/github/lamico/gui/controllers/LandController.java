@@ -8,6 +8,7 @@ import java.sql.Statement;
 import com.github.lamico.db.DBConnection;
 import com.github.lamico.entities.Land;
 import com.github.lamico.gui.utils.TextFormatterTypes;
+import com.github.lamico.gui.utils.TimedError;
 import com.github.lamico.managers.ResourceManager;
 import com.github.lamico.managers.TabManager;
 
@@ -16,6 +17,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -24,9 +26,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
 public class LandController {
+	private TimedError timedError = new TimedError();
 
 	@FXML
 	private AnchorPane root;
+
+	@FXML
+	private Label lbError;
 
 	@FXML
 	private Button btDelete;
@@ -109,8 +115,11 @@ public class LandController {
 				statement.executeUpdate(query);
 				showAllLand();
 			} catch (SQLException e) {
+				timedError.displayErrorMessage(lbError, "Failed to delete", 2);
 				e.printStackTrace();
 			}
+		} else {
+			timedError.displayErrorMessage(lbError, "Select a Row First", 2);
 		}
 
 		clearAllFields();
@@ -136,22 +145,45 @@ public class LandController {
 	void update(ActionEvent event) {
 		Land selectedLand = tbvTable.getSelectionModel().getSelectedItem();
 		if (selectedLand != null) {
+			String area = txtArea.getText();
+			String condition = txtCondition.getText();
+			String city = txtCity.getText();
+			String description = txtDescription.getText();
+			String valuation = txtValuation.getText();
+			String ownerSSN = txtOwner.getText();
+			String streetName = txtStreet.getText();
+			String blockNum = txtBlock.getText();
+			String plotNum = txtPlot.getText();
+			String prNum = String.valueOf(selectedLand.getPrNum());
+
+			if (area.isBlank() || condition.isBlank() || city.isBlank() || description.isBlank() || valuation.isBlank()
+					|| ownerSSN.isBlank() || streetName.isBlank() || blockNum.isBlank() || plotNum.isBlank()) {
+				timedError.displayErrorMessage(lbError, "Empty Fields", 2);
+				return;
+			}
+
+			if (ownerSSN.length() < 9) {
+				timedError.displayErrorMessage(lbError, "Invalid SSN", 2);
+				return;
+			}
+
 			try (Connection connection = DBConnection.getConnection();
 					Statement statement = connection.createStatement()) {
-				String query = "UPDATE RealEstate SET area = " + txtArea.getText() + ", prCondition = '"
-						+ txtCondition.getText() + "', city = '" + txtCity.getText() + "', areaDescription = '"
-						+ txtDescription.getText() + "', valuation = " + txtValuation.getText() + ", ownerSSN = '"
-						+ txtOwner.getText() + "', streetName = '" + txtStreet.getText() + "' WHERE prNum = "
-						+ selectedLand.getPrNum();
+
+				String query = "UPDATE RealEstate SET area = " + area + ", prCondition = '" + condition + "', city = '"
+						+ city + "', areaDescription = '" + description + "', valuation = " + valuation
+						+ ", ownerSSN = '" + ownerSSN + "', streetName = '" + streetName + "' WHERE prNum = " + prNum;
 				statement.executeUpdate(query);
-				query = "UPDATE Land SET blockNum = " + txtBlock.getText() + ", plotNum = " + txtPlot.getText()
-						+ " WHERE prNum = " + selectedLand.getPrNum();
-				;
+
+				query = "UPDATE Land SET blockNum = " + blockNum + ", plotNum = " + plotNum + " WHERE prNum = " + prNum;
 				statement.executeUpdate(query);
+
 				showAllLand();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
+		} else {
+			timedError.displayErrorMessage(lbError, "Select a Row First", 2);
 		}
 		clearAllFields();
 	}

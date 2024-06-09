@@ -119,5 +119,10 @@
       <Button fx:id="btUpdate" layoutX="832.0" layoutY="333.0" mnemonicParsing="false" onAction="#update" prefWidth="70.0" stylesheets="@../css/normal_button.css" text="Update" />
       <Button fx:id="btDelete" layoutX="1015.0" layoutY="333.0" mnemonicParsing="false" onAction="#delete" prefWidth="70.0" stylesheets="@../css/normal_button.css" text="Delete" />
       <Button layoutX="924.0" layoutY="333.0" mnemonicParsing="false" onAction="#refresh" prefWidth="70.0" stylesheets="@../css/normal_button.css" text="Refresh" />
+      <Label fx:id="lbError" alignment="CENTER" layoutX="851.0" layoutY="391.0" prefHeight="28.0" prefWidth="243.0" stylesheets="@../css/text_image.css" textFill="RED">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

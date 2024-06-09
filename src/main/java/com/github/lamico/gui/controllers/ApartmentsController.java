@@ -8,7 +8,9 @@ import java.sql.Statement;
 import com.github.lamico.db.DBConnection;
 import com.github.lamico.entities.RentalApartment;
 import com.github.lamico.entities.SaleApartment;
+import com.github.lamico.gui.utils.ParseUtils;
 import com.github.lamico.gui.utils.TextFormatterTypes;
+import com.github.lamico.gui.utils.TimedError;
 import com.github.lamico.managers.ResourceManager;
 import com.github.lamico.managers.TabManager;
 import javafx.collections.FXCollections;
@@ -17,6 +19,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -26,6 +29,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
 public class ApartmentsController {
+	private TimedError timedError = new TimedError();
+
+	@FXML
+	private Label lbErrorRent;
+
+	@FXML
+	private Label lbErrorSale;
 
 	@FXML
 	private AnchorPane root;
@@ -197,12 +207,11 @@ public class ApartmentsController {
 
 	@FXML
 	private TextField txtUnitSale;
-	
-	@FXML
-    void refresh(ActionEvent event) throws SQLException {
-		show();
-    }
 
+	@FXML
+	void refresh(ActionEvent event) throws SQLException {
+		show();
+	}
 
 	@FXML
 	void deleteRent(ActionEvent event) {
@@ -222,8 +231,11 @@ public class ApartmentsController {
 				executeQuery(deleteQuery);
 				showRent();
 			} catch (SQLException e) {
+				timedError.displayErrorMessage(lbErrorRent, "Failed to delete", 2);
 				e.printStackTrace();
 			}
+		} else {
+			timedError.displayErrorMessage(lbErrorRent, "Select a Row First", 2);
 		}
 		clearAllFields();
 	}
@@ -247,8 +259,11 @@ public class ApartmentsController {
 				executeQuery(deleteQuery);
 				showSale();
 			} catch (SQLException e) {
+				timedError.displayErrorMessage(lbErrorSale, "Failed to delete", 2);
 				e.printStackTrace();
 			}
+		}else {
+			timedError.displayErrorMessage(lbErrorSale, "Select a Row First", 2);
 		}
 		clearAllFields();
 	}
@@ -266,15 +281,33 @@ public class ApartmentsController {
 	void updateRent(ActionEvent event) {
 		RentalApartment selectedApartment = tbvRentalTable.getSelectionModel().getSelectedItem();
 		if (selectedApartment != null) {
+			int roomNum = ParseUtils.parseIntOrDefault(txtRoomsRent.getText());
+			int unitNum = ParseUtils.parseIntOrDefault(txtUnitRent.getText());
+			int bedroomNum = ParseUtils.parseIntOrDefault(txtBedRent.getText());
+			int bathroomNum = ParseUtils.parseIntOrDefault(txtBathRent.getText());
+			int livingroomNum = ParseUtils.parseIntOrDefault(txtLivingRent.getText());
+			int hasBalcony = rbBalconyRent.isSelected() ? 1 : 0;
+			String kitchenType = txtConditionRent.getText();
+			int hasGarden = rbGardenRent.isSelected() ? 1 : 0;
+			double rent = ParseUtils.parseDoubleOrDefault(txtRent.getText());
+			int prNum = selectedApartment.getPrNum();
+
+			if (roomNum == 0 || unitNum == 0 || bedroomNum == 0 || bathroomNum == 0 || livingroomNum == 0 || rent == 0
+					|| kitchenType.isBlank()) {
+				timedError.displayErrorMessage(lbErrorRent, "Empty Fields", 2);
+				return;
+			}
+			int sum = bedroomNum + bathroomNum + livingroomNum;
+			if (sum > roomNum) {
+				timedError.displayErrorMessage(lbErrorRent, "Invalid Room Total", 2);
+				return;
+			}
+
 			String updateQuery = "UPDATE Apartment a " + "JOIN RentalApartment ra ON a.prNum = ra.prNum "
-					+ "SET a.roomNum = " + Integer.parseInt(txtRoomsRent.getText()) + ", " + "a.unitNum = "
-					+ Integer.parseInt(txtUnitRent.getText()) + ", " + "a.bedroomNum = "
-					+ Integer.parseInt(txtBedRent.getText()) + ", " + "a.bathroomNum = "
-					+ Integer.parseInt(txtBathRent.getText()) + ", " + "a.livingroomNum = "
-					+ Integer.parseInt(txtLivingRent.getText()) + ", " + "a.hasBalcony = "
-					+ (rbBalconyRent.isSelected() ? 1 : 0) + ", " + "a.kitchenType = '" + txtConditionRent.getText()
-					+ "', " + "a.hasGarden = " + (rbGardenRent.isSelected() ? 1 : 0) + ", " + "ra.rent = "
-					+ Double.parseDouble(txtRent.getText()) + " WHERE a.prNum = " + selectedApartment.getPrNum();
+					+ "SET a.roomNum = " + roomNum + ", " + "a.unitNum = " + unitNum + ", " + "a.bedroomNum = "
+					+ bedroomNum + ", " + "a.bathroomNum = " + bathroomNum + ", " + "a.livingroomNum = " + livingroomNum
+					+ ", " + "a.hasBalcony = " + hasBalcony + ", " + "a.kitchenType = '" + kitchenType + "', "
+					+ "a.hasGarden = " + hasGarden + ", " + "ra.rent = " + rent + " WHERE a.prNum = " + prNum;
 
 			try {
 				executeQuery(updateQuery);
@@ -282,6 +315,8 @@ public class ApartmentsController {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
+		}else {
+			timedError.displayErrorMessage(lbErrorRent, "Select a Row First", 2);
 		}
 		clearAllFields();
 	}
@@ -323,15 +358,33 @@ public class ApartmentsController {
 	void updateSale(ActionEvent event) {
 		SaleApartment selectedApartment = tbvSaleTable.getSelectionModel().getSelectedItem();
 		if (selectedApartment != null) {
+			int roomNum = ParseUtils.parseIntOrDefault(txtRoomsSale.getText());
+			int unitNum = ParseUtils.parseIntOrDefault(txtUnitSale.getText());
+			int bedroomNum = ParseUtils.parseIntOrDefault(txtBedSale.getText());
+			int bathroomNum = ParseUtils.parseIntOrDefault(txtBathSale.getText());
+			int livingroomNum = ParseUtils.parseIntOrDefault(txtLivingSale.getText());
+			int hasBalcony = rbBalconySale.isSelected() ? 1 : 0;
+			String kitchenType = txtConditionSale.getText();
+			int hasGarden = rbGardenSale.isSelected() ? 1 : 0;
+			double price = ParseUtils.parseDoubleOrDefault(txtPrice.getText());
+			int prNum = selectedApartment.getPrNum();
+
+			if (roomNum == 0 || unitNum == 0 || bedroomNum == 0 || bathroomNum == 0 || livingroomNum == 0 || price == 0
+					|| kitchenType.isBlank()) {
+				timedError.displayErrorMessage(lbErrorSale, "Empty Fields", 2);
+				return;
+			}
+			int sum = bedroomNum + bathroomNum + livingroomNum;
+			if (sum > roomNum) {
+				timedError.displayErrorMessage(lbErrorSale, "Invalid Room Total", 2);
+				return;
+			}
+
 			String updateQuery = "UPDATE Apartment a " + "JOIN SaleApartment sa ON a.prNum = sa.prNum "
-					+ "SET a.roomNum = " + Integer.parseInt(txtRoomsSale.getText()) + ", " + "a.unitNum = "
-					+ Integer.parseInt(txtUnitSale.getText()) + ", " + "a.bedroomNum = "
-					+ Integer.parseInt(txtBedSale.getText()) + ", " + "a.bathroomNum = "
-					+ Integer.parseInt(txtBathSale.getText()) + ", " + "a.livingroomNum = "
-					+ Integer.parseInt(txtLivingSale.getText()) + ", " + "a.hasBalcony = "
-					+ (rbBalconySale.isSelected() ? 1 : 0) + ", " + "a.kitchenType = '" + txtConditionSale.getText()
-					+ "', " + "a.hasGarden = " + (rbGardenSale.isSelected() ? 1 : 0) + ", " + "sa.price = "
-					+ Double.parseDouble(txtPrice.getText()) + " WHERE a.prNum = " + selectedApartment.getPrNum();
+					+ "SET a.roomNum = " + roomNum + ", " + "a.unitNum = " + unitNum + ", " + "a.bedroomNum = "
+					+ bedroomNum + ", " + "a.bathroomNum = " + bathroomNum + ", " + "a.livingroomNum = " + livingroomNum
+					+ ", " + "a.hasBalcony = " + hasBalcony + ", " + "a.kitchenType = '" + kitchenType + "', "
+					+ "a.hasGarden = " + hasGarden + ", " + "sa.price = " + price + " WHERE a.prNum = " + prNum;
 
 			try {
 				executeQuery(updateQuery);
@@ -339,6 +392,8 @@ public class ApartmentsController {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
+		}else {
+			timedError.displayErrorMessage(lbErrorSale, "Select a Row First", 2);
 		}
 		clearAllFields();
 	}
@@ -363,6 +418,7 @@ public class ApartmentsController {
 					txtOwnerRent.setText(resultSet.getString("ownerSSN"));
 				}
 			} catch (SQLException e) {
+				timedError.displayErrorMessage(lbErrorRent, "Failed to get data", 2);
 				e.printStackTrace();
 			}
 			txtRoomsRent.setText(String.valueOf(selectedApartment.getRoomNum()));
@@ -396,6 +452,7 @@ public class ApartmentsController {
 					txtOwnerSale.setText(resultSet.getString("ownerSSN"));
 				}
 			} catch (SQLException e) {
+				timedError.displayErrorMessage(lbErrorRent, "Failed to get data", 2);
 				e.printStackTrace();
 			}
 			txtRoomsSale.setText(String.valueOf(selectedApartment.getRoomNum()));
@@ -462,6 +519,7 @@ public class ApartmentsController {
 		showSale();
 		showRent();
 	}
+
 	private void showSale() throws SQLException {
 		tbvSaleTable.setItems(getSaleApartments());
 		tvPrNumSale.setCellValueFactory(new PropertyValueFactory<>("prNum"));
